@@ -1,25 +1,24 @@
-FROM ubuntu
+FROM docker:dind
 
 EXPOSE 22 53 80 443 1000 2375 2376 2377 9443
 
 VOLUME ["/var/run", "/var/lib/docker/volumes"]
 
-RUN apt -y update
-RUN apt -y upgrade
+RUN apk update
+RUN apk upgrade
 
-RUN apt install -y nano
-RUN apt install -y curl
-RUN apt install -y wget
+RUN apk add bash
+RUN apk add nano
+RUN apk add curl
+RUN apk add wget
 
 RUN curl -fsSL https://get.docker.com -o get-docker.sh
 RUN sh get-docker.sh
 
 RUN echo "#!/bin/sh" > deploy-olympiad.sh
 
-RUN echo "service docker enable" >> deploy-olympiad.sh
-RUN echo "service docker start" >> deploy-olympiad.sh
 RUN echo "docker swarm init" >> deploy-olympiad.sh
-RUN echo "apt install -y docker-compose" >> deploy-olympiad.sh
+RUN echo "apk add docker-compose" >> deploy-olympiad.sh
 RUN echo "curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash" >> deploy-olympiad.sh
 
 RUN echo "docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena" >> deploy-olympiad.sh
