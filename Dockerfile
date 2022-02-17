@@ -64,7 +64,7 @@ RUN echo "docker exec Athena0 apt -y upgrade" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 sh /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 
 #Build Cyber Life Torpedo - default username is "minioadmin" and default password is also "minioadmin" (please change, especially before shipping off to Dockerhub or other public cloud repositories!)
-RUN echo "docker run -itd -p 9000:9000 -p 9001:9001 --name=torpedo -h torpedo --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /nexus-bucket:/nexus-bucket -v /nexus-bucket/s3-torpedo:/data quay.io/minio/minio server /data --console-address ":9001"" >> deploy-olympiad.sh
+RUN echo "docker run -itd --privileged -p 9000:9000 -p 9001:9001 --name=torpedo -h torpedo --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /nexus-bucket:/nexus-bucket -v /nexus-bucket/s3-torpedo:/data quay.io/minio/minio server /data --console-address ":9001"" >> deploy-olympiad.sh
 
 #Build Olympiad0 Portainer node
 RUN echo "docker volume create portainer_data" >> deploy-olympiad.sh
