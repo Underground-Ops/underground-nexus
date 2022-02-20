@@ -47,6 +47,9 @@ RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y 
 #RUN echo "docker exec workbench echo "docker exec workbench echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y update" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo apt install brave-browser" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y qemu" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo apt install virt-manager" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y update --fix-missing" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt --fix-broken install -y" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y upgrade" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
