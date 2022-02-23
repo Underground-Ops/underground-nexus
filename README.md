@@ -48,3 +48,7 @@ Milestones will be added for this resource to present the general release timeli
 The Underground Nexus can be configured to run virtual machines inside of it's stack with an application called *Virtual Machine Manager* and configuring it to use *QEMU* which is already pre-installed for immediate use upon being deployed.
 
 Please see the images ,found in this repository, on how to use virtual machines to begin configuring emulated virtual systems.
+
+----------------------------------------------------
+
+# Learn about the foundations the Underground Nexus was built from here: https://notiapoint.com/pages/the-olympiad
