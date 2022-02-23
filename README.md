@@ -8,9 +8,9 @@ Milestones will be added for this resource to present the general release timeli
 
 ----------------------------------------------------
 
-**Underground Nexus - Cloud Native Server Architecture (see the architecture PDF in this repository for an overview)**
+**Underground Nexus - Cloud Native Server Architecture *(see the architecture PDF in this repository for an overview)***
 
-**Quick Start Guide (see the quick start guide in the repository to get started)**
+**Quick Start Guide *(see the quick start guide in the repository to get started)***
 
 ***How to use the Underground Nexus*** - **Once Deployed**:
 
