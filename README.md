@@ -6,7 +6,7 @@ The Underground Nexus is a cloud construction toolkit.  This resource will be re
 
 Milestones will be added for this resource to present the general release timeline for trainings and features for this kit.
 
-# Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop Here: https://www.docker.com/products/docker-desktop
+## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop Here: https://www.docker.com/products/docker-desktop
 
 ***The minimum recommended hardware for the Underground Nexus is the Raspberry Pi 4, anything more powerful will also certainly run the Underground Nexus well (compatible with amd64 and arm systems).***
 
@@ -51,4 +51,4 @@ Please see the images ,found in this repository, on how to use virtual machines 
 
 ----------------------------------------------------
 
-# Learn about the foundations the Underground Nexus was built from here: https://notiapoint.com/pages/the-olympiad
+## Learn about the foundations the Underground Nexus was built from here: https://notiapoint.com/pages/the-olympiad
