@@ -8,11 +8,9 @@ Milestones will be added for this resource to present the general release timeli
 
 ----------------------------------------------------
 
-**Underground Nexus - Cloud Native Server Architecture:**
-![Underground_Nexus_Architecture_1__1_](/uploads/87e217dad309d090dbdb6d997de29525/Underground_Nexus_Architecture_1__1_.png)![Underground_Nexus_Architecture_2__2_](/uploads/51c0d29458da401072dfd3269ee8e613/Underground_Nexus_Architecture_2__2_.png)![Underground_Nexus_Architecture_3](/uploads/fe423f51005789e46eb4db87230c20e3/Underground_Nexus_Architecture_3.png)![Underground_Nexus_Architecture_4](/uploads/6535f90cf47b488dbfc574e8fa196519/Underground_Nexus_Architecture_4.png)
+**Underground Nexus - Cloud Native Server Architecture (see the architecture PDF in this repository for an overview)**
 
-**Quick Start Guide:**
-[Underground_Nexus_Quick_Guide.pdf](/uploads/637b77f704da8b7144765e6d6a1c39fa/Underground_Nexus_Quick_Guide.pdf)
+**Quick Start Guide (see the quick start guide in the repository to get started)**
 
 ***How to use the Underground Nexus*** - **Once Deployed**:
 
@@ -45,7 +43,4 @@ Milestones will be added for this resource to present the general release timeli
 
 The Underground Nexus can be configured to run virtual machines inside of it's stack with an application called *Virtual Machine Manager* and configuring it to use *QEMU* which is already pre-installed for immediate use upon being deployed.
 
-Please see the images below to understand the process of setting up Underground Nexus to run virtual machines.
-
-***Using Virtual Machines:***
-![Using_Virtual_Machines__1](/uploads/fe4382703be494001fd6b054a812d7f0/Using_Virtual_Machines__1.PNG)![Using_Virtual_Machines__2](/uploads/7f544765f208e50f90f293fa24104589/Using_Virtual_Machines__2.PNG)![Using_Virtual_Machines__3](/uploads/601b3142c7a7738646b83b5bf7563706/Using_Virtual_Machines__3.PNG)
+Please see the images ,found in this repository, on how to use virtual machines to begin configuring emulated virtual systems.
