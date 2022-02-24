@@ -20,7 +20,7 @@ Milestones will be added to this resource to present the general release timelin
 
 ----------------------------------------------------
 
-**IMPORTANT:** After deploying the Underground Nexus from a `docker run` command, type `docker exec Underground-Nexus sh deploy-olympiad.sh` in the exact same terminal or console in which the `docker run` command ran.
+**IMPORTANT:** After deploying the Underground Nexus from a `docker run` command, type `docker exec Underground-Nexus sh deploy-olympiad.sh` in the exact same terminal or console in which the `docker run` command ran. *This script does quite a lot and can take a LONG time to complete - depending on the power of your system and internet speeds it can take anywhere from 2 to 10 minutes to complete activating and initializing the Underground Nexus stack.*
 
 ***ACTIVATE the Underground Nexus (this is the only necessary command to run IMMEDIATELY after deploying the Underground Nexus to activate it):***
 `docker exec Underground-Nexus sh deploy-olympiad.sh`
