@@ -6,11 +6,13 @@ The Underground Nexus is a cloud construction toolkit.  This resource will be re
 
 Milestones will be added for this resource to present the general release timeline for trainings and features for this kit.
 
+***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
+
 ## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop Here: https://www.docker.com/products/docker-desktop
 
-**Dockerhub development pull for Docker Desktop and amd64 systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 53:53/tcp -p 53:53/udp -p 80:80 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9001 -p 9443:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus`
+**Dockerhub *development* pull for Docker Desktop and amd64 systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 53:53/tcp -p 53:53/udp -p 80:80 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9001 -p 9443:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus`
 
-**Dockerhub secure pull for Docker Desktop and amd64 systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1000:1000 -p 9443:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus`
+**Dockerhub *secure* pull for Docker Desktop and amd64 systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1000:1000 -p 9443:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus`
 
 ----------------------------------------------------
 
@@ -47,6 +49,15 @@ Milestones will be added for this resource to present the general release timeli
 -Ubuntu MATE Admin Desktop: http://10.20.0.1:1000 (runs as root - default `user`:`password` is `abc`:`abc`)
 -Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
 
+**10.** Here are the default apps mapped to the **development** ports if opened for access outside of the Underground Nexus:
+(it's recommended to only open ports 1000 and 9443 unless other ports are being used intentionally - port 22 allows ssh access through a Kali Linux node, and any port being used can be opened as needed, however, Nexus is more securely accessed from inside the Underground Nexus *MATE Admin Desktop*)
+-Portainer: 9443 (test https://localhost:9443 for access)
+-Kali Linux Athena0: 22 (open this port to turn a machine's ssh port into a Kali Linux based development, delivery and forensic analysis center powered by `radare2` - must first enable ssh from within Kali Linux to use remote shell access this way)
+-Pi hole: 80, 53 (test http://localhost for access - the Underground Nexus can be used as a powerful Pi hole for any device, if the Underground Nexus host IP address is used as a DNS server with port 53 open)
+-Cyber Life Torpedo (S3 bucket): 9001 (test http://localhost:9001 for access - this port can be used to move files in and out of the Underground Nexus or to turn the Nexus into a NAS / Network Attached Storage)
+-Ubuntu MATE Admin Desktop: 1000 (test http://localhost:1000 for access)
+-Ubuntu KDE Security Operation Center Desktop: 2000 (test http://localhost:2000 for access)
+
 ----------------------------------------------------
 
 **Deploying Virtual Machines in Underground Nexus:**
@@ -54,6 +65,10 @@ Milestones will be added for this resource to present the general release timeli
 The Underground Nexus can be configured to run virtual machines inside of it's stack with an application called *Virtual Machine Manager* and configuring it to use *QEMU* which is already pre-installed for immediate use upon being deployed.
 
 Please see the images ,found in this repository, on how to use virtual machines to begin configuring emulated virtual systems.
+
+----------------------------------------------------
+
+## Learn about foundational principles for Cloud Native and DevSecOps here: https://gitlab.com/natoascode/nist-draft-regulation-800-204c-comment-notes-and-timestamps
 
 ----------------------------------------------------
 
