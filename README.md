@@ -24,9 +24,9 @@ Milestones will be added for this resource to present the general release timeli
 
 ----------------------------------------------------
 
-**Underground Nexus - Cloud Native Server Architecture *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
+**Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
 
-**Quick Start Guide *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
+**Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip guide right to *STEP 3*): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
 
 ***How to use the Underground Nexus*** - **Once Deployed**:
 
