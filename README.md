@@ -20,6 +20,16 @@ Milestones will be added for this resource to present the general release timeli
 
 ----------------------------------------------------
 
+**IMPORTANT:** After deploying the Underground Nexus from a `docker run` command type `docker exec Underground-Nexus sh deploy-olympiad.sh` in the exact same terminal or console that the `docker run` command ran inside of.
+
+***Command to build activate the Underground Nexus (this is the only necessary command to run immediately after deploying the Underground Nexus to activate it):***
+`docker exec Underground-Nexus sh deploy-olympiad.sh`
+
+**ALTERNATIVE - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:**
+`sh deploy-olympiad.sh`
+
+----------------------------------------------------
+
 ***The minimum recommended hardware for the Underground Nexus is the Raspberry Pi 4, anything more powerful will also certainly run the Underground Nexus well (compatible with amd64 and arm systems).***
 
 ----------------------------------------------------
