@@ -43,20 +43,22 @@ Milestones will be added for this resource to present the general release timeli
 **8.** Nexus can be turned into an ultra Pi hole if it's DNS server ports are opened when Nexus is deployed (ports 53 and 67).  This would allow the Underground Nexus to be used as a company or home SOC that can have data integrated with Pi hole data using Grafana and Loki)
 
 **9.** Default URL's will show up if Nexus deploys without errors (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
--Portainer: https://10.20.0.1:9443
--Pi hole: http://10.20.0.20 (can change password from within Portainer)
--Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9001 (default `user`:`password` is `minioadmin`:`minioadmin`)
--Ubuntu MATE Admin Desktop: http://10.20.0.1:1000 (runs as root - default `user`:`password` is `abc`:`abc`)
--Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
+- -Portainer: https://10.20.0.1:9443
+- -Pi hole: http://10.20.0.20 (can change password from within Portainer)
+- -Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9001 (default `user`:`password` is `minioadmin`:`minioadmin`)
+- -Ubuntu MATE Admin Desktop: http://10.20.0.1:1000 (runs as root - default `user`:`password` is `abc`:`abc`)
+- -Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
+
 
 **10.** Here are the default apps mapped to the **development** ports if opened for access outside of the Underground Nexus:
 (it's recommended to only open ports 1000 and 9443 unless other ports are being used intentionally - port 22 allows ssh access through a Kali Linux node, and any port being used can be opened as needed, however, Nexus is more securely accessed from inside the Underground Nexus *MATE Admin Desktop*)
--Portainer: 9443 (test https://localhost:9443 for access)
--Kali Linux Athena0: 22 (open this port to turn a machine's ssh port into a Kali Linux based development, delivery and forensic analysis center powered by `radare2` - must first enable ssh from within Kali Linux to use remote shell access this way)
--Pi hole: 80, 53 (test http://localhost for access - the Underground Nexus can be used as a powerful Pi hole for any device, if the Underground Nexus host IP address is used as a DNS server with port 53 open)
--Cyber Life Torpedo (S3 bucket): 9001 (test http://localhost:9001 for access - this port can be used to move files in and out of the Underground Nexus or to turn the Nexus into a NAS / Network Attached Storage)
--Ubuntu MATE Admin Desktop: 1000 (test http://localhost:1000 for access)
--Ubuntu KDE Security Operation Center Desktop: 2000 (test http://localhost:2000 for access)
+- -Portainer: 9443 (test https://localhost:9443 for access)
+- -Kali Linux Athena0: 22 (open this port to turn a machine's ssh port into a Kali Linux based development, delivery and forensic analysis center powered by `radare2` - must first enable ssh from within Kali Linux to use remote shell access this way)
+- -Pi hole: 80, 53 (test http://localhost for access - the Underground Nexus can be used as a powerful Pi hole for any device, if the Underground Nexus host IP address is used as a DNS server with port 53 open)
+- -Cyber Life Torpedo (S3 bucket): 9001 (test http://localhost:9001 for access - this port can be used to move files in and out of the Underground Nexus or to turn the Nexus into a NAS / Network Attached Storage)
+- -Ubuntu MATE Admin Desktop: 1000 (test http://localhost:1000 for access)
+- -Ubuntu KDE Security Operation Center Desktop: 2000 (test http://localhost:2000 for access)
+
 
 ----------------------------------------------------
 
