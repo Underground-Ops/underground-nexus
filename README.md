@@ -8,7 +8,7 @@ Milestones will be added to this resource to present the general release timelin
 
 ***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
 
-***Check out the Underground Nexus Launch Demo to see it in action:*** https://youtu.be/8lZJoudb75w
+***Check out the Underground Nexus Launch Demo to see it in action (early development release):*** https://youtu.be/8lZJoudb75w
 
 ## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
