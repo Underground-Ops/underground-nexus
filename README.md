@@ -63,7 +63,7 @@ Milestones will be added to this resource to present the general release timelin
 - Pi hole: http://10.20.0.20 (can change password from within Portainer)
 - Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9001 (default `user`:`password` is `minioadmin`:`minioadmin`)
 - Ubuntu MATE Admin Desktop: http://10.20.0.1:1000 (runs as root - default `user`:`password` is `abc`:`abc`)
-- Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
+- Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:3000 (least privilege - default `user`:`password` is `abc`:`abc`)
 
 **10.** Here are the default apps mapped to the **development** ports if opened for access outside of the Underground Nexus
 (it's recommended to only open ports 1000 and 9443 unless other ports are being used intentionally - port 22 allows ssh access through a Kali Linux node, and any port being used can be opened as needed, however, Nexus is more securely accessed from inside the Underground Nexus *MATE Admin Desktop*):
