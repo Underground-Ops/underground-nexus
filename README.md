@@ -12,6 +12,8 @@ Milestones will be added to this resource to present the general release timelin
 
 ## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
+### Install Step 1 (assuming Docker is already installed) - Open a command line (Windows) or terminal (Linux or OSX) shell and paste the appropriate install command for your computer's hardware platform.
+
 **Dockerhub *DEVELOPMENT* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 53:53/tcp -p 53:53/udp -p 80:80 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9001 -p 9443:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
 
 **Dockerhub *SECURE* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1000:1000 -p 9443:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
@@ -24,10 +26,12 @@ Milestones will be added to this resource to present the general release timelin
 
 **IMPORTANT:** After deploying the Underground Nexus from a `docker run` command, type `docker exec Underground-Nexus sh deploy-olympiad.sh` in the exact same terminal or console in which the `docker run` command ran. *This script does quite a lot and can take a LONG time to complete - depending on the power of your system and internet speeds it can take anywhere from 2 to 10 minutes to complete activating and initializing the Underground Nexus stack.*
 
+### Install Step 2 - Paste activation command in the same shell the first command was entered in, and the Underground Nexus will build and activate itself (2 commands total to deploy - this is the second and final command if there are no errors).  If the command does not seem to work try the alternative install option below.
+
 ***ACTIVATE the Underground Nexus (this is the only necessary command to run IMMEDIATELY after deploying the Underground Nexus to activate it):***
 **`docker exec Underground-Nexus sh deploy-olympiad.sh`**
 
-**ALTERNATIVE - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:**
+**ALTERNATIVE** - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
 `sh deploy-olympiad.sh`
 
 ----------------------------------------------------
@@ -46,7 +50,7 @@ Milestones will be added to this resource to present the general release timelin
 
 **2.** The Nexus is designed to only need one open port to operate for maximum security (port 1000, also port 9443 is a safe second port to have open due to having `https`, and port 2000 can be used for a least privileged Security Operation Center dashboard builder - ports beyond these three need to have purpose).  Every other port opened should be opened with intention and monitoring, which the Pi hole monitors all default apps by default (the recommended open port for primary access is http://localhost:1000, Portainer with https can be made securely available at http://localhost:9443 and the SOC can be made available optionally at http://localhost:2000 - keep in mind that port 1000 is a portal to root access, so keep security in mind for port 1000).
 
-**3.** k3d cannot be run from inside of any webtop (for security reasons), rather k3d must be used directly inside the Underground Nexus Alpine Linux (Docker in Docker) host container that runs the Docker engine.  Once a kubernetes cluster has been deployed, webtops can then manage deployed kubernetes clusters.
+**3.** Inside of the Portainer interface, KuberNexus can be found for using Kubernetes.  To modify KuberNexus or to create a custom cluster of your own, the MATE admin desktop's terminal works with the `k3d` command which allows Kubernetes clusters to be built or modifed.
 
 **4.** Nexus apps are accessible from inside Firefox or any web browser inside the Nexus MATE admin desktop.
 
