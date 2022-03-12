@@ -26,10 +26,10 @@ RUN echo "docker run -itd --name=workbench -h workbench --privileged --init -e P
 #RUN echo "docker exec workbench echo "docker exec workbench echo "#!/bin/sh"" > /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y update" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y wget" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo apt -y update" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo apt install -y wget" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo wget https://release.gitkraken.com/linux/gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo dpkg -i gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo apt -y update" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo apt install -y wget" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo wget https://release.gitkraken.com/linux/gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo dpkg -i gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget -O vscode-amd64.deb  https://go.microsoft.com/fwlink/?LinkID=760868" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #ARM64 Visual Studio Code deploy
