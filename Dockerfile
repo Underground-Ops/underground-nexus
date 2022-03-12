@@ -27,6 +27,7 @@ RUN echo "docker run -itd --name=workbench -h workbench --privileged --init -e P
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y update" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y upgrade" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y wget" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo apt install -y wget" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo wget https://release.gitkraken.com/linux/gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec Security-Operation-Center echo "docker exec Security-Operation-Center sudo dpkg -i gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget -O vscode-amd64.deb  https://go.microsoft.com/fwlink/?LinkID=760868" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
@@ -50,13 +51,19 @@ RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y 
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y synaptic" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://raw.githubusercontent.com/rancher/k3d/main/install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo bash /install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo apt-get update && sudo apt-get install -y terraform" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench terraform -v" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench which terraform" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench touch ~/.bashrc" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench terraform -install-autocomplete" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo wget -O terraform-amd64.zip https://releases.hashicorp.com/terraform/1.1.7/terraform_1.1.7_linux_amd64.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo unzip terraform-amd64.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo mv terraform usr/local/bin" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo touch ~/.bashrc" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo terraform -install-autocomplete" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#Alternate Terraform deploy
+#RUN echo "docker exec workbench echo "docker exec workbench sudo curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench sudo apt-get update && sudo apt-get install -y terraform" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench terraform -v" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench which terraform" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench touch ~/.bashrc" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench terraform -install-autocomplete" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y update --fix-missing" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt --fix-broken install -y" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y upgrade" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
