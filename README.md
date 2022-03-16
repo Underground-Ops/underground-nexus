@@ -66,8 +66,9 @@ Milestones will be added to this resource to present the general release timelin
 - Portainer: https://10.20.0.1:9443
 - Pi hole: http://10.20.0.20 (can change password from within Portainer)
 - Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9001 (default `user`:`password` is `minioadmin`:`minioadmin`)
-- Ubuntu MATE Admin Desktop: http://<remotehost-ip>:1000 (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside it's own desktop inside of the Underground Nexus)
+- Ubuntu MATE Admin Desktop: `http://10.20.0.1:1000` (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside the Underground Nexus MATE Desktop)
 - Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:3000 (least privilege - default `user`:`password` is `abc`:`abc`)
+- Underground Nexus Secret Vault: https://10.20.0.1:8200 (default password is `myroot` - it is recommended to **not** make this port available for access outside of the Underground Nexus)
 
 **10.** Here are the default apps mapped to the **development** ports if opened for access outside of the Underground Nexus
 (it's recommended to only open ports 1000 and 9443 unless other ports are being used intentionally - port 22 allows ssh access through a Kali Linux node, and any port being used can be opened as needed, however, Nexus is more securely accessed from inside the Underground Nexus *MATE Admin Desktop*):
@@ -78,6 +79,15 @@ Milestones will be added to this resource to present the general release timelin
 - Ubuntu MATE Admin Desktop: 1000 (test http://localhost:1000 for access)
 - Ubuntu KDE Security Operation Center Desktop: 2000 (test http://localhost:2000 for access)
 
+**11.** From inside Portainer there is a *Kali Linux* system titled *Athena0* (access the terminal with Athena0's **>_** icon seen inside of Portainer's menu) - this tool is designed for pentesting and chaos engineering with architectures built by the Underground Nexus Kit before applications are released for production:
+- Tools include: Terraform (`terraform`), Metasploit (`msfconsole`), `nmap` and the Kali Linux `Bleeding Edge` repository for extensive resource access
+- This Athena0 node is designed as a super admin access gateway that can be configured to port 22 for accessing the Underground Nexus remotely (by default ssh is not configured in Athena0 to be accessible - please ensure the Underground Nexus is behind a firewall before configuring ssh access to the Underground Nexus with this node)
+- Both the Underground Nexus root shell and Ubuntu MATE terminal shell are able to send commands to Athena0 using `docker exec Athena0` followed by the desired command (for example, try `docker exec Athena0 terraform -v`)
+- Thanks to Terraform being paired with Metasploit, payloads can be distributed at scale from Athena0 for **Chaos Engineering** and general construction.
+
+**12.** Terraform comes pre-installed for immediate use from both the Underground Nexus MATE Desktop's terminal and the Athena0 Kali Linux node.
+- Use Terraform from the MATE Desktop terminal for general use
+- Use Terraform from the Athena0 node for more aggressive use that might require super admin level access and full `root` privileges
 
 ----------------------------------------------------
 
