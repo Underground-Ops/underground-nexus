@@ -48,7 +48,7 @@ Milestones will be added to this resource to present the general release timelin
 
 **1.** Access the Nexus MATE admin desktop at "http://localhost:1000" - If deployed on ARM, Visual Studio Code will need to be manually installed.  On amd64 builds you will see Visual Studio Code, GitHub Desktop and GitKraken listed in the MATE desktop. (The webtop is a loadbalancer, not just a desktop.)
 
-**2.** The Nexus is designed to only need one open port to operate for maximum security (port 1000, also port 9443 is a safe second port to have open due to having `https`, and port 2000 can be used for a least privileged Security Operation Center dashboard builder - ports beyond these three need to have purpose).  Every other port opened should be opened with intention and monitoring, which the Pi hole monitors all default apps by default (the recommended open port for primary access is http://localhost:1000, Portainer with https can be made securely available at http://localhost:9443 and the SOC can be made available optionally at http://localhost:2000 - keep in mind that port 1000 is a portal to root access, so keep security in mind for port 1000).
+**2.** The Underground Nexus is designed to only need one open port to use, for security purposes (port 1000 is the single access port - alternatively, port 9443 is a safe second port to have open due to having `https`, and optionally port 2000 can be used for a least privileged Security Operation Center dashboard builder - ports beyond these three need to have purpose).  Every other port opened should be opened with intention and monitoring, which the Pi hole monitors all default apps by default (the recommended open port for primary access is http://localhost:1000, Portainer with https can be made securely available at https://localhost:9443 and the SOC can be made available optionally at http://localhost:2000 - keep in mind that port 1000 is a portal to root access, so keep security in mind for port 1000).
 
 **3.** Inside of the Portainer interface, KuberNexus can be found for using Kubernetes.  To modify KuberNexus or to create a custom cluster of your own, the MATE admin desktop's terminal works with the `k3d` command which allows Kubernetes clusters to be built or modifed.
 
@@ -62,11 +62,11 @@ Milestones will be added to this resource to present the general release timelin
 
 **8.** Nexus can be turned into an ultra Pi hole if its DNS server ports are opened when Nexus is deployed (ports 53 and 67).  This would allow the Underground Nexus to be used as a company or home SOC that can have data integrated with Pi hole data using Grafana and Loki).
 
-**9.** Default URLs will show up if Nexus deploys without errors (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
+**9.** Default URLs will show up if Nexus deploys without errors - *the links below can be used from inside the Nexus desktop if accessing this GitHub URL from inside the Firefox browser within the Nexus MATE desktop itself* (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
 - Portainer: https://10.20.0.1:9443
 - Pi hole: http://10.20.0.20 (can change password from within Portainer)
 - Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9001 (default `user`:`password` is `minioadmin`:`minioadmin`)
-- Ubuntu MATE Admin Desktop: http://10.20.0.1:1000 (runs as root - default `user`:`password` is `abc`:`abc`)
+- Ubuntu MATE Admin Desktop: http://<remotehost-ip>:1000 (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside it's own desktop inside of the Underground Nexus)
 - Ubuntu KDE Security Operation Center Desktop: http://10.20.0.30:3000 (least privilege - default `user`:`password` is `abc`:`abc`)
 
 **10.** Here are the default apps mapped to the **development** ports if opened for access outside of the Underground Nexus
@@ -88,9 +88,9 @@ The Underground Nexus can be configured to emulate and run virtual machines insi
 Please see the images found in the repository for examples on how to use virtual machines to begin configuring emulated virtual systems.
 
 **Using Underground Nexus Virtual Machines:**
-- https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__1.PNG
-- https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__2.PNG
-- https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__3.PNG
+- Walkthrough screenshots steps 1-2: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__1.PNG
+- Walkthrough screenshots steps 3-4: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__2.PNG
+- Walkthrough screenshot step 5: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__3.PNG
 
 ----------------------------------------------------
 
