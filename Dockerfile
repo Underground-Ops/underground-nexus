@@ -1,1 +1,1 @@
-FROM natoascode/underground-nexus:amd64
+FROM linuxserver/webtop:ubuntu-mate
