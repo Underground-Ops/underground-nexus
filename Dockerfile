@@ -1,1 +1,1 @@
-FROM docker:dind
+FROM docker:stable-dind
