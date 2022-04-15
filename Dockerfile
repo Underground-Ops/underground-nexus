@@ -16,11 +16,11 @@ RUN apk add wget
 RUN docker swarm init
 #RUN apk add docker-compose
 
-RUN docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena
-RUN docker run -itd --privileged -p 53:53/tcp -p 53:53/udp -p 67:67 -p 80:80 -p 443:443 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v /var/lib/docker/volumes/pihole_DNS_data/_data/pihole/:/etc/pihole/ pihole/pihole:latest
+RUN sudo docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena
+RUN sudo docker run -itd --privileged -p 53:53/tcp -p 53:53/udp -p 67:67 -p 80:80 -p 443:443 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v /var/lib/docker/volumes/pihole_DNS_data/_data/pihole/:/etc/pihole/ pihole/pihole:latest
 
 #Build workbench stack
-RUN docker run -itd --name=workbench -h workbench --privileged --init -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 3000:3000 --dns=10.20.0.20 --net=Inner-Athena --ip=10.20.0.15 --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock linuxserver/webtop:ubuntu-mate
+RUN sudo docker run -itd --name=workbench -h workbench --privileged --init -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 3000:3000 --dns=10.20.0.20 --net=Inner-Athena --ip=10.20.0.15 --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock linuxserver/webtop:ubuntu-mate
 #RUN docker exec workbench echo "docker exec workbench echo "#!/bin/sh"" > /nexus-bucket/workbench.sh
 RUN docker exec workbench echo "docker exec workbench sudo apt -y update" >> /nexus-bucket/workbench.sh
 RUN docker exec workbench echo "docker exec workbench sudo apt install -y wget" >> /nexus-bucket/workbench.sh
@@ -71,10 +71,10 @@ RUN docker exec workbench echo "docker exec Security-Operation-Center sudo apt -
 RUN docker exec workbench echo "docker exec Security-Operation-Center sudo apt -y upgrade --fix-broken" >> /nexus-bucket/workbench.sh
 
 #Deploy Security Operation Center
-RUN docker run -itd --name=Security-Operation-Center -h Security-Operation-Center --privileged --init -e PUID=2000 -e PGID=2000 -e TZ=America/Colorado -p 2000:3000 --dns=10.20.0.20 --net=Inner-Athena --ip=10.20.0.30 --restart=always -v security-operation-center:/config -v /nexus-bucket:/config/Desktop/nexus-bucket linuxserver/webtop:ubuntu-kde
+RUN sudo docker run -itd --name=Security-Operation-Center -h Security-Operation-Center --privileged --init -e PUID=2000 -e PGID=2000 -e TZ=America/Colorado -p 2000:3000 --dns=10.20.0.20 --net=Inner-Athena --ip=10.20.0.30 --restart=always -v security-operation-center:/config -v /nexus-bucket:/config/Desktop/nexus-bucket linuxserver/webtop:ubuntu-kde
 
 #Build Athena0 stack
-RUN docker run -itd -p 22:22 --name=Athena0 -h Athena0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v athena0:/home/ -v /nexus-bucket:/nexus-bucket -v /etc/docker:/etc/docker -v /usr/local/bin/docker:/usr/local/bin/docker -v /var/run/docker.sock:/var/run/docker.sock kalilinux/kali-bleeding-edge
+RUN sudo docker run -itd -p 22:22 --name=Athena0 -h Athena0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v athena0:/home/ -v /nexus-bucket:/nexus-bucket -v /etc/docker:/etc/docker -v /usr/local/bin/docker:/usr/local/bin/docker -v /var/run/docker.sock:/var/run/docker.sock kalilinux/kali-bleeding-edge
 RUN docker exec Athena0 apt -y update
 RUN docker exec Athena0 apt install -y nano
 RUN docker exec Athena0 apt install -y nmap
@@ -92,8 +92,8 @@ RUN docker exec Athena0 apt -y update
 RUN docker exec Athena0 apt -y upgrade
 
 #Build Olympiad0 Portainer node
-RUN docker volume create portainer_data
-RUN docker run -d -p 8000:8000 -p 9443:9443 --name=Olympiad0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data cr.portainer.io/portainer/portainer-ce
+RUN sudo docker volume create portainer_data
+RUN sudo docker run -d -p 8000:8000 -p 9443:9443 --name=Olympiad0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data cr.portainer.io/portainer/portainer-ce
 
 #Install Kubernetes kit
 RUN curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
@@ -106,4 +106,4 @@ RUN docker run -itd --privileged -p 9000:9000 -p 9010:9001 --name=torpedo -h tor
 RUN docker run -itd -p 8200:1234 --name=Nexus-Secret-Vault -h Nexus-Secret-Vault --dns=10.20.0.20 --net=Inner-Athena --restart=always --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:1234' vault
 
 #Build workbench script
-RUN docker exec Athena0 sh /nexus-bucket/workbench.sh
+RUN sudo docker exec Athena0 sh /nexus-bucket/workbench.sh
