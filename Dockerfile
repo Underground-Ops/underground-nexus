@@ -1,1 +1,1 @@
-FROM kasmweb/kali:develop
+FROM kasmweb/core-kali-rolling:develop-rolling
