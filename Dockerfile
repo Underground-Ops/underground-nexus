@@ -1,1 +1,1 @@
-FROM docker:stable-dind
+FROM docker:git
