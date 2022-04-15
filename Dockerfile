@@ -14,7 +14,7 @@ RUN apk add wget
 
 #Build Inner-Athena engine
 RUN docker swarm init
-RUN apk add docker-compose
+#RUN apk add docker-compose
 
 RUN docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena
 RUN docker run -itd --privileged -p 53:53/tcp -p 53:53/udp -p 67:67 -p 80:80 -p 443:443 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v /var/lib/docker/volumes/pihole_DNS_data/_data/pihole/:/etc/pihole/ pihole/pihole:latest
