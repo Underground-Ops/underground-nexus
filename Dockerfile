@@ -1,6 +1,6 @@
 FROM docker:dind
 
-EXPOSE 22 53 80 443 1000 2375 2376 2377 9010 9443
+EXPOSE 1000
 
 VOLUME ["/var/run", "/var/lib/docker/volumes", "/nexus-bucket"]
 
