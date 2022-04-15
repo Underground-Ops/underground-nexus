@@ -1,1 +1,1 @@
-FROM docker:git
+FROM underground-nexus:amd64
