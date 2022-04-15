@@ -1,1 +1,1 @@
-FROM linuxserver/webtop
+FROM kasmweb/kali
