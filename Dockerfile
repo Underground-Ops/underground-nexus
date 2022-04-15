@@ -1,1 +1,1 @@
-FROM linuxserver/webtop:ubuntu-mate
+FROM linuxserver/webtop
