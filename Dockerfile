@@ -1,1 +1,1 @@
-FROM kasmweb/kali
+FROM kasmweb/kali:develop
