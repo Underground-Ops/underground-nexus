@@ -1,4 +1,4 @@
-FROM docker:dind
+FROM docker:latest
 
 EXPOSE 1000
 
