@@ -1,1 +1,1 @@
-FROM linuxserver/webtop:ubuntu-xfce
+FROM ubuntu:latest
