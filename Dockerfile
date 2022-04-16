@@ -1,1 +1,1 @@
-FROM kasmweb/core-kali-rolling:develop
+FROM portainer/portainer-ce
