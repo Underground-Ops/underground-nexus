@@ -1,1 +1,1 @@
-FROM pihole/pihole:latest
+FROM guacamole/guacamole:latest
