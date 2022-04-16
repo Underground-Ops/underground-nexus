@@ -1,1 +1,1 @@
-FROM dorowu/ubuntu-desktop-lxde-vnc
+FROM pihole/pihole:latest
