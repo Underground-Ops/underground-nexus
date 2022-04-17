@@ -55,9 +55,9 @@ Milestones will be added to this resource to present the general release timelin
 
 ### Install Step 1 (assuming Docker is already installed) - Open a command line (Windows) or terminal (Linux or OSX) shell and paste the appropriate install command for your computer's hardware platform.
 
-**Dockerhub *VPN* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
+**Dockerhub *VPN* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --ip=172.17.0.50 --privileged --init -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
 
-**Dockerhub *VPN* pull for *arm64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:arm64`
+**Dockerhub *VPN* pull for *arm64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --ip=172.17.0.50 --privileged --init -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:arm64`
 
 ----------------------------------------------------
 
