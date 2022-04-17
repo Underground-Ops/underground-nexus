@@ -27,7 +27,7 @@ Generate a client certificate without a passphrase (for TESTING ONLY - otherwise
   
 `docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME nopass`  
 Retrieve the client configuration with embedded certificates - it is NOT recommended to use `nopass` beyond testing
-(alternate example for setting up a VPN client password - `docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME`)  
+(**alternate preferred** example for setting up a VPN client **password** - `docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME`)  
   
 `docker run -v $OVPN_DATA:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn`  
 
