@@ -1,3 +1,33 @@
+# This Branch contains guidance on how to host Underground Nexus securely
+
+Using a VPN allows the applicaitons deployed from the Underground Nexus to be accessed more securely.
+
+The Underground Nexus can be deployed from inside of a VPN's VXLAN network to optionally allow remote Docker Swarm workers (local prem, cloud, hybrid) to cluster with cloud nodes to gain access to using Docker overlay networks that allow Docker to be used as a load balancer for Kubernetes, through the use of KuberNexus (default Underground Nexus deployment k8s cluster - build with k3d).
+
+The quick start guidance below is based on the following maintainer's OpenVPN container image:
+- https://registry.hub.docker.com/r/kylemanna/openvpn
+
+### Quick Start
+Pick a name for the $OVPN_DATA data volume container. It's recommended to use the ovpn-data- prefix to operate seamlessly with the reference systemd service. Users are encourage to replace example with a descriptive name of their choosing.
+
+`OVPN_DATA="ovpn-data-nexus"`
+Initialize the $OVPN_DATA container that will hold the configuration files and certificates. The container will prompt for a passphrase to protect the private key used by the newly generated certificate authority.
+
+The `VPN.SERVERNAME.COM` is the domain name or public IP address of the VPN Server.
+`docker volume create --name $OVPN_DATA`
+`docker run -v $OVPN_DATA:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM`
+`docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki`
+Start OpenVPN server process
+
+`docker run -v $OVPN_DATA:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn`
+Generate a client certificate without a passphrase
+
+`docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME nopass`
+Retrieve the client configuration with embedded certificates - it is NOT recommended to use `nopass` beyond testing
+(alternate example for setting up a VPN client password - `docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME`)
+
+`docker run -v $OVPN_DATA:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn`
+
 # Underground Nexus - DevSecOps Control Center
 
 **(*NOTE* - This resource is still in BETA!  Expect rough edges until refined.)**
