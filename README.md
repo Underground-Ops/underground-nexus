@@ -1,4 +1,4 @@
-# This Branch contains guidance on how to host Underground Nexus securely
+# This Branch contains guidance on how to host Underground Nexus as a WebApp securely
 
 Using a VPN allows the applicaitons deployed from the Underground Nexus to be accessed more securely.
 
