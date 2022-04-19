@@ -1,6 +1,6 @@
 FROM docker:dind
 
-EXPOSE 22 53 80 443 1000 2375 2376 2377 9010 9443
+EXPOSE 22 53 80 443 1000 2375 2376 2377 9010 9443 18443
 
 VOLUME ["/var/run", "/var/lib/docker/volumes", "/nexus-bucket"]
 
@@ -100,6 +100,9 @@ RUN echo "k3d cluster create KuberNexus -p 8080:80@loadbalancer -p 8443:8443@loa
 
 #Build Cyber Life Torpedo - default username is "minioadmin" and default password is also "minioadmin" (please change, especially before shipping off to Dockerhub or other public cloud repositories!)
 RUN echo "docker run -itd --privileged -p 9000:9000 -p 9010:9001 --name=torpedo -h torpedo --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /nexus-bucket:/nexus-bucket -v /nexus-bucket/s3-torpedo:/data quay.io/minio/minio server /data --console-address ":9001"" >> deploy-olympiad.sh
+
+#Deploy Visual Studio Code Container
+RUN echo "docker run -d --name=code-server -e PUID=1050 -e PGID=1050 -p 18443:8443 --dns=10.20.0.20 --net=Inner-Athena -v /nexus-bucket:/config -v /etc/docker:/etc/docker -v /usr/local/bin/docker:/usr/local/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --restart unless-stopped lscr.io/linuxserver/code-server" >> deploy-olympiad.sh
 
 #Build Development Vault
 RUN echo "docker run -itd -p 8200:1234 --name=Nexus-Secret-Vault -h Nexus-Secret-Vault --dns=10.20.0.20 --net=Inner-Athena --restart=always --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:1234' vault" >> deploy-olympiad.sh
