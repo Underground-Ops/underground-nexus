@@ -42,7 +42,7 @@ stages:
 - incremental rollout 100%
 - performance
 - cleanup
-sast:
-  stage: deploy
+#sast:
+  #stage: deploy
 include:
 - template: Auto-DevOps.gitlab-ci.yml
