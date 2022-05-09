@@ -43,6 +43,6 @@ stages:
 - performance
 - cleanup
 sast:
-  stage: test
+  stage: deploy
 include:
 - template: Auto-DevOps.gitlab-ci.yml
