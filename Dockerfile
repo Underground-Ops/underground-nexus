@@ -39,11 +39,11 @@ RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/shiftkey/desktop/releases/download/release-2.9.6-linux1/GitHubDesktop-linux-2.9.6-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i GitHubDesktop-linux-2.9.6-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y apt-transport-https curl" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-#OPTIONAL - Brave Browser install deploy
-#RUN echo "docker exec workbench echo "docker exec workbench sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-#RUN echo "docker exec workbench echo "docker exec workbench sudo echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-#RUN echo "docker exec workbench echo "docker exec workbench sudo apt -y update" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-#RUN echo "docker exec workbench echo "docker exec workbench sudo apt install brave-browser" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#Chrome RDP and GitKraken
+RUN echo "docker exec workbench echo "docker exec workbench wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i chrome-remote-desktop_current_amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench wget https://release.gitkraken.com/linux/gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #Virtual Machine Engineering Suite
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y qemu" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
