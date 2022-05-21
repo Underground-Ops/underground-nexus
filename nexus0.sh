@@ -54,3 +54,38 @@ service ssh start
 #------------------------------------
 #run "sh nexus0.sh" to execute
 #------------------------------------
+
+#------------------------------------
+#**How to configure Nexus0 for access:**
+#------------------------------------
+
+#------------------------------------
+#__*It is expected that you have already run `sh nexus0.sh` before doing this*__
+#------------------------------------
+#This goes over how to install chrome RDP via ssh to get to the webtop workbench.
+
+#From portainer’s my-workbench shell you want to use:
+#`hostname -i`
+
+#To get your host’s IP address, then ssh to the host with the ip:
+#`ssh abc@(ipaddress)`
+
+#Say yes, then the password is “abc”
+
+#------------------------------------
+#From the computer you are accessing things from, install chrome rdp, or go to the URL:
+#-https://remotedesktop.google.com/headless
+
+#*(the ssh **"Authorize"** key is __temporary__, so start over again if the Authorize string errors when ran inside the **Nexus0 shell** while **ssh'd as "abc" via Portainer**)*
+
+#In chrome rdp, choose access my computer, then choose install via ssh.
+
+#Follow the prompts till one says “Authorize”
+
+#Copy the Linux string it gives you
+
+#Paste that into the cloud Nexus0 node
+#------------------------------------
+#Access the Nexus0 from here once Chrome RDP is set up:
+#-https://remotedesktop.google.com/access
+#------------------------------------
