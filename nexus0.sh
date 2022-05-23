@@ -97,6 +97,7 @@ su - abc
 #The Google Chrome RDP "Authroize" script may be run when this script completes or the Chrome RDP "Authorize" string may be added to this script directly to automate setting up Chrome RDP - you will need to enter the PIN still when the script completes even if the Chrome RDP "Authorize" string is pasted to the bottom of this script before running.
 #OPTIONAL: copy paste Chrome RDP "Authorize" key below with this *REQUIRED STEP* "--user-name=abc" added to the VERY END of the string
 #Here is an example string: DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="thisisanexamplestringthatisnotrealandDOESNOTWORK" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname) --user-name=abc
-#(paste your modified Chrome RDP Authorize string below - the string pasted below should look like the example)
+#------------------------------------
+#(paste your modified Chrome RDP "Authorize" string here - the string pasted below should look like the example)
 
 #------------------------------------
