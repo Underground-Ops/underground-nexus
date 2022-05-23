@@ -19,11 +19,12 @@ apt update
 wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
 sudo dpkg -i gitkraken-amd64.deb
 apt -y upgrade --fix-broken
-#manually enable ssh - service ssh enable
-#start ssh - service ssh start
-#get ip address - hostname -i
+#to manually enable ssh - `service ssh enable`
+#to start ssh - `service ssh start`
+#get ip address - `hostname -i`
 #ssh into user to launch chrome rdp - ssh abc@ipaddressfromlastcommand
-#password - "abc"
+#password - "notiaPoint1"
+#change terminal CLI user from "root" to "abc" in the >_ Console without using ssh to switch from "root" to "abc" - `su - abc`
 #Use the chrome RDP application to get an "install via ssh" authentication string for "linux"
 #copy paste the authentication string into the "abc" ssh shell (don't use sudo - must be using ssh with "abc" or the chrome rdp setup will fail)
 
@@ -58,6 +59,8 @@ sudo cp 1280x1024.jpg 1024x768.jpg
 #service ssh enable
 #service ssh start
 
+echo "abc:notiaPoint1" | chpasswd
+
 su - abc
 #------------------------------------
 #run "sh nexus0.sh" to execute
@@ -75,7 +78,7 @@ su - abc
 #From portainer’s "my-nexus0" terminal shell (>_ Console) use:
 #`su - abc`
 
-#The default password for the user named "abc" is “abc” - change the default password with - `passwd abc`
+#The default password for the user named "abc" is “notiaPoint1” - change the default password with - `passwd abc`
 
 #CHROME RDP WILL ONLY INSTALL IF THE CONSOLE IS LOGGED INTO THE "abc" USER - DO NOT USE "sudo" (the `su - abc` command above will log the terminal into "abc," which is *REQUIRED*)
 
@@ -100,3 +103,5 @@ su - abc
 #(paste your modified Chrome RDP "Authorize" string once this script completes - the string pasted after running this script should look like the example above)
 #THE CHROME RDP AUTHORIZE STRING WILL ONLY WORK WHILE THE TERMINAL IS LOGGED IN AS "abc" - IF THE LINUX COMMAND TERMINAL DIES OR CRASHES AFTER RUNNING THIS SCRIPT THE FOLLOWING COMMAND WILL LOG THE CLI TERMINAL IN AS "abc": "su - abc"
 #------------------------------------
+#Default password to Desktop once in Chrome RDP is "notiaPoint1" - change the password using `sudo passwd abc`
+#Configure two factor authentication: https://www.tecmint.com/enable-two-factor-authentication-in-ubuntu/
