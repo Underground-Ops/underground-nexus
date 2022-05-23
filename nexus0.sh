@@ -52,8 +52,8 @@ sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/ma
 sudo rm 1024x768.jpg
 sudo cp 1280x1024.jpg 1024x768.jpg
 
-service ssh enable
-service ssh start
+#service ssh enable
+#service ssh start
 
 su - abc
 #------------------------------------
