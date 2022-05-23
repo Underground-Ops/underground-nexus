@@ -6,6 +6,9 @@
 #------------------------------------
 #name a file "nexus0.sh" and paste this script inside with "sudo apt update" then "sudo apt install nano" to ubild a script -- ctrl + x , y, enter (to save inside nano)
 #------------------------------------
+#alternatively this script may be pulled with `wget` or `curl` (install wget example: `apt update && apt install -y wget`)
+#download example string with `wget` to pull this script to a computer: `wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/nexus0.sh`
+#------------------------------------
 apt update
 apt install -y ssh
 apt install -y wget
