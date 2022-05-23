@@ -95,3 +95,6 @@ su - abc
 #-https://remotedesktop.google.com/access
 #------------------------------------
 #The Google Chrome RDP "Authroize" script may be run when this script completes or the Chrome RDP "Authorize" string may be added to this script directly to automate setting up Chrome RDP - you will need to enter the PIN still when the script completes even if the Chrome RDP "Authorize" string is pasted to the bottom of this script before running.
+#(paste Chrome RDP "Authorize" key below)
+
+#------------------------------------
