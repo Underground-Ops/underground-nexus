@@ -95,5 +95,5 @@ su - abc
 #Here is an example string: DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="thisisanexamplestringthatisnotrealandDOESNOTWORK" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname)
 #------------------------------------
 #(paste your modified Chrome RDP "Authorize" string once this script completes - the string pasted after running this script should look like the example above)
-#THE CHROME RDP AUTHORIZE STRING WILL ONLY WORK WHILE THE TERMINAL IS LOGGED INTO "abc" - IF THE LINUX COMMAND TERMINAL DIES OR CRASHES AFTER RUNNING THIS SCRIPT THE FOLLOWING COMMAND WILL LOG THE CLI TERMINAL INTO "abc": "su - abc"
+#THE CHROME RDP AUTHORIZE STRING WILL ONLY WORK WHILE THE TERMINAL IS LOGGED IN AS "abc" - IF THE LINUX COMMAND TERMINAL DIES OR CRASHES AFTER RUNNING THIS SCRIPT THE FOLLOWING COMMAND WILL LOG THE CLI TERMINAL IN AS "abc": "su - abc"
 #------------------------------------
