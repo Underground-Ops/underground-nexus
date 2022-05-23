@@ -54,6 +54,8 @@ sudo cp 1280x1024.jpg 1024x768.jpg
 
 service ssh enable
 service ssh start
+
+su - abc
 #------------------------------------
 #run "sh nexus0.sh" to execute
 #------------------------------------
@@ -92,3 +94,4 @@ service ssh start
 #Access the Nexus0 from here once Chrome RDP is set up:
 #-https://remotedesktop.google.com/access
 #------------------------------------
+#The Google Chrome RDP "Authroize" script may be run when this script completes or the Chrome RDP "Authorize" string may be added to this script directly to automate setting up Chrome RDP - you will need to enter the PIN still when the script completes even if the Chrome RDP "Authorize" string is pasted to the bottom of this script before running.
