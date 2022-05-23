@@ -69,35 +69,31 @@ su - abc
 #------------------------------------
 #This goes over how to install chrome RDP via ssh to get to the webtop workbench.
 
-#From portainer’s my-workbench shell you want to use:
-#`hostname -i`
+#From portainer’s "my-nexus0" terminal shell (>_ Console) use:
+#`su - abc`
 
-#To get your host’s IP address, then ssh to the host with the ip:
-#`ssh abc@(ipaddress)`
+#The default password for the user named "abc" is “abc” - change the default password with - `passwd abc`
 
-#Say yes, then the password is “abc”
+#CHROME RDP WILL ONLY INSTALL IF THE CONSOLE IS LOGGED INTO THE "abc" USER - DO NOT USE "sudo" (the `su - abc` command above will log the terminal into "abc," which is *REQUIRED*)
 
 #------------------------------------
-#From the computer you are accessing things from, install chrome rdp, or go to the URL:
+#From the computer you are accessing resources remotely from, install Chrome RDP, or go to the URL:
 #-https://remotedesktop.google.com/headless
 
 #*(the ssh **"Authorize"** key is __temporary__, so start over again if the Authorize string errors when ran inside the **Nexus0 shell** while **ssh'd as "abc" via Portainer**)*
 
 #In chrome rdp, choose access my computer, then choose install via ssh.
-
 #Follow the prompts till one says “Authorize”
+#Copy the Linux string it provides
+#Paste that into the cloud my-nexus0 node console while the terminal is logged as "abc"
 
-#Copy the Linux string it gives you
-
-#Paste that into the cloud Nexus0 node
 #------------------------------------
 #Access the Nexus0 from here once Chrome RDP is set up:
 #-https://remotedesktop.google.com/access
 #------------------------------------
 #The Google Chrome RDP "Authroize" script may be run when this script completes or the Chrome RDP "Authorize" string may be added to this script directly to automate setting up Chrome RDP - you will need to enter the PIN still when the script completes even if the Chrome RDP "Authorize" string is pasted to the bottom of this script before running.
-#OPTIONAL: copy paste Chrome RDP "Authorize" key below with this *REQUIRED STEP* "--user-name=abc" added to the VERY END of the string
-#Here is an example string: DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="thisisanexamplestringthatisnotrealandDOESNOTWORK" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname) --user-name=abc
+#Here is an example string: DISPLAY= /opt/google/chrome-remote-desktop/start-host --code="thisisanexamplestringthatisnotrealandDOESNOTWORK" --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name=$(hostname)
 #------------------------------------
-#(paste your modified Chrome RDP "Authorize" string here - the string pasted below should look like the example)
-
+#(paste your modified Chrome RDP "Authorize" string once this script completes - the string pasted after running this script should look like the example above)
+#THE CHROME RDP AUTHORIZE STRING WILL ONLY WORK WHILE THE TERMINAL IS LOGGED INTO "abc" - IF THE LINUX COMMAND TERMINAL DIES OR CRASHES AFTER RUNNING THIS SCRIPT THE FOLLOWING COMMAND WILL LOG THE CLI TERMINAL INTO "abc": "su - abc"
 #------------------------------------
