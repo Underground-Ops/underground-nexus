@@ -55,6 +55,12 @@ sudo rm 1280x1024.jpg
 sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly.jpg -O 1280x1024.jpg
 sudo rm 1024x768.jpg
 sudo cp 1280x1024.jpg 1024x768.jpg
+sudo rm 1080x1920.jpg
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-moon-jelly.jpg -O 1080x1920.jpg
+sudo rm 360x720.jpg
+sudo cp 1080x1920.jpg 360x720.jpg
+sudo rm 720x1440.jpg
+sudo cp 1080x1920.jpg 720x1440.jpg
 
 #service ssh enable
 #service ssh start
