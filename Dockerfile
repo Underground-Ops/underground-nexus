@@ -73,7 +73,15 @@ RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y 
 RUN echo "docker exec workbench echo "docker exec workbench sudo rm /usr/share/backgrounds/ubuntu-mate-common/Green-Wall-Logo.png" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/underground-nexus-scifi-space-jelly.png -O /usr/share/backgrounds/ubuntu-mate-common/Green-Wall-Logo.png" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #------------------------------------
-#Scifi Wallpaper link to creator post for credit: https://www.reddit.com/r/ImaginaryLandscapes/comments/h0d96c/the_cycle_by_artur_rosa_3d/
+#Set up firefox homepage
+RUN echo "docker exec workbench echo "docker exec workbench cd /config/.mozilla" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y zip unzip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo rm -r firefox" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo rm firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo unzip firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo chmod -R a+rwx firefox" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#------------------------------------
 
 #Deploy Security Operation Center
 RUN echo "docker run -itd --name=Security-Operation-Center -h Security-Operation-Center --privileged --init -e PUID=2000 -e PGID=2000 -e TZ=America/Colorado -p 2000:3000 --dns=10.20.0.20 --net=Inner-Athena --ip=10.20.0.30 --restart=always -v security-operation-center:/config -v /nexus-bucket:/config/Desktop/nexus-bucket linuxserver/webtop:alpine-kde" >> deploy-olympiad.sh
