@@ -78,9 +78,7 @@ RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y 
 RUN echo "docker exec workbench echo "docker exec workbench sudo rm -r /config/.mozilla/firefox" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo rm /config/.mozilla/firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo cp firefox.zip /config/.mozilla/firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo unzip /config/.mozilla/firefox.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo chmod -R a+rwx /config/.mozilla/firefox" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo cp firefox.zip /config/.mozilla/firefox.zip && cd /config/.mozilla && unzip /config/.mozilla/firefox.zip && chmod -R a+rwx /config/.mozilla/firefox" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #------------------------------------
 
 #Deploy Security Operation Center
