@@ -69,6 +69,7 @@ echo "abc:notiaPoint1" | chpasswd
 
 #Set up firefox homepage
 cd /config/.mozilla
+sudo apt install -y zip unzip
 sudo rm -r firefox
 sudo rm firefox.zip
 sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
