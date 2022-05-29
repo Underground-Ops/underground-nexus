@@ -33,7 +33,7 @@ apt -y upgrade --fix-broken
 #KDE wallpaper location: /usr/share/wallpapers/Next/contents/images/1440x900.jpg
 #------------------------------------
 
-#sea-space-jelly for kde ubuntu
+#sea-space-jelly wallpaper for kde ubuntu
 cd /usr/share/wallpapers/Next/contents/images/
 sudo rm 1440x900.jpg
 sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly-highres.jpg -O 1440x900.jpg
@@ -66,6 +66,14 @@ sudo cp 1080x1920.jpg 720x1440.jpg
 #service ssh start
 
 echo "abc:notiaPoint1" | chpasswd
+
+#Set up firefox homepage
+cd /config/.mozilla
+sudo rm -r firefox
+sudo rm firefox.zip
+sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
+sudo unzip firefox.zip
+sudo chmod -R a+rwx firefox
 
 su - abc
 #------------------------------------
