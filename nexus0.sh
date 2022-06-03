@@ -68,9 +68,10 @@ sudo cp 1080x1920.jpg 720x1440.jpg
 echo "abc:notiaPoint1" | chpasswd
 
 #Set up firefox homepage
+sudo rm -r /config/.mozilla
+sudo mkdir /config/.mozilla
 cd /config/.mozilla
 sudo apt install -y zip unzip
-sudo rm -r firefox
 sudo rm firefox.zip
 sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
 sudo unzip firefox.zip
