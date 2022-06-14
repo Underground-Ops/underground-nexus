@@ -1,6 +1,6 @@
 # Underground Nexus - DevSecOps Control Center
 
-**(*NOTE* - This resource is still in BETA!  Expect rough edges until refined.)**
+**(GA release is LIVE!)**
 
 The Underground Nexus is a cloud construction toolkit.  This resource will be receiving dedicated trainings until August of 2022 to teach developer communities how to use this tool for Cloud Native DevSecOps.
 
