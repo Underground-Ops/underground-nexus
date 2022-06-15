@@ -1,10 +1,11 @@
-# Underground Nexus - DevSecOps Control Center
+# Underground Nexus - Copy Paste Data Center and DevSecOps Software Factory
 
-**(GA release is LIVE!)**
+**__GA release is LIVE!__**
 
-The Underground Nexus is a cloud construction toolkit.  This resource will be receiving dedicated trainings until August of 2022 to teach developer communities how to use this tool for Cloud Native DevSecOps.
+The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for Cloud Native engineering, DevSecOps and all-around general data center needs.
 
-Milestones will be added to this resource to present the general release timeline for trainings and features for this kit.
+What is a hyperconverged data center?
+  **-->** https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.
 
 ***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
 
