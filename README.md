@@ -16,7 +16,7 @@ To get the nexus0 set up with Chrome RDP access (whether nexus0 is being configu
 ## Use the nexus0 script guidance to deploy to any flavor of Kubernetes
 
 **Nexus0's deploy script - `nexus0.sh`:**
-<script src="https://gitlab.com/c3901/devsecops-dojo-guild-research-boards/underground-nexus/-/snippets/2242846/raw/main/nexus0.sh"></script>
+<script src="https://raw.githubusercontent.com/Underground-Ops/underground-nexus/24067a3817a0d33495bdffbaaced7a7f5b4f28c1/nexus0.sh"></script>
 
 **Enjoy using the nexus0, check out the DevSecOps Dojo (from Cloud Underground) for learning or assistance!**
 - https://cloudunderground.dev/devsecops-dojo/
