@@ -1,6 +1,8 @@
-# This Branch contains guidance on how to host Underground Nexus as a WebApp securely
+# OpenVPN in a Container - Encryption For a Cloud Native World
 
-Using a VPN allows the applicaitons deployed from the Underground Nexus to be accessed more securely.
+**This Branch contains guidance on how to securely encrypt network traffic with OpenVPN for technologies like Docker, Kubernetes or tools that deploy both like the Underground Nexus.**
+
+Using a VPN allows applicaitons deployed from the Underground Nexus or other software factory platforms to be accessed more securely.
 
 The Underground Nexus can be deployed from inside of a VPN's VXLAN network to optionally allow remote Docker Swarm workers (local prem, cloud, hybrid) to cluster with cloud nodes to gain access to using Docker overlay networks that allow Docker to be used as a load balancer for Kubernetes, through the use of KuberNexus (default Underground Nexus deployment k8s cluster - build with k3d).
 
