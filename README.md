@@ -1,4 +1,4 @@
-# Underground Nexus - nexus0 Portable VPS Desktop
+# Underground Nexus - nexus0 Portable Cloud VPS Desktop (Chrome RDP READY!)
 
 **(This Virtual Private Desktop Server can be deployed inside of the Underground Nexus k3d KuberNexus version of Kubernetes or any other flavor of Kubernetes, this may be used as a standalone VPS or for inviting collaborators through the use of Chrome RDP - *nexus0 is a standalone VPS solution that can deploy independently from the Underground Nexus*)**
 
