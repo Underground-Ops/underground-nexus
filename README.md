@@ -7,7 +7,7 @@ Using a VPN allows applicaitons deployed from the Underground Nexus or other sof
 The Underground Nexus can be deployed from inside of a VPN's VXLAN network to optionally allow remote Docker Swarm workers (local prem, cloud, hybrid) to cluster with cloud nodes to gain access to using Docker overlay networks that allow Docker to be used as a load balancer for Kubernetes, through the use of KuberNexus (default Underground Nexus deployment k8s cluster - build with k3d).
 
 The quick start guidance below is based on the following maintainer's OpenVPN container image:
-- https://registry.hub.docker.com/r/kylemanna/openvpn
+- https://registry.hub.docker.com/r/natoascode/underground-openvpn
 
 ### Quick Start
 Pick a name for the $OVPN_DATA data volume container. It's recommended to use the ovpn-data- prefix to operate seamlessly with the reference systemd service. Users are encourage to replace example with a descriptive name of their choosing.
@@ -18,20 +18,20 @@ Pick a name for the $OVPN_DATA data volume container. It's recommended to use th
 
 2)  
 =>`docker volume create --name $OVPN_DATA`  
-=>`docker run -v $OVPN_DATA:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM`  
-=>`docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki`  
+=>`docker run -v $OVPN_DATA:/etc/openvpn --rm natoascode/underground-openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM`  
+=>`docker run -v $OVPN_DATA:/etc/openvpn --rm -it natoascode/underground-openvpn ovpn_initpki`  
 - The `VPN.SERVERNAME.COM` is the domain name or public IP address of the VPN Server.  
 - Start OpenVPN server process
 
 3)  
-=>`docker run -v $OVPN_DATA:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn`  
+=>`docker run -v $OVPN_DATA:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN natoascode/underground-openvpn`  
 - Generate a client certificate without a passphrase (for TESTING ONLY - otherwise, configure this to have a password by removing the `nopass` flag from the end of the next string)  
   
-=>`docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME nopass`  
+=>`docker run -v $OVPN_DATA:/etc/openvpn --rm -it natoascode/underground-openvpn easyrsa build-client-full CLIENTNAME nopass`  
 - Retrieve the client configuration with embedded certificates - it is NOT recommended to use `nopass` beyond testing
-(**alternate preferred** example for setting up a VPN client **password** - =>`docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn easyrsa build-client-full CLIENTNAME`)  
+(**alternate preferred** example for setting up a VPN client **password** - =>`docker run -v $OVPN_DATA:/etc/openvpn --rm -it natoascode/underground-openvpn easyrsa build-client-full CLIENTNAME`)  
   
-=>`docker run -v $OVPN_DATA:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn`  
+=>`docker run -v $OVPN_DATA:/etc/openvpn --rm natoascode/underground-openvpn ovpn_getclient CLIENTNAME > CLIENTNAME.ovpn`  
 
 4)
 Head to OpenVPN's official website to identify the proper download and installation option for the device you wish to connect to the newly configured Underground Nexus VPN WebApp server.  
@@ -41,7 +41,7 @@ Head to OpenVPN's official website to identify the proper download and installat
   
 Use the OpenVPN file generated from the steps above with the client OpenVPN app to connect to the VPN server.  
 
-# Underground Nexus - DevSecOps Control Center
+# Underground Nexus - DevSecOps Copy Paste Data Center and Software Factory
 
 **(*NOTE* - This resource is still in BETA!  Expect rough edges until refined.)**
 
