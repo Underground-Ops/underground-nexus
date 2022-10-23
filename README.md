@@ -6,8 +6,8 @@ Using a VPN allows applicaitons deployed from the Underground Nexus or other sof
 
 The Underground Nexus can be deployed from inside of a VPN's VXLAN network to optionally allow remote Docker Swarm workers (local prem, cloud, hybrid) to cluster with cloud nodes to gain access to using Docker overlay networks that allow Docker to be used as a load balancer for Kubernetes, through the use of KuberNexus (default Underground Nexus deployment k8s cluster - build with k3d).
 
-The quick start guidance below is based on the following maintainer's OpenVPN container image:
-- https://registry.hub.docker.com/r/natoascode/underground-openvpn
+The quick start guidance below is based on the following maintainer's OpenVPN source project:
+- https://github.com/kylemanna/docker-openvpn
 
 ### Quick Start
 Pick a name for the $OVPN_DATA data volume container. It's recommended to use the ovpn-data- prefix to operate seamlessly with the reference systemd service. Users are encourage to replace example with a descriptive name of their choosing.
