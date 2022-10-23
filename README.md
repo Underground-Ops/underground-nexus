@@ -16,7 +16,7 @@ To get the nexus0 set up with Chrome RDP access (whether nexus0 is being configu
 ## Use the nexus0 script guidance to deploy to any flavor of Kubernetes
 
 **Nexus0's deploy script - `nexus0.sh`:**
-#!/bin/bash
+`#!/bin/bash
 #------------------------------------
 #Nexus0 is a "copy paste" Cloud Native server node that may be deployed to container orchestrators (such as Kubernetes and Docker) - *Though Nexus0 is a component of the Underground Nexus "copy paste" datacenter environment, it __may run as a standalone server__ node even without the Underground Nexus*
 #------------------------------------
@@ -138,7 +138,7 @@ su - abc
 #THE CHROME RDP AUTHORIZE STRING WILL ONLY WORK WHILE THE TERMINAL IS LOGGED IN AS "abc" - IF THE LINUX COMMAND TERMINAL DIES OR CRASHES AFTER RUNNING THIS SCRIPT THE FOLLOWING COMMAND WILL LOG THE CLI TERMINAL IN AS "abc": "su - abc"
 #------------------------------------
 #Default password to Desktop once in Chrome RDP is "notiaPoint1" - change the password using `sudo passwd abc`
-#Configure two factor authentication: https://www.tecmint.com/enable-two-factor-authentication-in-ubuntu/
+#Configure two factor authentication: https://www.tecmint.com/enable-two-factor-authentication-in-ubuntu/`
 
 **Enjoy using the nexus0, check out the DevSecOps Dojo (from Cloud Underground) for learning or assistance!**
 - https://cloudunderground.dev/devsecops-dojo/
