@@ -1,109 +1,149 @@
-# Underground Nexus - Copy Paste Data Center and DevSecOps Software Factory
+# __Athena0 Pentesting Toolbox - *Agnostic Cloud Brute Forcer*__
+------------------------------------------------------------------------------  
+Athena0 is a tool dedicated to agnostic cloud brute force testing, alongside payload construction and delivery.
 
-**__GA release is LIVE!__**
+Are you looking for an easy way to practice ethical hacking or do you simply want a set of professional pentesting tools with a simple container __toolkit__  you can easily pull and run from a Docker container using *Docker Desktop* (on **ANY** system that can run Docker Desktop), a *Raspberry Pi* or another *ARM* system like a *Jetson Nano*?  
+  
+------------------------------------------------------------------------------  
+**If this is being used for professional payload construction, scripts should be written in the `/home/` directory.  In the home directory, a sample payload that builds the Olympiad package can be found as a review sample - the sample payload found in `/home/` is `olympiad.sh`, and additional payloads may be constructed and added to the directory for use.**  
+------------------------------------------------------------------------------  
+**To test the sample `olympiad.sh` payload, or build an Olympiad tool suite for *Docker* and *Kubernetes* in general, follow the guidance found here => https://hub.docker.com/repository/docker/natoascode/olympiad-dev**  
+------------------------------------------------------------------------------  
+  
+For *educators* and *learners*, this image can be used to learn **Ethical Hacking** skills!
+    
+------------------------------------------------------------------------------  
+💻 __*Start HACKING*__ 👇  
+------------------------------------------------------------------------------  
+**--Hide n' Hunt - Ethical Hacking Game & Simulation Setup Guide--**  
+  
+__How to use Athena0 to pentest or practice hacking:__ 
+https://www.youtube.com/watch?v=aZt7BTgK3Fo
 
-The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for Cloud Native engineering, DevSecOps and all-around general data center needs.
+__See Athena0 in action with a PVP hacking game called Hide n' Hunt:__ 
+https://www.youtube.com/watch?v=UZ2X-wP2djI&t=5s
 
-What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.">Learn more here!</a>
+*Use the guidance here to set up Hide'n Hunt, then provide this guide to every player for instruction on how to play for practicing cloud hacking skills.*
+  
+__Hide n’ Hunt Lesson and Game Guide - How to Play:__ 
+https://docs.google.com/document/d/1mCmjDDgVYk3bNftiGV_xIctOoRlq8tv4xmuECbL6Y-A/edit?usp=sharing
+  
+(Email nato@natoascode.com to learn more about Hide n’ Hunt for pentesting simulations. -- Thank you __Tony Huynh__ for helping create this game!)
 
-***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
+This Athena0 container is one part of an open-source platform called the __Olympiad__, built by the notiaSquad development community, managed by Nato Riley.  This node is configured with ssh for anyone to practice brute force attacks against clones generated from this container.
 
-***Check out how to get started with Underground Nexus quick-start guidance here:*** https://youtu.be/oXelz-AMwBU
+Athena0 is a payload engineering, recon and delivery toolkit that changes MAC addresses everytime the Athena0 container is restarted.  Tools such as the metasploit framework can be used in conjunction with beEF for building vulnerability payload packages for pentests.  As part of the delivery architecture, nmap and ZAP can be used for __recon__ while tools like Hydra and hashcat can be used independently or together for __brute force__ tests for establishing access for __payload delivery__.
+  
+__—*Read further to learn how to host ethical hacking DEATH MATCH and Hide n' Hunt tournaments with this for pentest practice* 😈💻👿—__
+  
+__Default Pentesting Tools:  
+Firewalld
+| Wireshark
+| John the Ripper (offline password cracker)
+| Hydra (online password cracker)
+| OWASP - ZAP
+| Nmap
+| Sqlmap
+| Metasploit Open Source Framework
+| netcat
+| hashcat
+| beEF (browser exploitation framework)
+| macchanger (enabled to automatically change the mac address by default, must uninstall or reinstall to disable this feature)__
+  
+If you want to practice or deploy brute force attacks (or any other pentesting-related attack), you will need to build at least two of these nodes.  The default name of each node is "Athena0," but nothing will be disrupted if the hostname is set to some other preferred name; title and name the pulled containers whatever you want.
 
-## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
+If secured with your own RSA ssh key, the ssh connection on this node can also be used as a means for extra secure remote access to a Raspberry Pi as an access gateway if the host system's port 22 is only open for ssh use internally to localhost.
 
-### Install Step 1 (assuming Docker is already installed) - Open a command line (Windows) or terminal (Linux or OSX) shell and paste the appropriate install command for your computer's hardware platform.
+__Generate Master Athena0 Admin Node:__  
 
-**Dockerhub *DEVELOPMENT* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 53:53/tcp -p 53:53/udp -p 80:80 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9010:9010 -p 9050:9443 -p 18443:18443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
+*Be aware that the Athena0 admin nodes are for professional pentesting, while player nodes (Athena1, Athena2, Athena3, etc.) are for practicing pentesting.*
 
-**Dockerhub *SECURE* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1000:1000 -p 9050:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
+__[STANDARD ADMIN NODE INSTALL]__  
+-- --Standard Pull => docker run -itd -p 2222:22 -h Athena0 --name=Athena0 --restart=always -v /home:/home natoascode/athena0
 
-**Dockerhub *DEVELOPMENT* pull for *Apple M1, Raspberry Pi, NVIDIA Jetson and arm64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 53:53/tcp -p 53:53/udp -p 80:80 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9010:9010 -p 9050:9443 -p 18443:18443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:arm64`
+__[STANDARD PLAYER NODE INSTALL TO PRACTICE HACKING]__  
+*Configure the Inner-Athena Docker network first*  
+-- --docker network create --subnet=172.20.0.0/20 Inner-Athena
 
-**Dockerhub *SECURE* pull for *Apple M1, Raspberry Pi, NVIDIA Jetson and arm64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1000:1000 -p 9050:9443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:arm64`
+*(only the admin node will be named "Athena0" and player nodes should be named according to the number of players - example: Athena1, Athena2, Athena3, etc.)*  
+-- --Standard Pull => docker run -itd -p 22 -h Athena1 --name=Athena1 --net=Inner-Athena natoascode/athena0
 
-----------------------------------------------------
+*Use Portainer to configure user access - read further for more portainer guidance.*
 
-**IMPORTANT:** After deploying the Underground Nexus from the appropriate `docker run` command for your system, enter the command below for "**Install Step 2**" in the exact same terminal or console in which the `docker run` command ran. *This script does quite a lot and can take a LONG time to complete - depending on the power of your system and internet speeds it can take anywhere from 15 to 45 minutes to complete activating and initializing the Underground Nexus stack.*
+__[ALTERNATE INSTALL WITH PI HOLE]__  
+*Configure the Inner-Athena Docker network first*  
+-- --docker network create --subnet=172.20.0.0/20 Inner-Athena
+  
+*Build the Athena0 master node*  
+-- --Pull For Pairing With a Pi-Hole Container => docker run -itd -p 2222:22 -h Athena0 --name=Athena0 --net=Inner-Athena --dns=172.20.0.20 --restart=always -v /home:/home -v /var/log:/var/log natoascode/athena0
+  
+*Run this on the Docker host before installing Pi Hole*  
+sudo systemctl disable systemd-resolved.service  
+  
+*If the above command was successful, the Pi Hole container should run with no errors*  
+-- --sudo docker run -itd -p 53:53/tcp -p 53:53/udp -p 67:67 -p 80:80 -p 443:443 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=172.20.0.20 --restart=always -v /home:/home -v /var/log/pihole.log:/var/log/pihole.log -v /etc/pihole:/etc/pihole pihole/pihole
+  
+*--(be aware that this "Standard Pull" is not going to work for the tournament since it only opens up port 2222:22 in the docker engine and -v makes the host running Docker more vulnerable)--*
+  
+-- --If you prefer having a GUI for accessing these containers, we recommend a Docker GUI called Portainer.
+Installation guidance is here => https://www.portainer.io/installation/
+  
+*--(__Portainer__ is __HIGHLY recommended for__ setting up and hosting __hacking tournaments__)--*
+  
+__*Note that if you want multiple people to connect to a single Raspberry Pi for ethical hacking tournaments, installing Portainer will allow you to set up independent Athena containers and create Portainer user accounts for each participant.  Users can then each access the Raspberry Pi through Portainer via a web browser. Note that even a cell phone can connect to Portainer if not all users have access to a computer.*__
 
-### Install Step 2 - Paste activation command in the same shell the first command was entered in, and the Underground Nexus will build and activate itself (2 commands total to deploy - this is the second and final command if there are no errors).  If the command does not seem to work try the alternative install option below.
+--(keep it consensual)--
 
-***ACTIVATE the Underground Nexus (this is the only necessary command to run IMMEDIATELY after deploying the Underground Nexus to activate it):***
-**`docker exec Underground-Nexus sh deploy-olympiad.sh`**
+*Use the default user account for practicing things like brute-force.*  
+Default Username: notitia  
+Default Password: notiaPoint!1
 
-**ALTERNATIVE** - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
-`sh deploy-olympiad.sh`
+------------------------------------------------------------------------------  
+------------------HERE IS AN ADDITIONAL MORE ADVANCED ETHICAL HACKING GAME!----------------------
+------------------------------------------------------------------------------  
+__-- --*OLYMPIAD ASSAULT GRID*-- --__
 
-----------------------------------------------------
+Pentesting Game Resources (only for those wanting to practice brute force) - [DEATH MATCH TOURNAMENT]:  
 
-***The minimum recommended hardware for the Underground Nexus is the Raspberry Pi 4; anything more powerful will also certainly run the Underground Nexus well (compatible with amd64 and arm systems).***
+__WHEN CLONING Athena0 FOR PARTICIPANTS__  
+-- -- Be aware that playing this game may require more ports to be opened to allow the containers to communicate.  Port ranges can be used to simplify this if the user knows how to configure entire open port ranges in the Docker engine.  
+__*Athena0 is both the master and admin node meant for cloning or Swarming, clones made from Athena0 for tournament use and play are called “Attack Nodes.”*__
 
-----------------------------------------------------
+1.  First, you will want to be aware of the scripts you may use with this container (see list below).  Setting up iptables and randomizing passwords is the first thing to do before practicing brute force attacks.  *RANDOMIZE THE PORT USED BY SSH BETWEEN EVERY MATCH ON EVERY ATHENA ATTACK NODE*
+-- --Setup Scripts - https://github.com/notiaPoint/notiaSquad-Projects/tree/master/Scripts
 
-**Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
+2.  Next, you need to configure Hydra between every brute force test or match on every Athena Attack Node.
+-- -- Configure Hydra - https://github.com/notiaPoint/notiaSquad-Projects/blob/master/Directions/hydra.md
 
-**Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
+3.  *BEGIN BATTLE* Now you are ready to begin a hacker death match between all containers running on your Raspberry Pi (4gb Pi can run at least 6 Athenas at once).  After Hydra commands have been run on all hosts, you will want to run an nmap scan to detect the available ports running SSH on every Attack Node.
+-- -- Nmap Recon - https://github.com/notiaPoint/notiaSquad-Projects/blob/master/Directions/nmap.md
 
-***How to use the Underground Nexus*** **- Once Deployed:**
+4.  *FINISH OFF YOUR OPPONENT* Once you identify on which port your opponent is using ssh, you will finally get to brute force your way into your opponent's Athena container and shut them down (remember to randomize the ssh port with scripts between every match). The player with the last Athena Attack Node standing wins!
+-- -- Finish Them - __(instead of using shutdown with containers, knock opponents out using the command "*kill pid 1*" - test before playing)__ https://github.com/notiaPoint/notiaSquad-Projects/blob/master/Directions/shutdown.md
+  
 
-**1.** Access the Nexus MATE admin desktop at "http://localhost:1000" - If deployed on ARM, Visual Studio Code will need to be manually installed.  On amd64 builds you will see Visual Studio Code, GitHub Desktop and GitKraken listed in the MATE desktop. (The webtop is a loadbalancer, not just a desktop.)
+--(keep it consensual)--
+  
+__Default Pentesting Tools:  
+Firewalld
+| Wireshark
+| John the Ripper (offline password cracker)
+| Hydra (online password cracker)
+| OWASP - ZAP
+| Nmap
+| Sqlmap
+| Metasploit Open Source Framework
+| netcat
+| hashcat
+| beEF (browser exploitation framework)
+| macchanger (enabled to automatically change the mac address by default, must uninstall or reinstall to disable this feature)__
+  
+Enable Port in Docker Pull:  
+2222:22
 
-**2.** The Underground Nexus is designed to only need one open port to use, for security purposes (port 1000 is the single access port - alternatively, port 9050 is a safe second port to have open due to having `https`, and optionally port 2000 can be used for a least privileged Security Operation Center dashboard builder - ports beyond these three need to have purpose).  Every other port opened should be opened with intention and monitoring, which the Pi hole monitors all default apps by default (the recommended open port for primary access is http://localhost:1000, Portainer with https can be made securely available at https://localhost:9050 and the SOC can be made available optionally at http://localhost:2000 - keep in mind that port 1000 is a portal to root access, so keep security in mind for port 1000).
-
-**3.** Inside of the Portainer interface, KuberNexus can be found for using Kubernetes.  To modify KuberNexus or to create a custom cluster of your own, the MATE admin desktop's terminal works with the `k3d` command which allows Kubernetes clusters to be built or modifed.
-
-**4.** Nexus apps are accessible from inside Firefox or any web browser inside the Nexus MATE admin desktop.
-
-**5.** GitHub makes for an easy-to-use Single Sign On solution for setting up developer tools to use Nexus.  Visual Studio Code can be integrated from GitHub with Code Spaces for cloud compute scaling to get more power for development.
-
-**6.** The Kali shell is secured behind Portainer's login for security purposes by default.  Configure Kali Linux for ssh to give ssh access to the entire Nexus through the Kali Athena0 node as a gateway.
-
-**7.** The Athena0 Kali node happens to be a primary monitoring point for Grafana and Loki and also includes Radare2 (forensics tool used by NSA) for deep analysis that can be monitored with Grafana dashboards.
-
-**8.** Nexus can be turned into an ultra Pi hole if its DNS server ports are opened when Nexus is deployed (ports 53 and 67).  This would allow the Underground Nexus to be used as a company or home SOC that can have data integrated with Pi hole data using Grafana and Loki).
-
-**9.** Default URLs will show up if Nexus deploys without errors - **the links below can be used from inside the Nexus desktop if accessing this GitHub URL from inside the Firefox browser within the Nexus MATE desktop itself** (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
-- Portainer: https://10.20.0.1:9443
-- Pi hole: http://10.20.0.20 (can change password from within Portainer)
-- Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9010 (default `user`:`password` is `minioadmin`:`minioadmin`)
-- Ubuntu MATE Admin Desktop: `http://10.20.0.1:1000` (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside the Underground Nexus MATE Desktop)
-- Ubuntu KDE Security Operation Center Desktop: http://10.20.0.1:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
-- Underground Nexus Secret Vault: http://10.20.0.1:8200 (default password is `myroot` - it is recommended to **not** make this port available for access outside of the Underground Nexus)
-- **Visual Studio Code** browser-accessible WebApp: http://10.20.0.1:18443 (be aware this VSC version is more locked down than the Visual Studio Code found on the MATE admin desktop)
-
-**10.** Here are the default apps mapped to the **development** ports if opened for access outside of the Underground Nexus
-(it's recommended to only open ports 1000 and 9443 unless other ports are being used intentionally - port 22 allows ssh access through a Kali Linux node, and any port being used can be opened as needed, however, Nexus is more securely accessed from inside the Underground Nexus *MATE Admin Desktop*):
-- Portainer: 9050 (test https://localhost:9050 for access)
-- Kali Linux Athena0: 22 (open this port to turn a machine's ssh port into a Kali Linux-based development, delivery and forensic analysis center powered by `radare2` - must first enable ssh from within Kali Linux to use remote shell access this way)
-- Pi hole: 80, 53 (test http://localhost for access - the Underground Nexus can be used as a powerful Pi hole for any device, if the Underground Nexus host IP address is used as a DNS server with port 53 open)
-- Cyber Life Torpedo (S3 bucket): 9010 (test http://localhost:9010 for access - this port can be used to move files in and out of the Underground Nexus or to turn the Nexus into a NAS - Network Attached Storage)
-- Ubuntu MATE Admin Desktop: 1000 (test http://localhost:1000 for access)
-- Ubuntu KDE Security Operation Center Desktop: 2000 (test http://localhost:2000 for access)
-- Web-browser accessible version of **Visual Studio Code**: 18443 (test http://localhost:18443 for access - be aware this VSC version is more locked down than the Visual Studio Code found on the MATE admin desktop)
-
-**11.** From inside Portainer there is a *Kali Linux* system titled *Athena0* (access the terminal with Athena0's **>_** icon seen inside of Portainer's menu) - this tool is designed for pentesting and chaos engineering:
-- Tools include: Terraform (`terraform`), Metasploit (`msfconsole`), `nmap` and the Kali Linux `Bleeding Edge` repository for extensive resource access
-- This Athena0 node is designed as a super admin access gateway that can be configured to port 22 for accessing the Underground Nexus remotely (by default ssh is not configured in Athena0 to be accessible - please ensure the Underground Nexus is behind a firewall before configuring ssh access to the Underground Nexus with this node)
-- Both the Underground Nexus root shell and Ubuntu MATE terminal shell are able to send commands to Athena0 using `docker exec Athena0` followed by the desired command (for example, try `docker exec Athena0 terraform -v`)
-- Thanks to Terraform being paired with Metasploit, payloads can be distributed at scale from Athena0 for **Chaos Engineering** and general construction.
-- This resources is valuable for **bug bounty hunting** with the Underground Nexus
-
-**12.** Terraform comes pre-installed for immediate use from both the Underground Nexus MATE Desktop's terminal and the Athena0 Kali Linux node:
-- Use Terraform from the MATE Desktop terminal for general use
-- Use Terraform from the Athena0 node for more aggressive use that might require super admin level access and full `root` privileges
-
-----------------------------------------------------
-
-**Deploying Virtual Machines in Underground Nexus:**
-
-The Underground Nexus can be configured to emulate and run virtual machines inside of its stack with an application called *Virtual Machine Manager* and can be configured to use *QEMU*, which is already pre-installed for immediate use upon being deployed.
-
-Please see the images found in the repository for examples on how to use virtual machines to begin configuring emulated virtual systems.
-
-**Using Underground Nexus Virtual Machines:**
-- Walkthrough screenshots steps 1-2: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__1.PNG
-- Walkthrough screenshots steps 3-4: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__2.PNG
-- Walkthrough screenshot step 5: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__3.PNG
+System Recommendations:  
+Hardware - Raspberry Pi 4B (4gb or 8gb)
+| Host OS Running Docker - Raspberry Pi OS with Docker installed
 
 ----------------------------------------------------
 
@@ -111,4 +151,4 @@ Please see the images found in the repository for examples on how to use virtual
 
 ----------------------------------------------------
 
-## Learn about the foundations that the Underground Nexus was built upon here: https://notiapoint.com/pages/the-olympiad
+## Learn about the ongoing Olympiad Project here: https://notiapoint.com/pages/the-olympiad
