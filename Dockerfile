@@ -19,7 +19,7 @@ RUN apt install -y cron
 #-------------------------------
 WORKDIR "/usr/local"
 RUN curl -L https://dl.dagger.io/dagger/install.sh | sh
-RUN wget -O terraform_linux.zip https://releases.hashicorp.com/terraform/1.3.2/terraform_1.3.2_linux_amd64.zip
+RUN wget -O terraform_linux.zip https://github.com/Underground-Ops/underground-nexus/blob/4343b3091667bd8779c2cbf27e9b261d89a757f8/Terraform%20Master/terraform_amd64_deployment.zip
 RUN apt install -y unzip
 RUN unzip terraform_linux.zip
 RUN mv terraform /usr/local/bin/
