@@ -7,6 +7,7 @@ Enjoy glorious Ubuntu KDE browser-based Desktops with optional Google Chrome RDP
 ## A nexus0 VPS can be deployed on an amd64 docker system with two commands:
 - `docker run -itd --name=nexus0 -h nexus0 --privileged -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/nexus0`
 - `docker exec nexus0 sh nexus0.sh`
+- Once the install completes **access your browser desktop at:** http://localhost:1000
 
 **NOTE** that the nexus0 can be deployed on both arm64 and amd64 platforms when using the the nexus0 dockerfile found on GitHub.
 
