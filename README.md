@@ -2,7 +2,7 @@
 
 **(This Virtual Private Desktop Server can be deployed inside of the Underground Nexus k3d KuberNexus version of Kubernetes or any other flavor of Kubernetes, this may be used as a standalone VPS or for inviting collaborators through the use of Chrome RDP - *nexus0 is a standalone VPS solution that can deploy independently from the Underground Nexus*)**
 
-## A nexus0 VPS can be deployed on an amd64 docker system wtih two commands:
+## A nexus0 VPS can be deployed on an amd64 docker system with two commands:
 - `docker run -itd --name=nexus0 -h nexus0 --privileged -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/nexus0`
 - `docker exec nexus0 sh nexus0.sh`
 
