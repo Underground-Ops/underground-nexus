@@ -1,4 +1,4 @@
-# __Athena0 Pentesting Toolbox - *Agnostic Cloud Brute Forcer*__
+# __Athena0 Pentesting Toolbox - *Agnostic Cloud Brute Forcer*__ (NEW updates on the way!)
 ------------------------------------------------------------------------------  
 Athena0 is a tool dedicated to agnostic cloud brute force testing, alongside payload construction and delivery.
 
@@ -36,7 +36,7 @@ Athena0 is a payload engineering, recon and delivery toolkit that changes MAC ad
   
 __—*Read further to learn how to host ethical hacking DEATH MATCH and Hide n' Hunt tournaments with this for pentest practice* 😈💻👿—__
   
-__Default Pentesting Tools:  
+__Default Pentesting Tools (Currently under revision - tool suite is changing):  
 Firewalld
 | Wireshark
 | John the Ripper (offline password cracker)
