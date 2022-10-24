@@ -2,7 +2,7 @@
 #-------------------------------
 #apt install git
 git clone https://github.com/Underground-Ops/underground-nexus.git
-cd underground-nexus/
+cd /nexus-bucket/underground-nexus/
 dagger project init
 dagger project update
 #dagger do build
