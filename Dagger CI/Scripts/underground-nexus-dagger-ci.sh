@@ -5,4 +5,5 @@ git clone https://github.com/Underground-Ops/underground-nexus.git
 cd /nexus-bucket/underground-nexus/
 dagger project init
 dagger project update
-#dagger do build
+dagger do build
+sh /nexus-bucket/underground-nexus/underground-nexus-update.sh
