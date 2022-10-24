@@ -1,6 +1,6 @@
 # __Athena0 Pentesting Toolbox - *Agnostic Cloud Brute Forcer*__ (NEW updates on the way!)
 ------------------------------------------------------------------------------  
-**(THIS PROJECT IS UNDER CONSTRUCTION AND MAY HAVE SIGNIFICANT CHANGES OVER THE NEXT FEW MONTHS)**
+**(THIS PROJECT IS UNDER MAJOR CONSTRUCTION AND MAY HAVE SIGNIFICANT CHANGES OVER THE NEXT FEW MONTHS)**
 
 Athena0 is a tool dedicated to agnostic cloud brute force testing, alongside payload construction and delivery.
 
