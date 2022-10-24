@@ -16,6 +16,8 @@ RUN apt install -y nmap
 RUN apt install -y git
 RUN apt install -y cron
 #-------------------------------
+RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
+#-------------------------------
 WORKDIR "/usr/local"
 RUN curl -L https://dl.dagger.io/dagger/install.sh | sh
 RUN wget -O terraform_linux.zip https://github.com/Underground-Ops/underground-nexus/raw/4343b3091667bd8779c2cbf27e9b261d89a757f8/Terraform%20Master/terraform_amd64_deployment.zip
