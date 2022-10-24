@@ -10,3 +10,7 @@ dagger do build
 sh /nexus-bucket/underground-nexus/underground-nexus-update.sh
 #Use crontab to schedule updates for Sundays if Athena0 has a docker socket
 echo "0   0   *   *   Sun     /usr/local/bin/underground-nexus-update.sh" > /var/spool/cron/crontabs/root
+#Enable, Start and check status of cron service
+service cron enable
+service cron start
+service cron status
