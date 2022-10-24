@@ -83,11 +83,11 @@ RUN echo "docker exec Athena0 apt -y update" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 git clone https://github.com/radareorg/radare2" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 sh radare2/sys/install.sh" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 apt-get install -y metasploit-framework" >> deploy-olympiad.sh
-RUN echo "docker exec Athena0 wget -O terraform-amd64.zip https://releases.hashicorp.com/terraform/1.1.7/terraform_1.1.7_linux_amd64.zip" >> deploy-olympiad.sh
-RUN echo "docker exec Athena0 unzip terraform-amd64.zip" >> deploy-olympiad.sh
-RUN echo "docker exec Athena0 mv terraform usr/local/bin" >> deploy-olympiad.sh
-RUN echo "docker exec Athena0 touch ~/.bashrc" >> deploy-olympiad.sh
-RUN echo "docker exec Athena0 terraform -install-autocomplete" >> deploy-olympiad.sh
+#RUN echo "docker exec Athena0 wget -O terraform-amd64.zip https://releases.hashicorp.com/terraform/1.1.7/terraform_1.1.7_linux_amd64.zip" >> deploy-olympiad.sh
+#RUN echo "docker exec Athena0 unzip terraform-amd64.zip" >> deploy-olympiad.sh
+#RUN echo "docker exec Athena0 mv terraform usr/local/bin" >> deploy-olympiad.sh
+#RUN echo "docker exec Athena0 touch ~/.bashrc" >> deploy-olympiad.sh
+#RUN echo "docker exec Athena0 terraform -install-autocomplete" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 apt -y update" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 apt -y upgrade" >> deploy-olympiad.sh
 
@@ -106,6 +106,9 @@ RUN echo "docker run -itd -p 8200:1234 --name=Nexus-Secret-Vault -h Nexus-Secret
 
 #Build workbench script
 RUN echo "docker exec Athena0 sh /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+
+#Deploy Dagger CI Cyber Life Building Beaver and Update Scheduling Manager Update script
+RUN echo "docker exec Athena0 sh /nexus-bucket/underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
 
 #Configure firefox browser defaults
 RUN echo "wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/firefox-homepage.sh" >> deploy-olympiad.sh
