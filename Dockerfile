@@ -108,7 +108,7 @@ RUN echo "docker run -itd -p 8200:1234 --name=Nexus-Secret-Vault -h Nexus-Secret
 RUN echo "docker exec Athena0 sh /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 
 #Deploy Dagger CI Cyber Life Building Beaver and Update Scheduling Manager Update script
-RUN echo "docker exec Athena0 sh /nexus-bucket/underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
+RUN echo "docker exec Athena0 sh /underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
 
 #Configure firefox browser defaults
 RUN echo "wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/firefox-homepage.sh" >> deploy-olympiad.sh
