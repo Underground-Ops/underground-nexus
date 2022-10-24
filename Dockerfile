@@ -12,7 +12,6 @@ RUN apt install -y curl
 RUN apt install -y wget
 #-------------------------------
 RUN apt install -y nmap
-#RUN apt install -y wireshark
 #-------------------------------
 RUN apt install -y git
 RUN apt install -y cron
