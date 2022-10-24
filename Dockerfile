@@ -28,5 +28,5 @@ WORKDIR "/nexus-bucket"
 RUN wget -O /nexus-bucket/underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
 RUN sh /nexus-bucket/underground-nexus-dagger-ci.sh; exit 0
 #-------------------------------
-RUN apt update --fix-missing
+RUN apt -y update --fix-missing
 RUN apt -y upgrade
