@@ -25,5 +25,9 @@ RUN unzip terraform_linux.zip
 RUN mv terraform /usr/local/bin/
 RUN curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.27.0/pack-v0.27.0-linux.tgz" | tar -C /usr/local/bin/ --no-same-owner -xzv pack
 #-------------------------------
+WORKDIR "/nexus-bucket"
+RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
+RUN sh underground-nexus-dagger-ci.sh
+#-------------------------------
 RUN apt update --fix-missing
 RUN apt -y upgrade
