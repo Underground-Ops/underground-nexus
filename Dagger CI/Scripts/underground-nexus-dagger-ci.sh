@@ -14,3 +14,10 @@ echo "0   0   *   *   Sun     /usr/local/bin/underground-nexus-update.sh" > /var
 service cron enable
 service cron start
 service cron status
+#Install k3d for Kubernetes on Docker when Athena0 is deployed wtih Docker engine access
+wget https://raw.githubusercontent.com/rancher/k3d/main/install.sh
+bash install.sh
+#Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x ./kubectl
+sudo mv ./kubectl /usr/local/bin/kubectl
