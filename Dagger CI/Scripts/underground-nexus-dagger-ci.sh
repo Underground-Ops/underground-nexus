@@ -17,8 +17,8 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ $$ rm /install.sh
 #Configure the Underground Nexus automated weekly update scheduling kit
 mv underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
-wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
-sh re-initialize-dagger-ci.sh
+#wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
+#sh re-initialize-dagger-ci.sh
 #Cleanup
 #rm /install.sh
 #rm /install.sh.1
