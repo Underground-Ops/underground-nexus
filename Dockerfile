@@ -41,3 +41,4 @@ RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/mai
 #-------------------------------
 RUN apt -y update --fix-missing
 RUN apt -y upgrade
+RUN rm -r install.*; exit 0
