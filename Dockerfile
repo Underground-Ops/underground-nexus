@@ -27,8 +27,8 @@ RUN mv terraform /usr/local/bin/
 RUN curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.27.0/pack-v0.27.0-linux.tgz" | tar -C /usr/local/bin/ --no-same-owner -xzv pack
 #-------------------------------
 WORKDIR "/nexus-bucket"
-#RUN cd /nexus-bucket/ && wget 
-#RUN sh /nexus-bucket/underground-nexus-dagger-ci.sh; exit 0
+RUN cd /nexus-bucket/ && wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
+RUN sh /nexus-bucket/underground-nexus-dagger-ci.sh; exit 0
 RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/underground-nexus-update.sh
 RUN sh underground-nexus-update.sh; exit 0
 RUN sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/underground-nexus-dagger-ci.sh; exit 0
