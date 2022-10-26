@@ -16,9 +16,9 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 #Install HELM with the standard stable repository and GitLab repository
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/
 #Configure the Underground Nexus automated weekly update scheduling kit
-#mv underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
-#wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
-#sh underground-nexus-dagger-ci.sh
+mv underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
+wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
+sh re-initialize-dagger-ci.sh
 sh /nexus-bucket/underground-nexus/underground-nexus-update.sh
 #Use crontab to schedule updates for Sundays if Athena0 has a docker socket
 echo "0   0   *   *   Sun     /usr/local/bin/underground-nexus-update.sh" > /var/spool/cron/crontabs/root
