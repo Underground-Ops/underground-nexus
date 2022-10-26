@@ -20,8 +20,7 @@ mv underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
 #wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
 #sh re-initialize-dagger-ci.sh
 #Cleanup
-#rm /install.sh
-#rm /install.sh.1
+rm -r /install.*
 #Prepare Update Management
 sh /nexus-bucket/underground-nexus/underground-nexus-update.sh
 #Use crontab to schedule updates for Sundays if Athena0 has a docker socket
