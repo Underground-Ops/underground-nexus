@@ -28,6 +28,10 @@ RUN echo "apk add docker-compose" >> deploy-olympiad.sh
 RUN echo "docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena" >> deploy-olympiad.sh
 RUN echo "docker run -itd -p 53:53/tcp -p 53:53/udp -p 67:67 -p 800:80 -p 443:443 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v /var/lib/docker/volumes/pihole_DNS_data/_data/pihole/:/etc/pihole/ pihole/pihole:latest" >> deploy-olympiad.sh
 
+#Build Olympiad0 Portainer node
+RUN echo "docker volume create portainer_data" >> deploy-olympiad.sh
+RUN echo "docker run -d -p 8000:8000 -p 9443:9443 --name=Olympiad0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data cr.portainer.io/portainer/portainer-ce" >> deploy-olympiad.sh
+
 #Build workbench stack
 RUN echo "docker run -itd --name=workbench -h workbench --privileged -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock linuxserver/webtop:ubuntu-mate" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench echo "#!/bin/sh"" > /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
@@ -129,7 +133,3 @@ RUN echo "docker exec Athena0 sh /underground-nexus-dagger-ci.sh" >> deploy-olym
 #Configure firefox browser defaults
 RUN echo "wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/firefox-homepage.sh" >> deploy-olympiad.sh
 RUN echo "sh firefox-homepage.sh" >> deploy-olympiad.sh
-
-#Build Olympiad0 Portainer node
-RUN echo "docker volume create portainer_data" >> deploy-olympiad.sh
-RUN echo "docker run -d -p 8000:8000 -p 9443:9443 --name=Olympiad0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data cr.portainer.io/portainer/portainer-ce" >> deploy-olympiad.sh
