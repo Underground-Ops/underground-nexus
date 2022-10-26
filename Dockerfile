@@ -30,5 +30,10 @@ WORKDIR "/nexus-bucket"
 RUN wget -O /nexus-bucket/underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
 RUN sh /nexus-bucket/underground-nexus-dagger-ci.sh; exit 0
 #-------------------------------
+WORKDIR "/"
+RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash; exit 0
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl; exit 0
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/; exit 0
+#-------------------------------
 RUN apt -y update --fix-missing
 RUN apt -y upgrade
