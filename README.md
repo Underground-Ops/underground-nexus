@@ -1,11 +1,18 @@
-# Underground Nexus - nexus0 Portable Cloud VPS Desktop (Chrome RDP READY)
+# Underground Nexus - nexus0 Portable Cloud VPS Desktop and Terminal Server (Chrome RDP READY)
+
+What is a Terminal Server and why do Data Centers use this technology?
 
 Enjoy glorious Ubuntu KDE browser-based Desktops with optional Google Chrome RDP Terminal access on Docker or Kubernetes!
 
 **(This Virtual Private Desktop Server can be deployed inside of the Underground Nexus k3d KuberNexus version of Kubernetes or any other flavor of Kubernetes, this may be used as a standalone VPS or for inviting collaborators through the use of Chrome RDP - *nexus0 is a standalone VPS solution that can deploy independently from the Underground Nexus*)**
 
-## A nexus0 VPS can be deployed on an amd64 docker system with two commands:
-- `docker run -itd --name=nexus0 -h nexus0 --privileged -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/nexus0`
+## A nexus0 VPS Terminal Server can be deployed on an amd64 docker system with two commands:
+- `docker run -itd --name=nexus0 -h nexus0 --privileged -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config -v /etc/docker:/etc/docker -v /usr/local/bin/docker:/usr/local/bin/docker -v /var/run/docker.sock:/var/run/docker.sock natoascode/nexus0`
+- `docker exec nexus0 sh nexus0.sh`
+- Once the install completes **access your browser desktop at:** http://localhost:1000
+
+## To deploy a nexus0 VPS without Docker socket access (more secure if Docker's socket is not needed):
+- `docker run -itd --name=nexus0 -h nexus0 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config natoascode/nexus0`
 - `docker exec nexus0 sh nexus0.sh`
 - Once the install completes **access your browser desktop at:** http://localhost:1000
 
@@ -19,7 +26,7 @@ To get the nexus0 set up with Chrome RDP access (whether nexus0 is being configu
 ## Use the nexus0 script guidance to deploy to any flavor of Kubernetes
 
 **Nexus0's deploy script - `nexus0.sh` script file and guidance:**
-# <a href="https://raw.githubusercontent.com/Underground-Ops/underground-nexus/24067a3817a0d33495bdffbaaced7a7f5b4f28c1/nexus0.sh">*Review nexus0 Install Script with Chrome RDP Guidance Here*</a>
+# <a href="https://raw.githubusercontent.com/Underground-Ops/underground-nexus/24067a3817a0d33495bdffbaaced7a7f5b4f28c1/nexus0.sh">*Review nexus0 Install Script for Chrome RDP Guidance Here*</a>
 
 **Enjoy using the nexus0, check out the DevSecOps Dojo (from Cloud Underground) for learning or assistance!**
 - https://cloudunderground.dev/devsecops-dojo/
