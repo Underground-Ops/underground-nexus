@@ -8,15 +8,15 @@ Enjoy glorious Ubuntu KDE browser-based Desktops with optional Google Chrome RDP
 
 ## A nexus0 VPS Terminal Server can be deployed on an amd64 docker system with two commands:
 - `docker run -itd --name=nexus0 -h nexus0 --privileged -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config -v /etc/docker:/etc/docker -v /usr/local/bin/docker:/usr/local/bin/docker -v /var/run/docker.sock:/var/run/docker.sock natoascode/nexus0`
-- `docker exec nexus0 sh nexus0.sh`
-- Once the install completes **access your browser desktop at:** http://localhost:1000
+- `docker exec nexus0 sh nexus0.sh` (once script completes, use the Chrome RDP "ssh" install option to set up remote access)
+- Once the install completes **access your browser desktop at:** http://localhost:1000 (default password "notiaPoint1")
 
 ## To deploy a nexus0 VPS without Docker socket access (more secure if Docker's socket is not needed):
 - `docker run -itd --name=nexus0 -h nexus0 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1000:3000 --restart=always -v nexus0:/config natoascode/nexus0`
-- `docker exec nexus0 sh nexus0.sh`
-- Once the install completes **access your browser desktop at:** http://localhost:1000
+- `docker exec nexus0 sh nexus0.sh`(once script completes, use the Chrome RDP "ssh" install option to set up remote access)
+- Once the install completes **access your browser desktop at:** http://localhost:1000 (default password "notiaPoint1")
 
-# Enter nexus0 bash shell and login as the "abc" user:
+## Enter nexus0 bash shell and login as the "abc" user (required for entering new Chrome RDP "ssh" keys):
 `docker exec -it nexus0 bash
 su - abc`
 
