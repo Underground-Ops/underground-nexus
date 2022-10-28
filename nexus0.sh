@@ -9,6 +9,8 @@
 #alternatively this script may be pulled with `wget` or `curl` (install wget example: `apt update && apt install -y wget`)
 #download example string with `wget` to pull this script to a computer: `wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/nexus0.sh`
 #------------------------------------
+#the following command can be used to enter the nexus0 shell using kubectl: `kubectl exec -it my-nexus0 -- /bin/bash`
+#------------------------------------
 apt update
 apt install -y ssh
 apt install -y wget
