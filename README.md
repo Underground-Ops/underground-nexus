@@ -16,6 +16,10 @@ Enjoy glorious Ubuntu KDE browser-based Desktops with optional Google Chrome RDP
 - `docker exec nexus0 sh nexus0.sh`
 - Once the install completes **access your browser desktop at:** http://localhost:1000
 
+# Enter nexus0 bash shell and login as the "abc" user:
+`docker exec -it nexus0 bash
+su - abc`
+
 **NOTE** that the nexus0 can be deployed on both arm64 and amd64 platforms when using the the nexus0 dockerfile found on GitHub.
 
 To get the nexus0 set up with Chrome RDP access (whether nexus0 is being configured for personal remote access or for inviting guests to collaborator desktops), follow the guidance in the commented sections of the nexus0 script found below.
