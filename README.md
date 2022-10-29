@@ -10,11 +10,6 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 ***Check out how to get started with Underground Nexus quick-start guidance here:*** https://youtu.be/oXelz-AMwBU
 
-**View screenshots of the Underground Nexus MATE desktop:**
-<img src="https://cloudunderground.dev/wp-content/uploads/2022/05/UN-screen4-sml-768x487.png" alt="Cloud Underground MATE Desktop">
-
-<img src="https://cloudunderground.dev/wp-content/uploads/2022/05/UN-screen3-sml-768x486.png" alt="Cloud Underground MATE Desktop in vertical configuration">
-
 ## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
 ### Install Step 1 (assuming Docker is already installed) - Open a command line (Windows) or terminal (Linux or OSX) shell and paste the appropriate install command for your computer's hardware platform.
