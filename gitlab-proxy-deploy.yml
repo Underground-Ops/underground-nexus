@@ -17,7 +17,7 @@ services:
         target: /omnibus_config.rb
     networks:
       - default
-      - inner-athena
+      - Inner-Athena
       - traefik-public
     deploy:
       labels:
@@ -64,7 +64,7 @@ volumes:
   gitlab-config:
     external: true
 networks:
-  inner-athena:
+  Inner-Athena:
     external: true
   traefik-public:
     external: true

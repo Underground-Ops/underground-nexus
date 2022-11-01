@@ -97,7 +97,7 @@ services:
       # Use the public network created to be shared between Traefik and
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
-      - inner-athena
+      - Inner-Athena
 
 volumes:
   # Create a volume to store the certificates, there is a constraint to make sure
@@ -110,5 +110,5 @@ networks:
   # services that need to be publicly available via this Traefik
   traefik-public:
     external: true
-  inner-athena:
+  Inner-Athena:
     external: true
