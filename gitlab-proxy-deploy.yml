@@ -4,8 +4,8 @@ services:
     image: gitlab/gitlab-ce:latest
     ports:
       - "222:22"
-      - "80:80"
-      - "443:443"
+      #- "80:80"
+      #- "443:443"
     volumes:
       - gitlab-data:/var/opt/gitlab
       - gitlab-logs:/var/log/gitlab
