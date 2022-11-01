@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   gitlab:
-    image: gitlab/gitlab-ee:latest
+    image: gitlab/gitlab-ce:latest
     ports:
       - "222:22"
       - "80:80"
