@@ -64,7 +64,7 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 **9.** Default URLs will show up if Nexus deploys without errors - **the links below can be used from inside the Nexus desktop if accessing this GitHub URL from inside the Firefox browser within the Nexus MATE desktop itself** (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
 - Portainer: https://10.20.0.1:9443
-- Pi hole: http://10.20.0.20 (can change password from within Portainer)
+- Pi hole: http://10.20.0.20:800 (can change password from within Portainer)
 - Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9010 (default `user`:`password` is `minioadmin`:`minioadmin`)
 - Ubuntu MATE Admin Desktop: `http://10.20.0.1:1000` (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside the Underground Nexus MATE Desktop)
 - Ubuntu KDE Security Operation Center Desktop: http://10.20.0.1:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
