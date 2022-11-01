@@ -130,6 +130,7 @@ RUN echo "k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> deploy-
 
 #Deploy Dagger CI Cyber Life Building Beaver and Update Scheduling Manager Update script
 RUN echo "docker exec Athena0 sh /underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
+RUN echo "docker exec Athena0 sh /enable-weekly-updates.sh" >> deploy-olympiad.sh
 
 #Deploy Traefik loadbalancer, GitLab for Git-BIOS alongside the collaborator-workbench service - build "underground-ops.me" domain proxy gateway
 RUN echo "curl https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/gitlab-collaborator-stack.sh | sh" >> deploy-olympiad.sh
