@@ -19,6 +19,8 @@ services:
       - default
       #- Inner-Athena
       - traefik-public
+    dns:
+      - 10.20.0.1
     deploy:
       labels:
         - traefik.port=80

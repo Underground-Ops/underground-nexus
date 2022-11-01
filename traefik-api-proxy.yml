@@ -98,6 +98,8 @@ services:
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
       #- Inner-Athena
+    dns:
+      - 10.20.0.1
 
 volumes:
   # Create a volume to store the certificates, there is a constraint to make sure
