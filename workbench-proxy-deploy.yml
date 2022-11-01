@@ -17,7 +17,7 @@ services:
       #- SUBFOLDER=/ #optional
     networks:
       #- default
-      - Inner-Athena
+      #- Inner-Athena
       - traefik-public
     deploy:
       labels:

@@ -17,7 +17,7 @@ services:
         target: /omnibus_config.rb
     networks:
       - default
-      - Inner-Athena
+      #- Inner-Athena
       - traefik-public
     deploy:
       labels:
