@@ -26,7 +26,7 @@ RUN echo "docker swarm init" >> deploy-olympiad.sh
 RUN echo "apk add docker-compose" >> deploy-olympiad.sh
 
 RUN echo "docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena" >> deploy-olympiad.sh
-RUN echo "docker run -itd -p 53:53/tcp -p 53:53/udp -p 67:67 -p 800:80 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v /var/lib/docker/volumes/pihole_DNS_data/_data/pihole/:/etc/pihole/ pihole/pihole:latest" >> deploy-olympiad.sh
+RUN echo "docker run -itd -p 53:53/tcp -p 53:53/udp -p 67:67 -p 800:80 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v pihole_config:/etc/pihole/ pihole/pihole:latest" >> deploy-olympiad.sh
 
 #Build Olympiad0 Portainer node
 RUN echo "docker volume create portainer_data" >> deploy-olympiad.sh
