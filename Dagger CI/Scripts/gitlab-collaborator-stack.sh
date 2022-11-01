@@ -13,7 +13,7 @@ bash -c "NODE_ID=$(docker info -f '{{.Swarm.NodeID}}'); EMAIL=me@underground-ops
 #Apply docker lables
 docker node update --label-add traefik-public.traefik-public-certificates=true Underground-Nexus
 
-#
+#Build collaborator stack, GitLab and traefik loadbalancer
 docker stack deploy -c /nexus-bucket/underground-nexus/traefik-api-proxy.yml traefik
 docker stack deploy -c /nexus-bucket/underground-nexus/gitlab-proxy-deploy.yml gitlab
 docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.yml collaborator-workbench
