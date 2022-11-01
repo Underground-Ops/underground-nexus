@@ -131,6 +131,9 @@ RUN echo "k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> deploy-
 #Deploy Dagger CI Cyber Life Building Beaver and Update Scheduling Manager Update script
 RUN echo "docker exec Athena0 sh /underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
 
+#Deploy Traefik loadbalancer, GitLab for Git-BIOS alongside the collaborator-workbench service - build "underground-ops.me" domain proxy gateway
+RUN echo "sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/gitlab-collaborator-stack.sh" >> deploy-olympiad.sh; exit 0
+
 #Configure firefox browser defaults
 RUN echo "wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/firefox-homepage.sh" >> deploy-olympiad.sh
 RUN echo "sh firefox-homepage.sh" >> deploy-olympiad.sh
