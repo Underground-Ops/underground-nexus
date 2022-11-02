@@ -139,4 +139,6 @@ RUN echo "curl https://raw.githubusercontent.com/Underground-Ops/underground-nex
 RUN echo "wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/firefox-homepage.sh" >> deploy-olympiad.sh
 RUN echo "sh firefox-homepage.sh" >> deploy-olympiad.sh
 
+RUN echo "docker restart Inner-DNS-Control" >> deploy-olympiad.sh
+
 RUN apk upgrade
