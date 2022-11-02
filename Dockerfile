@@ -73,8 +73,9 @@ RUN echo "docker exec workbench echo "docker exec Athena0 #mkdir /root/.kube && 
 RUN echo "docker exec workbench echo "docker exec Athena0 sh /nexus-bucket/build-kubernexus.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec Athena0 sh /enable-weekly-updates.sh" >> /nexus-bucket/enable-weekly-updates.sh" >> deploy-olympiad.sh
 
-#RUN echo "docker exec workbench echo "docker exec workbench sudo wget -O terraform-amd64.zip https://github.com/Underground-Ops/underground-nexus/raw/4343b3091667bd8779c2cbf27e9b261d89a757f8/Terraform%20Master/terraform_amd64_deployment.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-#RUN echo "docker exec workbench echo "docker exec workbench sudo unzip terraform-amd64.zip" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#Terraform
+RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Terraform%20Master/terraform-workbench-install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo sh terraform-workbench-install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo mv terraform usr/local/bin" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo touch ~/.bashrc" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo terraform -install-autocomplete" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
