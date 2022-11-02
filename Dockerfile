@@ -10,6 +10,7 @@ RUN apt install -y bash
 RUN apt install -y nano
 RUN apt install -y curl
 RUN apt install -y wget
+RUN apt install -y sudo
 #-------------------------------
 RUN apt install -y nmap
 #-------------------------------
