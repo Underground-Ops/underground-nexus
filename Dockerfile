@@ -43,14 +43,12 @@ RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo
 RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo apk add wget" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo apk add dpkg" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo apk upgrade" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-#Primary Visual Studio Code install
-RUN echo "docker exec workbench echo "docker exec workbench curl https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/visual-studio-code.sh | bash" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh, exit 0
-#Backup VSC deploys in case the primary install fails
-RUN echo "docker exec workbench echo "docker exec workbench sudo wget -O vscode-amd64.deb  https://go.microsoft.com/fwlink/?LinkID=760868" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#Visual Studio Code installs
+#RUN echo "docker exec workbench echo "docker exec workbench sudo wget -O vscode-amd64.deb  https://go.microsoft.com/fwlink/?LinkID=760868" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #ARM64 Visual Studio Code deploy
-RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://aka.ms/linux-arm64-deb -O vscode-arm64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-arm64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://aka.ms/linux-arm64-deb -O vscode-arm64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+#RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-arm64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #GitHub Desktop
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/shiftkey/desktop/releases/download/release-3.1.1-linux1/GitHubDesktop-linux-3.1.1-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i GitHubDesktop-linux-2.9.6-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
@@ -124,6 +122,14 @@ RUN echo "docker run -d --name=code-server -e PUID=1050 -e PGID=1050 -p 18443:30
 #Build Development Vault
 RUN echo "docker run -itd -p 8200:1234 --name=Nexus-Secret-Vault -h Nexus-Secret-Vault --dns=10.20.0.20 --net=Inner-Athena --restart=always --cap-add=IPC_LOCK -e 'VAULT_DEV_ROOT_TOKEN_ID=myroot' -e 'VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:1234' vault" >> deploy-olympiad.sh
 
+
+#Deploy Dagger CI Cyber Life Building Beaver and Update Scheduling Manager Update script
+RUN echo "docker exec Athena0 sh /old-underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
+RUN echo "docker exec Athena0 sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/enable-weekly-updates.sh" >> deploy-olympiad.sh
+
+#Visual Studio Code for workbench desktop
+RUN echo "docker exec workbench echo "docker exec workbench bash /config/Desktop/nexus-bucket/underground-nexus/visual-studio-code.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+
 #Build workbench script
 RUN echo "docker exec Athena0 sh /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 
@@ -133,10 +139,6 @@ RUN echo "k3d cluster create KuberNexus -p 8080:8080@loadbalancer -p 8443:8443@l
 RUN echo "curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl" >> deploy-olympiad.sh; exit 0
 RUN echo "curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl" >> deploy-olympiad.sh; exit 0
 RUN echo "k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> deploy-olympiad.sh; exit 0
-
-#Deploy Dagger CI Cyber Life Building Beaver and Update Scheduling Manager Update script
-RUN echo "docker exec Athena0 sh /old-underground-nexus-dagger-ci.sh" >> deploy-olympiad.sh
-RUN echo "docker exec Athena0 sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/enable-weekly-updates.sh" >> deploy-olympiad.sh
 
 #Deploy Traefik loadbalancer, GitLab for Git-BIOS alongside the collaborator-workbench service - build "underground-ops.me" domain proxy gateway
 RUN echo "curl https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/gitlab-collaborator-stack.sh | sh" >> deploy-olympiad.sh
