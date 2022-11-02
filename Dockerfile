@@ -76,6 +76,7 @@ RUN echo "docker exec workbench echo "docker exec Athena0 sh /enable-weekly-upda
 #Terraform
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Terraform%20Master/terraform-workbench-install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo sh terraform-workbench-install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo mv /terraform-workbench-install.sh /config/Desktop/nexus-bucket" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo mv terraform usr/local/bin" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo touch ~/.bashrc" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #RUN echo "docker exec workbench echo "docker exec workbench sudo terraform -install-autocomplete" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
@@ -149,5 +150,7 @@ RUN echo "wget https://raw.githubusercontent.com/Underground-Ops/underground-nex
 RUN echo "sh firefox-homepage.sh" >> deploy-olympiad.sh
 
 RUN echo "docker restart Inner-DNS-Control" >> deploy-olympiad.sh
+
+RUN echo "docker exec -it workbench bash && bash /config/Desktop/nexus-bucket/terraform-workbench-install.sh && terraform -v" >> deploy-olympiad.sh
 
 RUN apk upgrade
