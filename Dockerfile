@@ -21,10 +21,10 @@ RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/mai
 #-------------------------------
 WORKDIR "/usr/local"
 RUN curl -L https://dl.dagger.io/dagger/install.sh | sh
-#RUN wget -O terraform_linux.zip https://github.com/Underground-Ops/underground-nexus/raw/4343b3091667bd8779c2cbf27e9b261d89a757f8/Terraform%20Master/terraform_amd64_deployment.zip
-#RUN apt install -y unzip
-#RUN unzip terraform_linux.zip
-#RUN mv terraform /usr/local/bin/
+RUN wget -O terraform_linux.zip https://github.com/Underground-Ops/underground-nexus/raw/4343b3091667bd8779c2cbf27e9b261d89a757f8/Terraform%20Master/terraform_amd64_deployment.zip
+RUN apt install -y unzip
+RUN unzip terraform_linux.zip
+RUN mv terraform /usr/local/bin/
 RUN curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.27.0/pack-v0.27.0-linux.tgz" | tar -C /usr/local/bin/ --no-same-owner -xzv pack
 #-------------------------------
 WORKDIR "/nexus-bucket"
