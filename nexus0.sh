@@ -2,7 +2,7 @@
 #------------------------------------
 #Nexus0 is a "copy paste" Cloud Native server node that may be deployed to container orchestrators (such as Kubernetes and Docker) - *Though Nexus0 is a component of the Underground Nexus "copy paste" datacenter environment, it __may run as a standalone server__ node even without the Underground Nexus*
 #------------------------------------
-#--*Copy paste* this "nexus0" template inside of a Kubernetes (or KuberNexus) cluster to test: `kubectl run nexus0 -i --tty --image linuxserver/webtop:ubuntu-kde`
+#--*Copy paste* this "nexus0" template inside of a Kubernetes (or KuberNexus) cluster to test: `kubectl run nexus0 -i --tty --image natoascode/nexus0:latest`
 #------------------------------------
 #name a file "nexus0.sh" and paste this script inside with "sudo apt update" then "sudo apt install nano" to ubild a script -- ctrl + x , y, enter (to save inside nano)
 #------------------------------------
