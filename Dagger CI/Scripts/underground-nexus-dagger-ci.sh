@@ -11,10 +11,21 @@ dagger do build
 cd /
 wget https://raw.githubusercontent.com/rancher/k3d/main/install.sh
 bash install.sh
+
 #Install kubectl
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+#curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+apt-get update
+apt-get install -y ca-certificates curl
+apt-get install -y apt-transport-https
+curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+apt-get update && upgrade -y
+apt-get install -y kubectl
+
 #Install HELM with the standard stable repository and GitLab repository
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ $$ rm /install.sh
+
+#----------------------------------------------------------------------
 #Configure the Underground Nexus automated weekly update scheduling kit
 mv underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
 #wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh

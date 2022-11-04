@@ -1,11 +1,11 @@
 version: "3.6"
 services:
   gitlab:
-    image: gitlab/gitlab-ee:latest
+    image: gitlab/gitlab-ce:latest
     ports:
       - "222:22"
-      - "80:80"
-      - "443:443"
+      #- "80:80"
+      #- "443:443"
     volumes:
       - gitlab-data:/var/opt/gitlab
       - gitlab-logs:/var/log/gitlab
@@ -17,8 +17,10 @@ services:
         target: /omnibus_config.rb
     networks:
       - default
-      - inner-athena
+      #- Inner-Athena
       - traefik-public
+    dns:
+      - 10.20.0.1
     deploy:
       labels:
         - traefik.port=80
@@ -64,7 +66,7 @@ volumes:
   gitlab-config:
     external: true
 networks:
-  inner-athena:
+  Inner-Athena:
     external: true
   traefik-public:
     external: true
