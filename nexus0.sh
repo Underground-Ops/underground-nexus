@@ -2,12 +2,14 @@
 #------------------------------------
 #Nexus0 is a "copy paste" Cloud Native server node that may be deployed to container orchestrators (such as Kubernetes and Docker) - *Though Nexus0 is a component of the Underground Nexus "copy paste" datacenter environment, it __may run as a standalone server__ node even without the Underground Nexus*
 #------------------------------------
-#--*Copy paste* this "nexus0" template inside of a Kubernetes (or KuberNexus) cluster to test: `kubectl run my-nexus0 -i --tty --image linuxserver/webtop:ubuntu-kde`
+#--*Copy paste* this "nexus0" template inside of a Kubernetes (or KuberNexus) cluster to test: `kubectl run nexus0 -i --tty --image natoascode/nexus0:latest`
 #------------------------------------
 #name a file "nexus0.sh" and paste this script inside with "sudo apt update" then "sudo apt install nano" to ubild a script -- ctrl + x , y, enter (to save inside nano)
 #------------------------------------
 #alternatively this script may be pulled with `wget` or `curl` (install wget example: `apt update && apt install -y wget`)
 #download example string with `wget` to pull this script to a computer: `wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/nexus0.sh`
+#------------------------------------
+#the following command can be used to enter the nexus0 shell using kubectl: `kubectl exec -it nexus0 -- /bin/bash`
 #------------------------------------
 apt update
 apt install -y ssh
@@ -68,10 +70,9 @@ sudo cp 1080x1920.jpg 720x1440.jpg
 echo "abc:notiaPoint1" | chpasswd
 
 #Set up firefox homepage
-sudo rm -r /config/.mozilla
-sudo mkdir /config/.mozilla
 cd /config/.mozilla
 sudo apt install -y zip unzip
+sudo rm -r firefox
 sudo rm firefox.zip
 sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
 sudo unzip firefox.zip
@@ -91,7 +92,7 @@ su - abc
 #------------------------------------
 #This goes over how to install chrome RDP via ssh to get to the webtop workbench.
 
-#From portainer’s "my-nexus0" terminal shell (>_ Console) use:
+#From portainer’s "nexus0" terminal shell (>_ Console) OR **alternatively** from `kubectl exec -it nexus0 -- /bin/bash` use:
 #`su - abc`
 
 #The default password for the user named "abc" is “notiaPoint1” - change the default password with - `passwd abc`
@@ -107,7 +108,7 @@ su - abc
 #In chrome rdp, choose access my computer, then choose install via ssh.
 #Follow the prompts till one says “Authorize”
 #Copy the Linux string it provides
-#Paste that into the cloud my-nexus0 node console while the terminal is logged as "abc"
+#Paste that into the cloud nexus0 node console while the terminal is logged as "abc"
 
 #------------------------------------
 #Access the Nexus0 from here once Chrome RDP is set up:
