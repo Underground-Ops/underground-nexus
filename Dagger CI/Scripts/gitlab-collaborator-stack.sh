@@ -21,7 +21,8 @@ docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.ym
 #Set up "Control Panel" stack - powered by Wordpress
 mkdir /var/lib/docker/volumes/underground-wordpress_db_data
 cp /nexus-bucket/underground-nexus/'Production Artifacts'/Wordpress/_data.zip /var/lib/docker/volumes/underground-wordpress_db_data/
-unzip /var/lib/docker/volumes/underground-wordpress_db_data/_data.zip
+cd /var/lib/docker/volumes/underground-wordpress_db_data/
+unzip _data.zip
 rm -r /var/lib/docker/volumes/underground-wordpress_db_data/_data.zip
 docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.yml underground-wordpress
 
