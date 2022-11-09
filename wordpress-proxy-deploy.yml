@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+   db:
+     image: ghcr.io/linuxserver/mariadb
+     #container_name: mariadb
+     volumes:
+       - db_data:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: Augustu53CannotFly148235
+       MYSQL_DATABASE: wordpressdb
+       MYSQL_USER: wordpressuser
+       MYSQL_PASSWORD: Augustu5CanFly1482
+     networks:
+      #- default
+      #- Inner-Athena
+      - traefik-public
+     dns:
+      - 10.20.0.1
+     expose:
+       - "3306"
+
+
+   wordpress:
+     depends_on:
+       - db
+     image: wordpress:latest
+     #container_name: wordpress
+     ports:
+       - "8080:80"
+     restart: always
+     environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: wordpressuser
+       WORDPRESS_DB_PASSWORD: Augustu5CanFly1482
+       WORDPRESS_DB_NAME: wordpressdb
+
+     networks:
+      #- default
+      #- Inner-Athena
+      - traefik-public
+     dns:
+      - 10.20.0.1
+     deploy:
+      labels:
+        - traefik.port=80
+        - traefik.frontend.rule=Host(`underground-ops.me`)
+        # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
+        ##- traefik.http.middlewares.wordpress-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
+        - traefik.docker.network=proxy
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        # https-redirect middleware to redirect HTTP to HTTPS
+        # It can be re-used by other stacks in other Docker Compose files
+        - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+        - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+        - traefik.http.routers.wordpress-http.rule=Host(`underground-ops.me`)
+        - traefik.http.routers.wordpress-http.entrypoints=http
+        - traefik.http.routers.wordpress-http.middlewares=https-redirect
+        - traefik.http.routers.wordpress-https.rule=Host(`underground-ops.me`)
+        - traefik.http.routers.wordpress-https.entrypoints=https
+        - traefik.http.routers.wordpress-https.tls=true
+        - traefik.http.routers.wordpress-https.tls.certresolver=le
+        # Enable HTTP Basic auth, using the middleware created above
+        ##- traefik.http.routers.wordpress-https.middlewares=wordpress-auth
+        - traefik.http.services.wordpress.loadbalancer.server.port=80
+
+
+volumes:
+    db_data: {}
+networks:
+  Inner-Athena:
+    external: true
+  traefik-public:
+    external: true
