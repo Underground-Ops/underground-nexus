@@ -13,10 +13,17 @@ bash -c "NODE_ID=$(docker info -f '{{.Swarm.NodeID}}'); EMAIL=me@underground-ops
 #Apply docker lables
 docker node update --label-add traefik-public.traefik-public-certificates=true Underground-Nexus
 
-#Build collaborator stack, GitLab and traefik loadbalancer
+#Build collaborator stack, GitLab and Traefik loadbalancer
 docker stack deploy -c /nexus-bucket/underground-nexus/traefik-api-proxy.yml traefik
 docker stack deploy -c /nexus-bucket/underground-nexus/gitlab-proxy-deploy.yml gitlab
 docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.yml collaborator-workbench
+
+#Set up "Control Panel" stack - powered by Wordpress
+mkdir /var/lib/docker/volumes/underground-wordpress_db_data
+cp /nexus-bucket/underground-nexus/'Production Artifacts'/Wordpress/_data.zip /var/lib/docker/volumes/underground-wordpress_db_data/
+unzip /var/lib/docker/volumes/underground-wordpress_db_data/_data.zip
+rm -r /var/lib/docker/volumes/underground-wordpress_db_data/_data.zip
+docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.yml underground-wordpress
 
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /var/lib/docker/volumes/pihole_config/_data/

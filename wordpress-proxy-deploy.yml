@@ -5,7 +5,7 @@ services:
      image: ghcr.io/linuxserver/mariadb
      #container_name: mariadb
      volumes:
-       - db_data:/var/lib/mysql
+       - db_data:/config
      restart: always
      environment:
        MYSQL_ROOT_PASSWORD: Augustu53CannotFly148235
