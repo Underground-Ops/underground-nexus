@@ -26,24 +26,24 @@ services:
         - traefik.port=80
         - traefik.frontend.rule=Host(`gitlab.underground-ops.me`)
         # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
-        - traefik.http.middlewares.gitlab-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
+        ##- traefik.http.middlewares.gitlab-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
         - traefik.docker.network=proxy
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
         # https-redirect middleware to redirect HTTP to HTTPS
         # It can be re-used by other stacks in other Docker Compose files
-        - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
-        - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+        ##- traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+        ##- traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
         - traefik.http.routers.gitlab-http.rule=Host(`gitlab.underground-ops.me`)
         - traefik.http.routers.gitlab-http.entrypoints=http
-        - traefik.http.routers.gitlab-http.middlewares=https-redirect
+        ##- traefik.http.routers.gitlab-http.middlewares=https-redirect
         - traefik.http.routers.gitlab-https.rule=Host(`gitlab.underground-ops.me`)
         - traefik.http.routers.gitlab-https.entrypoints=https
         - traefik.http.routers.gitlab-https.tls=true
         - traefik.http.routers.gitlab-https.tls.certresolver=le
         # Enable HTTP Basic auth, using the middleware created above
-        - traefik.http.routers.gitlab-https.middlewares=gitlab-auth
+        ##- traefik.http.routers.gitlab-https.middlewares=gitlab-auth
         - traefik.http.services.gitlab.loadbalancer.server.port=80
     secrets:
       - gitlab_root_password
