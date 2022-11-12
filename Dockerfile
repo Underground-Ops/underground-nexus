@@ -51,6 +51,7 @@ RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo
 #RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i vscode-arm64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #Install Git
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y git" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y iputils-ping" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #GitHub Desktop
 RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/shiftkey/desktop/releases/download/release-3.1.1-linux1/GitHubDesktop-linux-3.1.1-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i GitHubDesktop-linux-2.9.6-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
@@ -106,6 +107,7 @@ RUN echo "docker run -itd --name=Security-Operation-Center -h Security-Operation
 #Build Athena0 stack
 RUN echo "docker run -itd --init -p 22:22 --name=Athena0 -h Athena0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v athena0:/home/ -v /nexus-bucket:/nexus-bucket -v /etc/docker:/etc/docker -v /usr/local/bin/docker:/usr/local/bin/docker -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes/:/var/lib/docker/volumes/ natoascode/athena0:latest" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 apt -y update" >> deploy-olympiad.sh
+RUN echo "docker exec Athena0 apt install -y iputils-ping" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 git clone https://github.com/radareorg/radare2" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 sh radare2/sys/install.sh" >> deploy-olympiad.sh
 RUN echo "docker exec Athena0 apt-get install -y metasploit-framework" >> deploy-olympiad.sh
