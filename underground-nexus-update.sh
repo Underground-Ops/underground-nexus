@@ -20,9 +20,9 @@ docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.ym
 cd /nexus-bucket/underground-nexus/
 
 #Update Workbench
-docker exec workbench apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get autoclean -y && apt-get clean -y && apt-get autoremove
+docker exec workbench apt update -y && apt upgrade -y && apt dist-upgrade -y && apt autoclean -y && apt clean -y && apt autoremove
 
 #Update local Kali Linux node (Athena0)
-apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
-apt-get autoclean -y && apt-get clean -y
-apt-get autoremove
+apt update -y && apt upgrade -y && apt dist-upgrade -y
+apt autoclean -y && apt clean -y
+apt autoremove
