@@ -36,7 +36,7 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 **Head to Portainer to Log In at - *https://localhost:9050*:**
 - Reset Portainer for initial login if locked out using `docker exec Underground-Nexus docker restart Olympiad0`
-- Once the install script completes head to *http://localhost:1000* and open **__Firefox__** to find the **__Git-BIOS Control Panel__** to get started using the Underground Nexus resources and tools
+- Once the install script completes head to *http://localhost:1000* and open **_Firefox_** to find the **_Git-BIOS Control Panel_** to get started using the Underground Nexus resources and tools
 
 ----------------------------------------------------
 
