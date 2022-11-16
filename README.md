@@ -34,6 +34,10 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 **ALTERNATIVE** - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
 `sh deploy-olympiad.sh`
 
+**Head to Portainer to Log In at - *https://localhost:9050*:**
+- Reset Portainer for initial login if locked out using `docker exec Underground-Nexus docker restart Olympiad0`
+- Once the install script completes head to *http://localhost:1000* and open **__Firefox__** to find the **__Git-BIOS Control Panel__** to get started using the Underground Nexus resources and tools
+
 ----------------------------------------------------
 
 ***The minimum recommended hardware for the Underground Nexus is the Raspberry Pi 4; anything more powerful will also certainly run the Underground Nexus well (compatible with amd64 and arm systems).***
