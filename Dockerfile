@@ -65,7 +65,7 @@ RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i chrome-
 RUN echo "docker exec workbench echo "docker exec workbench wget https://release.gitkraken.com/linux/gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i gitkraken-amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #Install Discord
-RUN echo "docker exec workbench echo "docker exec workbench wget -O discord.deb "https://discordapp.com/api/download?platform=linux&format=deb"" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench wget -O discord.deb https://discordapp.com/api/download?platform=linux&format=deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i discord.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #Virtual Machine Engineering Suite
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y qemu" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
