@@ -164,5 +164,6 @@ RUN echo "docker exec workbench bash /config/Desktop/nexus-bucket/terraform-work
 RUN echo "docker exec Athena0 curl https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/underground-nexus-update.sh | bash" >> deploy-olympiad.sh
 
 RUN echo "docker restart Inner-DNS-Control" >> deploy-olympiad.sh
+RUN echo "docker restart workbench" >> deploy-olympiad.sh
 
 RUN apk upgrade
