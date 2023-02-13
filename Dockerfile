@@ -24,6 +24,10 @@ RUN curl -L https://dl.dagger.io/dagger/install.sh | sh
 WORKDIR "/"
 #-------------------------------
 
+#Pull the Olympiad's lightweight deployment activation script artifact first
+RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/olympiad-deploy-light.sh
+
+#Build the FULL Olympiad deployment activation script
 RUN echo "#!/bin/sh" > deploy-olympiad.sh
 
 #Build Inner-Athena engine
