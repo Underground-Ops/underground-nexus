@@ -1,3 +1,6 @@
+#Initiate Swarm mode if not already running in swarm mode
+docker swarm init --advertise-addr 127.0.0.1
+
 #Build the traefik-public network
 docker network create --attachable --driver=overlay --subnet=10.15.0.0/16 --gateway=10.15.0.1 traefik-public
 
