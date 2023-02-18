@@ -62,7 +62,8 @@ k3d cluster create KuberNexus -p 8080:8080@loadbalancer -p 8443:8443@loadbalance
 curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/arm64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 k3d kubeconfig merge KuberNexus --kubeconfig-merge-default
-curl https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/gitlab-collaborator-stack.sh | sh
+wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/gitlab-collaborator-stack.sh
+sh gitlab-collaborator-stack.sh
 wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/firefox-homepage.sh
 sh firefox-homepage.sh
 docker exec workbench bash /config/Desktop/nexus-bucket/terraform-workbench-install.sh && docker exec workbench terraform -v
