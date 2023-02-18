@@ -2,7 +2,7 @@ FROM kalilinux/kali-rolling
 
 EXPOSE 22
 
-VOLUME ["/var/run", "/var/lib/docker/volumes", "/nexus-bucket"]
+VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 
 RUN apt update
 #-------------------------------
