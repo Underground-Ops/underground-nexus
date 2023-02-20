@@ -38,3 +38,7 @@ cd /var/lib/docker/volumes/pihole_DNS_data/_data/
 echo "cname=api.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=gitlab.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=workbench.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=grafana.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=alertmanager.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=unsee.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=prometheus.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
