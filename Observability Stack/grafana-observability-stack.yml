@@ -25,6 +25,8 @@ services:
     image: stefanprodan/caddy
     networks:
       - net
+    dns:
+      - 10.20.0.1
     environment:
       - DOCKER_GWBRIDGE_IP=172.18.0.1
     configs:
@@ -42,6 +44,8 @@ services:
     image: google/cadvisor
     networks:
       - net
+    dns:
+      - 10.20.0.1
     command: -logtostderr -docker_only
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -63,6 +67,8 @@ services:
       - default
       - net
       - traefik-public
+    dns:
+      - 10.20.0.1
     environment:
       - GF_SECURITY_ADMIN_USER=notitia
       - GF_SECURITY_ADMIN_PASSWORD=$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
@@ -106,6 +112,8 @@ services:
       - default
       - net
       - traefik-public
+    dns:
+      - 10.20.0.1
     #environment:
       #- SLACK_URL=${SLACK_URL:-https://hooks.slack.com/services/TOKEN}
       #- SLACK_CHANNEL=${SLACK_CHANNEL:-general}
@@ -147,6 +155,8 @@ services:
       - default
       - net
       - traefik-public
+    dns:
+      - 10.20.0.1
     environment:
       - "ALERTMANAGER_URIS=default:http://alertmanager:9093"
     deploy:
@@ -171,6 +181,8 @@ services:
     image: prom/node-exporter
     networks:
       - net
+    dns:
+      - 10.20.0.1
     environment:
       - NODE_ID={{.Node.ID}}
     volumes:
@@ -198,6 +210,8 @@ services:
       - default
       - net
       - traefik-public
+    dns:
+      - 10.20.0.1
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
