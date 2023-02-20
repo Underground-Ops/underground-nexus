@@ -146,8 +146,8 @@ services:
         - traefik.http.routers.swarmprom-alertmanager-https.tls=true
         - traefik.http.routers.swarmprom-alertmanager-https.tls.certresolver=le
         - traefik.http.services.swarmprom-alertmanager.loadbalancer.server.port=9093
-        - traefik.http.middlewares.swarmprom-alertmanager-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
-        - traefik.http.routers.swarmprom-alertmanager-https.middlewares=swarmprom-alertmanager-auth
+        #- traefik.http.middlewares.swarmprom-alertmanager-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
+        #- traefik.http.routers.swarmprom-alertmanager-https.middlewares=swarmprom-alertmanager-auth
 
   #unsee:
     #image: cloudflare/unsee
@@ -246,7 +246,7 @@ services:
         - traefik.http.routers.swarmprom-prometheus-https.tls=true
         - traefik.http.routers.swarmprom-prometheus-https.tls.certresolver=le
         - traefik.http.services.swarmprom-prometheus.loadbalancer.server.port=9090
-        - traefik.http.middlewares.swarmprom-prometheus-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
-        - traefik.http.routers.swarmprom-prometheus-https.middlewares=swarmprom-prometheus-auth
+        #- traefik.http.middlewares.swarmprom-prometheus-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
+        #- traefik.http.routers.swarmprom-prometheus-https.middlewares=swarmprom-prometheus-auth
 
 #URL's inlcude: grafana.underground-ops.me, alertmanager.underground-ops.me, unsee.underground-ops.me, prometheus.underground-ops.me
