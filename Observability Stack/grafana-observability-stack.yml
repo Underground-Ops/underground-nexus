@@ -158,7 +158,7 @@ services:
     #dns:
       #- 10.20.0.1
     #environment:
-      #- "ALERTMANAGER_URIS=default:https://alertmanager.underground-ops.me:9093"
+      #- "ALERTMANAGER_URIS=default:http://alertmanager:9093"
     #deploy:
       #mode: replicated
       #replicas: 1
