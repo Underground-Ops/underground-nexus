@@ -149,33 +149,33 @@ services:
         - traefik.http.middlewares.swarmprom-alertmanager-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
         - traefik.http.routers.swarmprom-alertmanager-https.middlewares=swarmprom-alertmanager-auth
 
-  unsee:
-    image: cloudflare/unsee
-    networks:
-      - default
-      - net
-      - traefik-public
-    dns:
-      - 10.20.0.1
-    environment:
-      - "ALERTMANAGER_URIS=default:https://alertmanager.underground-ops.me:9093"
-    deploy:
-      mode: replicated
-      replicas: 1
-      labels:
-        - traefik.enable=true
-        - traefik.docker.network=traefik-public
-        - traefik.constraint-label=traefik-public
-        - traefik.http.routers.swarmprom-unsee-http.rule=Host(`unsee.underground-ops.me`)
-        - traefik.http.routers.swarmprom-unsee-http.entrypoints=http
-        - traefik.http.routers.swarmprom-unsee-http.middlewares=https-redirect
-        - traefik.http.routers.swarmprom-unsee-https.rule=Host(`unsee.underground-ops.me`)
-        - traefik.http.routers.swarmprom-unsee-https.entrypoints=https
-        - traefik.http.routers.swarmprom-unsee-https.tls=true
-        - traefik.http.routers.swarmprom-unsee-https.tls.certresolver=le
-        - traefik.http.services.swarmprom-unsee.loadbalancer.server.port=8080
-        - traefik.http.middlewares.swarmprom-unsee-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
-        - traefik.http.routers.swarmprom-unsee-https.middlewares=swarmprom-unsee-auth
+  #unsee:
+    #image: cloudflare/unsee
+    #networks:
+      #- default
+      #- net
+      #- traefik-public
+    #dns:
+      #- 10.20.0.1
+    #environment:
+      #- "ALERTMANAGER_URIS=default:https://alertmanager.underground-ops.me:9093"
+    #deploy:
+      #mode: replicated
+      #replicas: 1
+      #labels:
+        #- traefik.enable=true
+        #- traefik.docker.network=traefik-public
+        #- traefik.constraint-label=traefik-public
+        #- traefik.http.routers.swarmprom-unsee-http.rule=Host(`unsee.underground-ops.me`)
+        #- traefik.http.routers.swarmprom-unsee-http.entrypoints=http
+        #- traefik.http.routers.swarmprom-unsee-http.middlewares=https-redirect
+        #- traefik.http.routers.swarmprom-unsee-https.rule=Host(`unsee.underground-ops.me`)
+        #- traefik.http.routers.swarmprom-unsee-https.entrypoints=https
+        #- traefik.http.routers.swarmprom-unsee-https.tls=true
+        #- traefik.http.routers.swarmprom-unsee-https.tls.certresolver=le
+        #- traefik.http.services.swarmprom-unsee.loadbalancer.server.port=8080
+        #- traefik.http.middlewares.swarmprom-unsee-auth.basicauth.users=notitia:$$2y$$10$$DtArCoiPKfuSoE7VH4LRO.S/fHeekYr3QanhpC2GC867f.iunZT2.
+        #- traefik.http.routers.swarmprom-unsee-https.middlewares=swarmprom-unsee-auth
 
   node-exporter:
     image: prom/node-exporter
