@@ -6,6 +6,7 @@ dagger project update
 dagger do build
 rm -r /usr/local/bin/underground-nexus-update.sh
 cp /nexus-bucket/underground-nexus/underground-nexus-update.sh /usr/local/bin/
+rm -r /nexus-bucket/underground-nexus-update.sh
 cp /nexus-bucket/underground-nexus/underground-nexus-update.sh /nexus-bucket
 
 #Update Control Panel - powered by Wordpress
