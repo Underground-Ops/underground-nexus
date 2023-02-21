@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.1'
 
 volumes:
     prometheus_data: {}
@@ -11,7 +11,7 @@ networks:
 services:
 
   prometheus:
-    image: prom/prometheus:v2.36.2
+    image: prom/prometheus:v2.1.0
     volumes:
       - ./prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
@@ -25,10 +25,8 @@ services:
     links:
       - cadvisor:cadvisor
       - alertmanager:alertmanager
-#      - pushgateway:pushgateway
     depends_on:
       - cadvisor
-#      - pushgateway
     networks:
       - back-tier
     restart: always
@@ -38,14 +36,12 @@ services:
 #          - node.hostname == ${HOSTNAME}
 
   node-exporter:
-    image: quay.io/prometheus/node-exporter:latest
+    image: prom/node-exporter
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
-      - /:/host:ro,rslave
     command: 
-      - '--path.rootfs=/host'
       - '--path.procfs=/host/proc' 
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
@@ -91,7 +87,6 @@ services:
 
   grafana:
     image: grafana/grafana
-    user: "472"
     depends_on:
       - prometheus
     ports:
@@ -106,12 +101,3 @@ services:
       - front-tier
     restart: always
 
-#  pushgateway:
-#    image: prom/pushgateway
-#    restart: always
-#    expose:
-#      - 9091
-#    ports:
-#      - "9091:9091"
-#    networks:
-#      - back-tier

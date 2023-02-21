@@ -1,0 +1,21 @@
+name: prometheus test
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install compose
+      run: sudo curl -L --fail https://github.com/docker/compose/releases/download/1.29.2/run.sh -o /usr/local/bin/docker-compose
+    - name: chmod compose
+      run:  sudo chmod +x /usr/local/bin/docker-compose
+    - name: Build the Docker image
+      run: docker-compose up -d
+    - name: test prom
+      run: while ! curl --retry 10 --retry-delay 5 -v 0.0.0.0:9090 >/dev/null; do sleep 1; done
+

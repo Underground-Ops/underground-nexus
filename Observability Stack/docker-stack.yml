@@ -1,0 +1,171 @@
+version: '3.7'
+
+volumes:
+    prometheus_data: {}
+    grafana_data: {}
+
+networks:
+  monitor-net:
+  traefik-public:
+    external: true
+
+services:
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    ports:
+      - 9090:9090
+    depends_on:
+      - cadvisor
+#      - pushgateway
+    networks:
+      - monitor-net
+      - traefik-public
+    dns:
+      - 10.20.0.1
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.swarmprom-prometheus-http.rule=Host(`prometheus.underground-ops.me`)
+        - traefik.http.routers.swarmprom-prometheus-http.entrypoints=http
+        - traefik.http.routers.swarmprom-prometheus-http.middlewares=https-redirect
+        - traefik.http.routers.swarmprom-prometheus-https.rule=Host(`prometheus.underground-ops.me`)
+        - traefik.http.routers.swarmprom-prometheus-https.entrypoints=https
+        - traefik.http.routers.swarmprom-prometheus-https.tls=true
+        - traefik.http.routers.swarmprom-prometheus-https.tls.certresolver=le
+        - traefik.http.services.swarmprom-prometheus.loadbalancer.server.port=9090
+
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command: 
+      - '--path.procfs=/host/proc' 
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    ports:
+      - 9100:9100
+    networks:
+      - monitor-net
+    dns:
+      - 10.20.0.1
+    deploy:
+      mode: global
+      restart_policy:
+          condition: on-failure
+
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    volumes:
+      - "./alertmanager/:/etc/alertmanager/"
+    networks:
+      - monitor-net
+      - traefik-public
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    deploy:
+      placement:
+        constraints:
+           - node.role==manager
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.swarmprom-alertmanager-http.rule=Host(`alertmanager.underground-ops.me`)
+        - traefik.http.routers.swarmprom-alertmanager-http.entrypoints=http
+        - traefik.http.routers.swarmprom-alertmanager-http.middlewares=https-redirect
+        - traefik.http.routers.swarmprom-alertmanager-https.rule=Host(`alertmanager.underground-ops.me`)
+        - traefik.http.routers.swarmprom-alertmanager-https.entrypoints=https
+        - traefik.http.routers.swarmprom-alertmanager-https.tls=true
+        - traefik.http.routers.swarmprom-alertmanager-https.tls.certresolver=le
+        - traefik.http.services.swarmprom-alertmanager.loadbalancer.server.port=9093
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 8080:8080
+    networks:
+      - monitor-net
+    dns:
+      - 10.20.0.1
+    deploy:
+      mode: global
+      restart_policy:
+          condition: on-failure
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    env_file:
+      - ./grafana/config.monitoring
+    networks:
+      - monitor-net
+      - traefik-public
+    dns:
+      - 10.20.0.1
+    user: "472"
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.swarmprom-grafana-http.rule=Host(`grafana.underground-ops.me`)
+        - traefik.http.routers.swarmprom-grafana-http.entrypoints=http
+        - traefik.http.routers.swarmprom-grafana-http.middlewares=https-redirect
+        - traefik.http.routers.swarmprom-grafana-https.rule=Host(`grafana.underground-ops.me`)
+        - traefik.http.routers.swarmprom-grafana-https.entrypoints=https
+        - traefik.http.routers.swarmprom-grafana-https.tls=true
+        - traefik.http.routers.swarmprom-grafana-https.tls.certresolver=le
+        - traefik.http.services.swarmprom-grafana.loadbalancer.server.port=3000
+
+#  pushgateway:
+#    image: prom/pushgateway
+#    deploy:
+#      mode: global
+#      restart_policy:
+#        condition: on-failure
+#    ports:
+#      - 9091:9091
+#    networks:
+#      - monitor-net
