@@ -6,7 +6,7 @@ services:
       mode: replicated
       replicas: 0
     ports:
-      - "2050:3000"
+      - "3000"
     #shm_size: "1gb" #optional
     #restart: unless-stopped
     #volumes:
