@@ -2,8 +2,11 @@ version: "3.6"
 services:
   workbench:
     image: linuxserver/webtop:ubuntu-mate
+    deploy:
+      mode: replicated
+      replicas: 0
     ports:
-      - "3000:3000"
+      - "2050:3000"
     #shm_size: "1gb" #optional
     #restart: unless-stopped
     #volumes:

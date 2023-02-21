@@ -30,6 +30,10 @@ unzip _data.zip
 rm -r /var/lib/docker/volumes/underground-wordpress_db_data/_data.zip
 docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.yml underground-wordpress
 
+#Build the Underground Observability Stack
+cd /nexus-bucket/underground-nexus/'Observability Stack'/
+docker stack deploy -c ./docker-stack.yml underground-observability
+
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /var/lib/docker/volumes/pihole_config/_data/
 echo "10.20.0.1 underground-ops.me" >> custom.list
