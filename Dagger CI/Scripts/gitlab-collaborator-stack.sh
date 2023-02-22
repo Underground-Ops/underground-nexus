@@ -34,7 +34,7 @@ docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.ym
 #Build the Underground Observability Stack
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
-#cd /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker/multi-node/
+#cd /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker/single-node/
 #docker-compose -f generate-indexer-certs.yml run --rm generator
 #docker stack deploy -c ./docker-stack.yml underground-siem
 
