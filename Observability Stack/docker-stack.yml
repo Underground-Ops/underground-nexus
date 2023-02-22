@@ -110,7 +110,7 @@ services:
         constraints:
            - node.role==manager
       restart_policy:
-        condition: always
+        condition: on-failure
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
