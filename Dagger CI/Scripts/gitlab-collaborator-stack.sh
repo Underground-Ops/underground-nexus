@@ -34,11 +34,6 @@ docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.ym
 #Build the Underground Observability Stack
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
-#rm -r /wazuh-docker
-#cp -r /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker /
-#cd /wazuh-docker/single-node/
-#docker-compose -f generate-indexer-certs.yml run --rm generator
-#docker-compose up
 
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /var/lib/docker/volumes/pihole_config/_data/
@@ -53,3 +48,18 @@ echo "cname=alertmanager.underground-ops.me,underground-ops.me" >> 05-pihole-cus
 echo "cname=indexer.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=prometheus.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=wazuh.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+
+#Build SIEM and EDR Wazuh stack
+cd /
+rm -r /wazuh-docker
+cp -r /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker /
+cd /wazuh-docker/single-node/
+docker-compose -f generate-indexer-certs.yml run --rm generator
+docker-compose up -d
+
+#Deploy EDR agent to admin workbench
+docker exec -it workbench bash
+sudo curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='wazuh.manager' WAZUH_AGENT_GROUP='default' dpkg -i ./wazuh-agent-4.3.10.deb
+sudo update-rc.d wazuh-agent defaults 95 10
+sudo service wazuh-agent start
+exit
