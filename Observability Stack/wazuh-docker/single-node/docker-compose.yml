@@ -96,8 +96,8 @@ services:
     image: wazuh/wazuh-dashboard:4.3.10
     hostname: wazuh.dashboard
     restart: always
-    ports:
-      - 443:5601
+    #ports:
+      #- 443:5601
     networks:
       - traefik-public
     dns:
