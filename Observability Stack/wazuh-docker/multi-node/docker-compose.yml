@@ -7,7 +7,7 @@ networks:
 
 services:
   wazuh.master:
-    image: wazuh/wazuh-manager
+    image: wazuh/wazuh-manager:4.3.10
     hostname: wazuh.master
     restart: always
     ports:
