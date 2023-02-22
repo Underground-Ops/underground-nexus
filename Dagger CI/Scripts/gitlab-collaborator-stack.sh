@@ -46,3 +46,4 @@ echo "cname=grafana.underground-ops.me,underground-ops.me" >> 05-pihole-custom-c
 echo "cname=alertmanager.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=unsee.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=prometheus.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=wazuh.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
