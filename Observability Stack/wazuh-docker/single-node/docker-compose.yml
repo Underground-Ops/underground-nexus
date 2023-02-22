@@ -18,7 +18,7 @@ services:
     networks:
       - traefik-public
     dns:
-      - 10.15.0.20
+      - 10.20.0.1
     environment:
       - INDEXER_URL=https://wazuh.indexer:9200
       - INDEXER_USERNAME=admin
@@ -55,7 +55,7 @@ services:
     networks:
       - traefik-public
     dns:
-      - 10.15.0.20
+      - 10.20.0.1
     environment:
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -83,14 +83,14 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.wazuh-http.rule=Host(`indexer.underground-ops.me`)
-        - traefik.http.routers.wazuh-http.entrypoints=http
-        - traefik.http.routers.wazuh-http.middlewares=https-redirect
-        - traefik.http.routers.wazuh-https.rule=Host(`indexer.underground-ops.me`)
-        - traefik.http.routers.wazuh-https.entrypoints=https
-        - traefik.http.routers.wazuh-https.tls=true
-        - traefik.http.routers.wazuh-https.tls.certresolver=le
-        - traefik.http.services.wazuh.loadbalancer.server.port=9200
+        - traefik.http.routers.indexer-http.rule=Host(`indexer.underground-ops.me`)
+        - traefik.http.routers.indexer-http.entrypoints=http
+        #- traefik.http.routers.indexer-http.middlewares=https-redirect
+        - traefik.http.routers.indexer-https.rule=Host(`indexer.underground-ops.me`)
+        - traefik.http.routers.indexer-https.entrypoints=https
+        - traefik.http.routers.indexer-https.tls=true
+        - traefik.http.routers.indexer-https.tls.certresolver=le
+        - traefik.http.services.indexer.loadbalancer.server.port=9200
 
   wazuh.dashboard:
     image: wazuh/wazuh-dashboard:4.3.10
@@ -101,7 +101,7 @@ services:
     networks:
       - traefik-public
     dns:
-      - 10.15.0.20
+      - 10.20.0.1
     environment:
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=SecretPassword
