@@ -16,8 +16,8 @@ services:
       - "55000:55000"
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     environment:
       - INDEXER_URL=https://wazuh1.indexer:9200
       - INDEXER_USERNAME=admin
@@ -51,8 +51,8 @@ services:
     restart: always
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     environment:
       - INDEXER_URL=https://wazuh1.indexer:9200
       - INDEXER_USERNAME=admin
@@ -86,8 +86,8 @@ services:
       - "9200:9200"
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     environment:
       - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
       - "bootstrap.memory_lock=true"
@@ -114,8 +114,8 @@ services:
     restart: always
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     environment:
       - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
       - "bootstrap.memory_lock=true"
@@ -140,8 +140,8 @@ services:
     restart: always
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     environment:
       - "OPENSEARCH_JAVA_OPTS=-Xms1g -Xmx1g"
       - "bootstrap.memory_lock=true"
@@ -168,8 +168,8 @@ services:
       #- 443:5601
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     environment:
       - OPENSEARCH_HOSTS="https://wazuh1.indexer:9200"
       - WAZUH_API_URL="https://wazuh.master"
@@ -212,8 +212,8 @@ services:
       - "1514:1514"
     networks:
       - traefik-public
-    #dns:
-      #- 10.20.0.1
+    dns:
+      - 10.20.0.20
     depends_on:
       - wazuh.master
       - wazuh.worker

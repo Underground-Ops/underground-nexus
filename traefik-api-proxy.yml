@@ -99,7 +99,7 @@ services:
       - traefik-public
       #- Inner-Athena
     dns:
-      - 10.20.0.1
+      - 10.20.0.20
 
 volumes:
   # Create a volume to store the certificates, there is a constraint to make sure
