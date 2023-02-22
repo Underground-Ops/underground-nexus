@@ -20,7 +20,7 @@ services:
       #- Inner-Athena
       - traefik-public
     dns:
-      - 10.20.0.20
+      - 10.20.0.1
     deploy:
       labels:
         - traefik.port=80
@@ -53,7 +53,7 @@ services:
       mode: replicated
       replicas: 4
     dns:
-      - 10.20.0.20
+      - 10.20.0.1
 configs:
   gitlab:
     file: ./gitlab.rb
