@@ -7,7 +7,7 @@ docker network create --attachable --driver=overlay --subnet=10.15.0.0/16 --gate
 #Attach management and state resoruces to the traefik network (Pihole manages the DNS for the stack)
 docker network connect traefik-public workbench
 docker network connect traefik-public Athena0
-docker network connect traefik-public Inner-DNS-Control
+docker network connect --ip 10.15.0.20 traefik-public Inner-DNS-Control
 docker network connect traefik-public torpedo
 
 #Define system variables
@@ -48,6 +48,6 @@ echo "cname=gitlab.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cn
 echo "cname=workbench.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=grafana.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=alertmanager.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
-echo "cname=unsee.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=indexer.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=prometheus.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=wazuh.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf

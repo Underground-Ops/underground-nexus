@@ -195,14 +195,14 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.swarmprom-grafana-http.rule=Host(`wazuh.underground-ops.me`)
-        - traefik.http.routers.swarmprom-grafana-http.entrypoints=http
-        - traefik.http.routers.swarmprom-grafana-http.middlewares=https-redirect
-        - traefik.http.routers.swarmprom-grafana-https.rule=Host(`wazuh.underground-ops.me`)
-        - traefik.http.routers.swarmprom-grafana-https.entrypoints=https
-        - traefik.http.routers.swarmprom-grafana-https.tls=true
-        - traefik.http.routers.swarmprom-grafana-https.tls.certresolver=le
-        - traefik.http.services.swarmprom-grafana.loadbalancer.server.port=5601
+        - traefik.http.routers.wazuh-http.rule=Host(`wazuh.underground-ops.me`)
+        - traefik.http.routers.wazuh-http.entrypoints=http
+        - traefik.http.routers.wazuh-http.middlewares=https-redirect
+        - traefik.http.routers.wazuh-https.rule=Host(`wazuh.underground-ops.me`)
+        - traefik.http.routers.wazuh-https.entrypoints=https
+        - traefik.http.routers.wazuh-https.tls=true
+        - traefik.http.routers.wazuh-https.tls.certresolver=le
+        - traefik.http.services.wazuh.loadbalancer.server.port=5601
 
   nginx:
     image: nginx:stable
