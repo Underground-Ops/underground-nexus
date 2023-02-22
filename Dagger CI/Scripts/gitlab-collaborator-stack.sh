@@ -34,9 +34,11 @@ docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.ym
 #Build the Underground Observability Stack
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
-#cd /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker/single-node/
+#rm -r /wazuh-docker
+#cp -r /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker /
+#cd /wazuh-docker/single-node/
 #docker-compose -f generate-indexer-certs.yml run --rm generator
-#docker stack deploy -c ./docker-stack.yml underground-siem
+#docker-compose up
 
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /var/lib/docker/volumes/pihole_config/_data/
