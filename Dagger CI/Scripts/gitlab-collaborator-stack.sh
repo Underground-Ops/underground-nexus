@@ -11,7 +11,8 @@ docker network connect traefik-public Inner-DNS-Control
 docker network connect traefik-public torpedo
 
 #Define system variables
-bash -c "NODE_ID=$(docker info -f '{{.Swarm.NodeID}}'); EMAIL=me@underground-ops.me; DOMAIN=localhost"
+export DOMAIN=underground-ops.me
+bash -c "NODE_ID=$(docker info -f '{{.Swarm.NodeID}}'); EMAIL=me@underground-ops.me; DOMAIN=underground-ops.me"
 
 #Apply docker lables
 docker node update --label-add traefik-public.traefik-public-certificates=true Underground-Nexus
