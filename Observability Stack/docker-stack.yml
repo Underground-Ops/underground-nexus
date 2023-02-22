@@ -38,7 +38,7 @@ services:
         constraints:
           - node.role==manager
       restart_policy:
-        condition: always
+        condition: on-failure
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -69,7 +69,7 @@ services:
         constraints:
           - node.role==manager
       restart_policy:
-        condition: always
+        condition: on-failure
 
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
@@ -91,7 +91,7 @@ services:
     deploy:
       mode: global
       restart_policy:
-          condition: always
+          condition: on-failure
 
   alertmanager:
     image: prom/alertmanager
@@ -140,7 +140,7 @@ services:
     deploy:
       mode: global
       restart_policy:
-          condition: always
+          condition: on-failure
 
   grafana:
     image: grafana/grafana
