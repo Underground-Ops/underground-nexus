@@ -38,7 +38,7 @@ services:
         constraints:
           - node.role==manager
       restart_policy:
-        condition: on-failure
+        condition: always
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -51,6 +51,25 @@ services:
         - traefik.http.routers.swarmprom-prometheus-https.tls=true
         - traefik.http.routers.swarmprom-prometheus-https.tls.certresolver=le
         - traefik.http.services.swarmprom-prometheus.loadbalancer.server.port=9090
+
+  loki:
+    image: grafana/loki
+    command:
+      - '--config.file=/etc/loki/local-config.yaml'
+    ports:
+      - 3100:3100
+    depends_on:
+      - prometheus
+    networks:
+      - monitor-net
+    dns:
+      - 10.20.0.1
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+      restart_policy:
+        condition: always
 
   node-exporter:
     image: quay.io/prometheus/node-exporter:latest
@@ -72,7 +91,7 @@ services:
     deploy:
       mode: global
       restart_policy:
-          condition: on-failure
+          condition: always
 
   alertmanager:
     image: prom/alertmanager
@@ -91,7 +110,7 @@ services:
         constraints:
            - node.role==manager
       restart_policy:
-        condition: on-failure
+        condition: always
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -121,12 +140,13 @@ services:
     deploy:
       mode: global
       restart_policy:
-          condition: on-failure
+          condition: always
 
   grafana:
     image: grafana/grafana
     depends_on:
       - prometheus
+      - loki
     ports:
       - 3000:3000
     volumes:
@@ -145,7 +165,7 @@ services:
         constraints:
           - node.role==manager
       restart_policy:
-        condition: on-failure
+        condition: always
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
@@ -164,7 +184,7 @@ services:
 #    deploy:
 #      mode: global
 #      restart_policy:
-#        condition: on-failure
+#        condition: always
 #    ports:
 #      - 9091:9091
 #    networks:
