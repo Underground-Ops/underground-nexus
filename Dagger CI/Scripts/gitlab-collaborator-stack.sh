@@ -58,6 +58,6 @@ docker-compose -f /wazuh-docker/single-node/generate-indexer-certs.yml run --rm 
 docker-compose up -d
 
 #Deploy EDR agent to admin workbench
-docker exec workbench curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='wazuh.manager' WAZUH_AGENT_GROUP='default' dpkg -i ./wazuh-agent-4.3.10.deb
-docker exec workbench update-rc.d wazuh-agent defaults 95 10
-docker exec workbench service wazuh-agent start
+echo "curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='wazuh.manager' WAZUH_AGENT_GROUP='default' dpkg -i ./wazuh-agent-4.3.10.deb && update-rc.d wazuh-agent defaults 95 10 && service wazuh-agent start" > wazuh-agent.sh
+docker cp wazuh-agent.sh workbench:/
+docker exec -it workbench bash wazuh-agent.sh
