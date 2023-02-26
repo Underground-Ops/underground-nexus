@@ -7,7 +7,7 @@ docker network create --attachable --driver=overlay --subnet=10.15.0.0/16 --gate
 #Attach management and state resoruces to the traefik network (Pihole manages the DNS for the stack)
 docker network connect traefik-public workbench
 docker network connect traefik-public Athena0
-docker network connect --ip 10.15.0.100 traefik-public Inner-DNS-Control
+docker network connect --ip 10.15.0.200 traefik-public Inner-DNS-Control
 docker network connect traefik-public torpedo
 
 #Define system variables
