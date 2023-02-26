@@ -41,6 +41,6 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | b
 RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/enable-weekly-updates.sh
 RUN sh enable-weekly-updates.sh; exit 0
 #-------------------------------
-RUN apt -y update --fix-missing
+RUN apt -y update --fix-missing; exit 0
 RUN apt -y upgrade
 RUN rm -r install.*; exit 0
