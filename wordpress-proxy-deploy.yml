@@ -3,6 +3,11 @@ version: '3'
 services:
    db:
      image: ghcr.io/linuxserver/mariadb
+     deploy:
+       resources:
+         limits:
+           cpus: 1.00
+           memory: 512M
      #container_name: mariadb
      volumes:
        - db_data:/config
@@ -43,6 +48,10 @@ services:
      dns:
       - 10.20.0.1
      deploy:
+      resources:
+        limits:
+         cpus: 1.00
+         memory: 512M
       labels:
         - traefik.port=80
         - traefik.frontend.rule=Host(`underground-ops.me`)

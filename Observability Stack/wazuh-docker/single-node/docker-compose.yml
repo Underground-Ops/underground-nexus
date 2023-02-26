@@ -10,6 +10,9 @@ services:
     image: wazuh/wazuh-manager:4.3.10
     hostname: wazuh.manager
     restart: always
+    mem_limit: 4096m
+    #mem_reservation: 128M
+    cpus: 2.0
     ports:
       - "1514:1514"
       - "1515:1515"
@@ -50,6 +53,9 @@ services:
     image: wazuh/wazuh-indexer:4.3.10
     hostname: wazuh.indexer
     restart: always
+    mem_limit: 4096m
+    #mem_reservation: 128M
+    cpus: 2.0
     ports:
       - "9200:9200"
     networks:
@@ -74,28 +80,27 @@ services:
       - ./config/wazuh_indexer_ssl_certs/admin-key.pem:/usr/share/wazuh-indexer/config/certs/admin-key.pem
       - ./config/wazuh_indexer/wazuh.indexer.yml:/usr/share/wazuh-indexer/config/opensearch.yml
       - ./config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/internal_users.yml
-    deploy:
-      placement:
-        constraints:
-          - node.role==manager
-      labels:
-        - traefik.port=9200
-        - traefik.enable=true
-        - traefik.docker.network=traefik-public
-        - traefik.constraint-label=traefik-public
-        - traefik.http.routers.indexer-http.rule=Host(`indexer.underground-ops.me`)
-        - traefik.http.routers.indexer-http.entrypoints=http
-        #- traefik.http.routers.indexer-http.middlewares=https-redirect
-        - traefik.http.routers.indexer-https.rule=Host(`indexer.underground-ops.me`)
-        - traefik.http.routers.indexer-https.entrypoints=https
-        - traefik.http.routers.indexer-https.tls=true
-        - traefik.http.routers.indexer-https.tls.certresolver=le
-        - traefik.http.services.indexer.loadbalancer.server.port=9200
+    labels:
+      - traefik.port=9200
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.routers.indexer-http.rule=Host(`indexer.underground-ops.me`)
+      - traefik.http.routers.indexer-http.entrypoints=http
+      #- traefik.http.routers.indexer-http.middlewares=https-redirect
+      - traefik.http.routers.indexer-https.rule=Host(`indexer.underground-ops.me`)
+      - traefik.http.routers.indexer-https.entrypoints=https
+      - traefik.http.routers.indexer-https.tls=true
+      - traefik.http.routers.indexer-https.tls.certresolver=le
+      - traefik.http.services.indexer.loadbalancer.server.port=9200
 
   wazuh.dashboard:
     image: wazuh/wazuh-dashboard:4.3.10
     hostname: wazuh.dashboard
     restart: always
+    mem_limit: 4096m
+    #mem_reservation: 128M
+    cpus: 2.0
     ports:
       - 5601:5601
     networks:
@@ -119,23 +124,19 @@ services:
     links:
       - wazuh.indexer:wazuh.indexer
       - wazuh.manager:wazuh.manager
-    deploy:
-      placement:
-        constraints:
-          - node.role==manager
-      labels:
-        - traefik.port=5601
-        - traefik.enable=true
-        - traefik.docker.network=traefik-public
-        - traefik.constraint-label=traefik-public
-        - traefik.http.routers.wazuh-http.rule=Host(`wazuh.underground-ops.me`)
-        - traefik.http.routers.wazuh-http.entrypoints=http
-        - traefik.http.routers.wazuh-http.middlewares=https-redirect
-        - traefik.http.routers.wazuh-https.rule=Host(`wazuh.underground-ops.me`)
-        - traefik.http.routers.wazuh-https.entrypoints=https
-        - traefik.http.routers.wazuh-https.tls=true
-        - traefik.http.routers.wazuh-https.tls.certresolver=le
-        - traefik.http.services.wazuh.loadbalancer.server.port=5601
+    labels:
+      - traefik.port=5601
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+      - traefik.http.routers.wazuh-http.rule=Host(`wazuh.underground-ops.me`)
+      - traefik.http.routers.wazuh-http.entrypoints=http
+      - traefik.http.routers.wazuh-http.middlewares=https-redirect
+      - traefik.http.routers.wazuh-https.rule=Host(`wazuh.underground-ops.me`)
+      - traefik.http.routers.wazuh-https.entrypoints=https
+      - traefik.http.routers.wazuh-https.tls=true
+      - traefik.http.routers.wazuh-https.tls.certresolver=le
+      - traefik.http.services.wazuh.loadbalancer.server.port=5601
 
 
 volumes:

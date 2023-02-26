@@ -15,6 +15,10 @@ services:
         published: 443
         mode: host
     deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 512M
       placement:
         constraints:
           # Make the traefik service run only on the node with this label

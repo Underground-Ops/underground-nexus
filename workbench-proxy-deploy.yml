@@ -2,9 +2,6 @@ version: "3.6"
 services:
   workbench:
     image: linuxserver/webtop:ubuntu-mate
-    deploy:
-      mode: replicated
-      replicas: 0
     ports:
       - "3000"
     #shm_size: "1gb" #optional
@@ -25,6 +22,12 @@ services:
     dns:
       - 10.20.0.1
     deploy:
+      resources:
+        limits:
+          cpus: 0.50
+          memory: 512M
+      mode: replicated
+      replicas: 0
       labels:
         - traefik.port=3000
         - traefik.frontend.rule=Host(`workbench.underground-ops.me`)
