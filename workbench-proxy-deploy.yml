@@ -24,7 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: 0.50
+          cpus: '0.50'
           memory: 512M
       mode: replicated
       replicas: 0

@@ -12,7 +12,7 @@ services:
     restart: always
     mem_limit: 4096m
     #mem_reservation: 128M
-    cpus: 2.0
+    cpus: '2.00'
     ports:
       - "1514:1514"
       - "1515:1515"
@@ -55,7 +55,7 @@ services:
     restart: always
     mem_limit: 4096m
     #mem_reservation: 128M
-    cpus: 2.0
+    cpus: '2.00'
     ports:
       - "9200:9200"
     networks:
@@ -100,7 +100,7 @@ services:
     restart: always
     mem_limit: 4096m
     #mem_reservation: 128M
-    cpus: 2.0
+    cpus: '2.00'
     ports:
       - 5601:5601
     networks:

@@ -24,7 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: 4
+          cpus: '4.00'
           memory: 4096M
       labels:
         - traefik.port=80
