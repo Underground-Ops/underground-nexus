@@ -63,4 +63,6 @@ bash build-wazuh.sh
 #Deploy EDR agent to admin workbench
 echo "curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='wazuh.manager' WAZUH_AGENT_GROUP='default' dpkg -i ./wazuh-agent-4.3.10.deb && update-rc.d wazuh-agent defaults 95 10 && service wazuh-agent start" > wazuh-agent.sh
 docker cp wazuh-agent.sh workbench:/
-docker exec -it workbench bash wazuh-agent.sh
+docker exec -it workbench bash
+bash /wazuh-agent.sh
+exit
