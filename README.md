@@ -29,13 +29,13 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 ### Install Step 2 - Paste activation command in the same shell the first command was entered in, and the Underground Nexus will build and activate itself (2 commands total to deploy - this is the second and final command if there are no errors).  If the command does not seem to work try the alternative install option below.
 
 ***ACTIVATE the Underground Nexus (this is the only necessary command to run IMMEDIATELY after deploying the Underground Nexus to activate it):***
-**`docker exec Underground-Nexus sh deploy-olympiad.sh`**
+**`docker exec Underground-Nexus bash deploy-olympiad.sh`**
 
 **ALTERNATIVE ACTIVATION** - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
-`sh deploy-olympiad.sh`
+`bash deploy-olympiad.sh`
 
 **ALTERNATIVE FOR LOW POWERED DEVICES AND "LIGHTWEIGHT" DEPLOYMENT ACTIVATIONS** - *Systems with **under 8GB worth of RAM** will perform best using the light deployment of the Underground Nexus that that lacks KuberNexus, the underground-ops.me domain and non-essential tools. (apps remoed include Vault, the SOC, Traefik, Wordpress, GitLab, collaborator workbenches, k3d/Kubernetes)* -- From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
-`sh olympiad-deploy-light.sh`
+`bash olympiad-deploy-light.sh`
 
 **Head to Portainer to Log In at - *https://localhost:9050*:**
 - Reset Portainer for initial login if locked out using `docker exec Underground-Nexus docker restart Olympiad0`
