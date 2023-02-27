@@ -82,12 +82,14 @@ services:
       - ./config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/internal_users.yml
     labels:
       - traefik.port=9200
+      - traefik.frontend.rule=Host(`indexer.underground-ops.me`)
+      - traefik.docker.network=proxy
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       - traefik.constraint-label=traefik-public
       - traefik.http.routers.indexer-http.rule=Host(`indexer.underground-ops.me`)
       - traefik.http.routers.indexer-http.entrypoints=http
-      #- traefik.http.routers.indexer-http.middlewares=https-redirect
+      - traefik.http.routers.indexer-http.middlewares=https-redirect
       - traefik.http.routers.indexer-https.rule=Host(`indexer.underground-ops.me`)
       - traefik.http.routers.indexer-https.entrypoints=https
       - traefik.http.routers.indexer-https.tls=true
@@ -126,6 +128,8 @@ services:
       - wazuh.manager:wazuh.manager
     labels:
       - traefik.port=5601
+      - traefik.frontend.rule=Host(`wazuh.underground-ops.me`)
+      - traefik.docker.network=proxy
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       - traefik.constraint-label=traefik-public
