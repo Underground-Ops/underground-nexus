@@ -23,7 +23,7 @@ services:
     dns:
       - 10.20.0.1
     environment:
-      - INDEXER_URL=https://indexer.underground-ops.me
+      - INDEXER_URL=https://wazuh.indexer:9200
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=SecretPassword
       - FILEBEAT_SSL_VERIFICATION_MODE=full
@@ -82,7 +82,6 @@ services:
       - ./config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/plugins/opensearch-security/securityconfig/internal_users.yml
     labels:
       - traefik.port=9200
-      - traefik.frontend.rule=Host(`indexer.underground-ops.me`)
       - traefik.docker.network=proxy
       - traefik.enable=true
       - traefik.docker.network=traefik-public
