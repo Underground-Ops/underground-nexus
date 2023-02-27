@@ -89,7 +89,7 @@ services:
       - traefik.constraint-label=traefik-public
       - traefik.http.routers.indexer-http.rule=Host(`indexer.underground-ops.me`)
       - traefik.http.routers.indexer-http.entrypoints=http
-      - traefik.http.routers.indexer-http.middlewares=https-redirect
+      #- traefik.http.routers.indexer-http.middlewares=https-redirect
       - traefik.http.routers.indexer-https.rule=Host(`indexer.underground-ops.me`)
       - traefik.http.routers.indexer-https.entrypoints=https
       - traefik.http.routers.indexer-https.tls=true
