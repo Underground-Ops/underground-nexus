@@ -23,7 +23,7 @@ services:
     dns:
       - 10.20.0.1
     environment:
-      - INDEXER_URL=https://wazuh.indexer:9200
+      - INDEXER_URL=https://indexer.underground-ops.me
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=SecretPassword
       - FILEBEAT_SSL_VERIFICATION_MODE=full
