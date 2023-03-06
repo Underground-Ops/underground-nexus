@@ -60,8 +60,8 @@ RUN echo "docker exec workbench echo "docker exec Security-Operation-Center sudo
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y git" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y iputils-ping" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #GitHub Desktop
-RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/shiftkey/desktop/releases/download/release-3.1.1-linux1/GitHubDesktop-linux-3.1.1-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i GitHubDesktop-linux-2.9.6-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo wget https://github.com/shiftkey/desktop/releases/download/release-3.2.0-linux1/GitHubDesktop-linux-3.2.0-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
+RUN echo "docker exec workbench echo "docker exec workbench sudo dpkg -i GitHubDesktop-linux-3.2.0-linux1.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec workbench sudo apt install -y apt-transport-https curl" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 #Chrome RDP and GitKraken
 RUN echo "docker exec workbench echo "docker exec workbench wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
