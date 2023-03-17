@@ -40,7 +40,8 @@ cd /var/lib/docker/volumes/pihole_config/_data/
 echo "10.20.0.1 underground-ops.me" >> custom.list
 
 cd /var/lib/docker/volumes/pihole_DNS_data/_data/
-echo "cname=api.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+rm 05-pihole-custom-cname.conf
+echo "cname=api.underground-ops.me,underground-ops.me" > 05-pihole-custom-cname.conf
 echo "cname=gitlab.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=workbench.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=grafana.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
