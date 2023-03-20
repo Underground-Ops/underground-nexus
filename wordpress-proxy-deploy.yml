@@ -24,8 +24,6 @@ services:
       - 10.20.0.1
     expose:
       - "3306"
-
-
   wordpress:
     depends_on:
       - db
@@ -74,7 +72,6 @@ services:
         # Enable HTTP Basic auth, using the middleware created above
         ##- traefik.http.routers.wordpress-https.middlewares=wordpress-auth
         - traefik.http.services.wordpress.loadbalancer.server.port=80
-
 
 volumes:
     db_data: {}
