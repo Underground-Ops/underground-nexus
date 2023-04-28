@@ -53,7 +53,7 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 **Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
 
-###Underground Nexus Architecture###
+### Underground Nexus Architecture 
 
 <img src="Graphics/SVG/super-root-cluster.svg" alt="Underground Nexus Super Roots">
 
