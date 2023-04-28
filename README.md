@@ -2,7 +2,7 @@
 
 **Release Version 1.0.1**
 
-
+<img src="Graphics/SVG/nexus-software-factory.svg" alt="Underground Nexus Software Factory">
 
 The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs.
 
@@ -52,6 +52,38 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 **Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
 
 **Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
+
+###Underground Nexus Architecture###
+
+<img src="Graphics/SVG/super-root-cluster.svg" alt="Underground Nexus Super Roots">
+
+The Underground Nexus allows business owners to grow your #tech organically like a garden - start with what you have and grow it your way. What the heck is the Underground Nexus?!
+
+The Underground Nexus from Cloud Underground is a hyperconverged #datacenter and copy paste #software factory, meaning it is a microservices based and built data center that can scale even across hardware that might not be compatible to orchestrate otherwise.
+
+That was a mouthful, let's break it down a bit more...
+
+- The Underground Nexus is a containerized kernel known as a "super root" system. (DigitalOcean defines kernels here: https://lnkd.in/gcpQvnqZ)
+- A "super root" cluster is a cluster of Underground Nexus nodes, in which each node maps to hardware kernel inputs and outputs (IO) based on how the developer designs IO mappings for an Underground Nexus hosted application (can be a Swarm or it can use a rootless orchestrator such as being configured for rootless Kubernetes).
+- "Super root" clusters are defined as "super" due to the need to protect super root kernel layers since they possess privileged access to hardware IO, all super roots as a result come heavily equipped with monitoring out of the box alongside SIEM and XDR that's preconfigured for security use.
+- Super roots allow Underground Nexus users to start with whatever server infrastructure they currently have available, and scale with very few limits down the road as they grow without needing to build for 3+ years worth of computing costs up front (could start with a budget of $0 or $1,000 and then scale endlessly as you grow).
+- The Underground Nexus kernel (referred to as a "Git-BIOS") can be managed via a single source of truth in the form of a Git repository, which means 100% of the Underground Nexus can be managed with CICD runners.
+- Underground Nexus is a cloud native kernel, meaning that it can cluster multiple hardware nodes together to run as one single serverless server (even if the hardware isn't all the same or living in the same location).
+- The Underground Nexus can run on-premise or with any flavor of public cloud that can run Docker or Kubernetes, it can even make AWS, Azure, GCP, Linode and beyond all run together as one single orchestrated application hosting environment while also being less work than manually configuring one single computing environment.
+- GitLab powers the heart of the Underground Nexus, allowing a "super root" cluster to be capable of scaling with serverless functions, rather than exclusively scaling with your chosen container orchestrator.
+- Applications look the same on the surface for end users, except the lower hosting costs can mean superior customer service support budgets.
+
+The Underground Nexus is free to use anytime, #build at your own pace.
+
+Grow your glory!
+
+<img src="Graphics/SVG/software-factory-pipeline.svg" alt="Underground Nexus Software Factory Pipeline">
+
+<img src="Graphics/SVG/cloud-native-git-bios.svg" alt="Cloud Underground's Cloud-native Git-BIOS">
+
+<img src="Graphics/SVG/git-bios-engine.svg" alt="The Git-BIOS Engine">
+
+<img src="Graphics/SVG/developer-site-architecture.svg" alt="Underground Nexus Developer Site Architecture">
 
 ***How to use the Underground Nexus*** **- Once Deployed:**
 
