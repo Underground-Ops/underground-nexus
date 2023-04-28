@@ -85,13 +85,13 @@ Grow your glory!
 
 <img src="Graphics/SVG/developer-site-architecture.svg" alt="Underground Nexus Developer Site Architecture">
 
-## Helpful Videos
+### Helpful Videos
 
 **Ditch VPN's and go 100% Zero Trust:** https://www.youtube.com/watch?v=IYmXPF3XUwo
 
 **Publish a Zero Trust Wordpress Website directly from Underground Nexus with Cloudflare:** https://youtu.be/ey4u7OUAF3c
 
-***How to use the Underground Nexus*** **- Once Deployed:**
+## ***How to use the Underground Nexus*** **- Once Deployed:**
 
 **1.** Access the Nexus MATE admin desktop at "http://localhost:1000" - If deployed on ARM, Visual Studio Code will need to be manually installed.  On amd64 builds you will see Visual Studio Code, GitHub Desktop and GitKraken listed in the MATE desktop. (The webtop is a loadbalancer, not just a desktop.)
 
@@ -143,21 +143,18 @@ Grow your glory!
 
 ----------------------------------------------------
 
-**Deploying Virtual Machines in Underground Nexus:**
+## Deploying Virtual Machines in Underground Nexus:
 
 The Underground Nexus can be configured to emulate and run virtual machines inside of its stack with an application called *Virtual Machine Manager* and can be configured to use *QEMU*, which is already pre-installed for immediate use upon being deployed.
 
 Please see the images found in the repository for examples on how to use virtual machines to begin configuring emulated virtual systems.
 
-**Using Underground Nexus Virtual Machines:**
-- Walkthrough screenshots steps 1-2
+### Using Underground Nexus Virtual Machines:
+- Walkthrough screenshots
 
 <img src="Using_Virtual_Machines__1.PNG" alt="Walkthrough screenshots steps 1-2">
 
-- Walkthrough screenshots steps 3-4:
 <img src="Using_Virtual_Machines__2.PNG" alt="Walkthrough screenshots steps 3-4">
-
-- Walkthrough screenshot step 5: 
 
 <img src="Using_Virtual_Machines__3.PNG" alt="Walkthrough screenshots steps 5">
 
