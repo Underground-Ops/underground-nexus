@@ -85,6 +85,12 @@ Grow your glory!
 
 <img src="Graphics/SVG/developer-site-architecture.svg" alt="Underground Nexus Developer Site Architecture">
 
+## Helpful Videos
+
+**Ditch VPN's and go 100% Zero Trust:** https://www.youtube.com/watch?v=IYmXPF3XUwo
+
+**Publish a Zero Trust Wordpress Website directly from Underground Nexus with Cloudflare:** https://youtu.be/ey4u7OUAF3c
+
 ***How to use the Underground Nexus*** **- Once Deployed:**
 
 **1.** Access the Nexus MATE admin desktop at "http://localhost:1000" - If deployed on ARM, Visual Studio Code will need to be manually installed.  On amd64 builds you will see Visual Studio Code, GitHub Desktop and GitKraken listed in the MATE desktop. (The webtop is a loadbalancer, not just a desktop.)
@@ -144,9 +150,16 @@ The Underground Nexus can be configured to emulate and run virtual machines insi
 Please see the images found in the repository for examples on how to use virtual machines to begin configuring emulated virtual systems.
 
 **Using Underground Nexus Virtual Machines:**
-- Walkthrough screenshots steps 1-2: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__1.PNG
-- Walkthrough screenshots steps 3-4: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__2.PNG
-- Walkthrough screenshot step 5: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__3.PNG
+- Walkthrough screenshots steps 1-2
+
+<img src="Using_Virtual_Machines__1.PNG" alt="Walkthrough screenshots steps 1-2">
+
+- Walkthrough screenshots steps 3-4:
+<img src="Using_Virtual_Machines__2.PNG" alt="Walkthrough screenshots steps 3-4">
+
+- Walkthrough screenshot step 5: 
+
+<img src="Using_Virtual_Machines__3.PNG" alt="Walkthrough screenshots steps 5">
 
 ----------------------------------------------------
 
