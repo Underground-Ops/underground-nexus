@@ -1,8 +1,8 @@
-# Underground Nexus - Copy Paste Data Center and DevSecOps Software Factory
+# Underground Nexus - Copy/Paste Data Center and DevSecOps Software Factory
 
 **__GA release is LIVE!__**
 
-The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for Cloud Native engineering, DevSecOps and all-around general data center needs.
+The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs.
 
 What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.">Learn more here!</a>
 
