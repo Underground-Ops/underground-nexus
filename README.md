@@ -1,8 +1,34 @@
-# Underground Nexus - Copy Paste Data Center and DevSecOps Software Factory
+# Underground Nexus - Copy/Paste Data Center and DevSecOps Software Factory
 
-**__GA release is LIVE!__**
+**Release Version 1.0.1**
 
-The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for Cloud Native engineering, DevSecOps and all-around general data center needs.
+<p align="center"><img src="https://github.com/Underground-Ops/underground-nexus/blob/main/Graphics/SVG/cloud-underground-logo.svg" alt="Cloud Underground Logo" width="300px" height="300px"> <img src="https://github.com/Underground-Ops/underground-nexus/blob/main/Graphics/SVG/new-nexus-logo.svg" alt="Underground Nexus Logo" width="300px" height="300px"></p>
+
+----------------------------------------------------
+
+### Table of Contents
+
+- <a href="#introduction">Intro & Helpful Links</a>
+
+- <a href="#install-step-1-assuming-docker-is-already-installed---open-a-command-line-windows-or-terminal-linux-or-osx-shell-and-paste-the-appropriate-install-command-for-your-computers-hardware-platform">Install Step 1</a>
+
+- <a href="#install-step-2---paste-activation-command-in-the-same-shell-the-first-command-was-entered-in-and-the-underground-nexus-will-build-and-activate-itself-2-commands-total-to-deploy---this-is-the-second-and-final-command-if-there-are-no-errors--if-the-command-does-not-seem-to-work-try-the-alternative-install-option-below">Install Step 2</a>
+
+- <a href="#how-to-use-the-underground-nexus---once-deployed">How to Use Underground Nexus</a>
+
+- <a href="#deploying-virtual-machines-in-underground-nexus">How to Deploy Virtual Machines in Underground Nexus</a>
+
+- <a href="#underground-nexus-architecture">Underground Nexus Architecture</a>
+
+- <a href="#learn-about-foundational-principles-for-cloud-native-and-devsecops-here-httpsgitlabcomnatoascodenist-draft-regulation-800-204c-comment-notes-and-timestamps">More Resources</a>
+
+----------------------------------------------------
+
+## INTRODUCTION
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/nexus-software-factory.svg" alt="Underground Nexus Software Factory">
+
+The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs.
 
 What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.">Learn more here!</a>
 
@@ -10,9 +36,9 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 ***Check out how to get started with Underground Nexus quick-start guidance here:*** https://youtu.be/lhzhLCprrYE
 
-## Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
+### Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
-### Install Step 1 (assuming Docker is already installed) - Open a command line (Windows) or terminal (Linux or OSX) shell and paste the appropriate install command for your computer's hardware platform.
+## Install Step 1 (assuming Docker is already installed) - Open a command line (Windows) or terminal (Linux or OSX) shell and paste the appropriate install command for your computer's hardware platform.
 
 **Dockerhub *DEVELOPMENT* pull for *Docker Desktop or amd64* systems:** `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 53:53/tcp -p 53:53/udp -p 80:80 -p 8080:8080 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9010:9010 -p 9050:9443 -p 18443:18443 -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
 
@@ -26,7 +52,7 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 **IMPORTANT:** After deploying the Underground Nexus from the appropriate `docker run` command for your system, enter the command below for "**Install Step 2**" in the exact same terminal or console in which the `docker run` command ran. *This script does quite a lot and can take a LONG time to complete - depending on the power of your system and internet speeds it can take anywhere from 15 to 45 minutes to complete activating and initializing the Underground Nexus stack.*
 
-### Install Step 2 - Paste activation command in the same shell the first command was entered in, and the Underground Nexus will build and activate itself (2 commands total to deploy - this is the second and final command if there are no errors).  If the command does not seem to work try the alternative install option below.
+## Install Step 2 - Paste activation command in the same shell the first command was entered in, and the Underground Nexus will build and activate itself (2 commands total to deploy - this is the second and final command if there are no errors).  If the command does not seem to work try the alternative install option below.
 
 ***ACTIVATE the Underground Nexus (this is the only necessary command to run IMMEDIATELY after deploying the Underground Nexus to activate it):***
 **`docker exec Underground-Nexus bash deploy-olympiad.sh`**
@@ -47,11 +73,7 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 ----------------------------------------------------
 
-**Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
-
-**Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
-
-***How to use the Underground Nexus*** **- Once Deployed:**
+## ***How to use the Underground Nexus*** **- Once Deployed:**
 
 **1.** Access the Nexus MATE admin desktop at "http://localhost:1000" - If deployed on ARM, Visual Studio Code will need to be manually installed.  On amd64 builds you will see Visual Studio Code, GitHub Desktop and GitKraken listed in the MATE desktop. (The webtop is a loadbalancer, not just a desktop.)
 
@@ -72,6 +94,8 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 **9.** Default URLs will show up if Nexus deploys without errors - **the links below can be used from inside the Nexus desktop if accessing this GitHub URL from inside the Firefox browser within the Nexus MATE desktop itself** (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
 - Portainer: https://10.20.0.1:9443
 - Pi hole: http://10.20.0.20:800 (can change password from within Portainer)
+- Grafana: https://grafana.underground-ops.me/ and http://10.20.0.1:3000/
+- Wazuh: https://wazuh.underground-ops.me:5601/ and https://10.20.0.1:5601/
 - Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9010 (default `user`:`password` is `minioadmin`:`minioadmin`)
 - Ubuntu MATE Admin Desktop: `http://10.20.0.1:1000` (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside the Underground Nexus MATE Desktop)
 - Ubuntu KDE Security Operation Center Desktop: http://10.20.0.1:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
@@ -101,16 +125,58 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 ----------------------------------------------------
 
-**Deploying Virtual Machines in Underground Nexus:**
+## Deploying Virtual Machines in Underground Nexus:
 
 The Underground Nexus can be configured to emulate and run virtual machines inside of its stack with an application called *Virtual Machine Manager* and can be configured to use *QEMU*, which is already pre-installed for immediate use upon being deployed.
 
 Please see the images found in the repository for examples on how to use virtual machines to begin configuring emulated virtual systems.
 
-**Using Underground Nexus Virtual Machines:**
-- Walkthrough screenshots steps 1-2: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__1.PNG
-- Walkthrough screenshots steps 3-4: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__2.PNG
-- Walkthrough screenshot step 5: https://github.com/Underground-Ops/underground-nexus/blob/main/Using_Virtual_Machines__3.PNG
+### Using Underground Nexus Virtual Machines:
+- Walkthrough screenshots
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Using_Virtual_Machines__1.PNG" alt="Walkthrough screenshots steps 1-2">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Using_Virtual_Machines__2.PNG" alt="Walkthrough screenshots steps 3-4">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Using_Virtual_Machines__3.PNG" alt="Walkthrough screenshots steps 5">
+
+----------------------------------------------------
+
+## Underground Nexus Architecture
+
+**Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
+
+**Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/super-root-cluster.svg" alt="Underground Nexus Super Roots">
+
+The Underground Nexus allows business owners to grow your #tech organically like a garden - start with what you have and grow it your way. What the heck is the Underground Nexus?!
+
+The Underground Nexus from Cloud Underground is a hyperconverged #datacenter and copy paste #software factory, meaning it is a microservices based and built data center that can scale even across hardware that might not be compatible to orchestrate otherwise.
+
+That was a mouthful, let's break it down a bit more...
+
+- The Underground Nexus is a containerized kernel known as a "super root" system. (DigitalOcean defines kernels here: https://lnkd.in/gcpQvnqZ)
+- A "super root" cluster is a cluster of Underground Nexus nodes, in which each node maps to hardware kernel inputs and outputs (IO) based on how the developer designs IO mappings for an Underground Nexus hosted application (can be a Swarm or it can use a rootless orchestrator such as being configured for rootless Kubernetes).
+- "Super root" clusters are defined as "super" due to the need to protect super root kernel layers since they possess privileged access to hardware IO, all super roots as a result come heavily equipped with monitoring out of the box alongside SIEM and XDR that's preconfigured for security use.
+- Super roots allow Underground Nexus users to start with whatever server infrastructure they currently have available, and scale with very few limits down the road as they grow without needing to build for 3+ years worth of computing costs up front (could start with a budget of $0 or $1,000 and then scale endlessly as you grow).
+- The Underground Nexus kernel (referred to as a "Git-BIOS") can be managed via a single source of truth in the form of a Git repository, which means 100% of the Underground Nexus can be managed with CICD runners.
+- Underground Nexus is a cloud native kernel, meaning that it can cluster multiple hardware nodes together to run as one single serverless server (even if the hardware isn't all the same or living in the same location).
+- The Underground Nexus can run on-premise or with any flavor of public cloud that can run Docker or Kubernetes, it can even make AWS, Azure, GCP, Linode and beyond all run together as one single orchestrated application hosting environment while also being less work than manually configuring one single computing environment.
+- GitLab powers the heart of the Underground Nexus, allowing a "super root" cluster to be capable of scaling with serverless functions, rather than exclusively scaling with your chosen container orchestrator.
+- Applications look the same on the surface for end users, except the lower hosting costs can mean superior customer service support budgets.
+
+The Underground Nexus is free to use anytime, #build at your own pace.
+
+Grow your glory!
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/software-factory-pipeline.svg" alt="Underground Nexus Software Factory Pipeline">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/cloud-native-git-bios.svg" alt="Cloud Underground's Cloud-native Git-BIOS">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/git-bios-engine.svg" alt="The Git-BIOS Engine">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/developer-site-architecture.svg" alt="Underground Nexus Developer Site Architecture">
 
 ----------------------------------------------------
 
@@ -119,3 +185,11 @@ Please see the images found in the repository for examples on how to use virtual
 ----------------------------------------------------
 
 ## Learn about the foundations that the Underground Nexus was built upon here: https://notiapoint.com/pages/the-olympiad
+
+----------------------------------------------------
+
+## Helpful Videos
+
+**Ditch VPN's and go 100% Zero Trust:** https://www.youtube.com/watch?v=IYmXPF3XUwo
+
+**Publish a Zero Trust Wordpress Website directly from Underground Nexus with Cloudflare:** https://youtu.be/ey4u7OUAF3c
