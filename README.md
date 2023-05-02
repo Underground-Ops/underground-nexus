@@ -2,21 +2,23 @@
 
 **Release Version 1.0.1**
 
+----------------------------------------------------
+
 ### Table of Contents
 
-<a href="#introduction">- Intro & Helpful Links</a>
+- <a href="#introduction">Intro & Helpful Links</a>
 
-<a href="#install-step-1-assuming-docker-is-already-installed---open-a-command-line-windows-or-terminal-linux-or-osx-shell-and-paste-the-appropriate-install-command-for-your-computers-hardware-platform">- Install Step 1</a>
+- <a href="#install-step-1-assuming-docker-is-already-installed---open-a-command-line-windows-or-terminal-linux-or-osx-shell-and-paste-the-appropriate-install-command-for-your-computers-hardware-platform">Install Step 1</a>
 
-<a href="#install-step-2---paste-activation-command-in-the-same-shell-the-first-command-was-entered-in-and-the-underground-nexus-will-build-and-activate-itself-2-commands-total-to-deploy---this-is-the-second-and-final-command-if-there-are-no-errors--if-the-command-does-not-seem-to-work-try-the-alternative-install-option-below">- Install Step 2</a>
+- <a href="#install-step-2---paste-activation-command-in-the-same-shell-the-first-command-was-entered-in-and-the-underground-nexus-will-build-and-activate-itself-2-commands-total-to-deploy---this-is-the-second-and-final-command-if-there-are-no-errors--if-the-command-does-not-seem-to-work-try-the-alternative-install-option-below">Install Step 2</a>
 
-<a href="#how-to-use-the-underground-nexus---once-deployed">- How to Use Underground Nexus</a>
+- <a href="#how-to-use-the-underground-nexus---once-deployed">How to Use Underground Nexus</a>
 
-<a href="#deploying-virtual-machines-in-underground-nexus">- How to Deploy Virtual Machines in Underground Nexus</a>
+- <a href="#deploying-virtual-machines-in-underground-nexus">How to Deploy Virtual Machines in Underground Nexus</a>
 
-<a href="#underground-nexus-architecture">- Underground Nexus Architecture</a>
+- <a href="#underground-nexus-architecture">Underground Nexus Architecture</a>
 
-<a href="#learn-about-foundational-principles-for-cloud-native-and-devsecops-here-httpsgitlabcomnatoascodenist-draft-regulation-800-204c-comment-notes-and-timestamps">- More Resources</a>
+- <a href="#learn-about-foundational-principles-for-cloud-native-and-devsecops-here-httpsgitlabcomnatoascodenist-draft-regulation-800-204c-comment-notes-and-timestamps">More Resources</a>
 
 ----------------------------------------------------
 
