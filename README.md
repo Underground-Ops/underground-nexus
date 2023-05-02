@@ -2,7 +2,7 @@
 
 **Release Version 1.0.1**
 
-<img style="max-width: 300px; max-height: 300px" src="https://github.com/Underground-Ops/underground-nexus/blob/main/Graphics/SVG/cloud-underground-logo.svg" alt="Cloud Underground Logo"> <img style="max-width: 300px; max-height: 300px" src="https://github.com/Underground-Ops/underground-nexus/blob/main/Graphics/SVG/new-nexus-logo.svg" alt="Underground Nexus Logo">
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/main/Graphics/SVG/cloud-underground-logo.svg" alt="Cloud Underground Logo" width="300" height="300"> <img src="https://github.com/Underground-Ops/underground-nexus/blob/main/Graphics/SVG/new-nexus-logo.svg" alt="Underground Nexus Logo" width="300" height="300">
 
 ----------------------------------------------------
 
