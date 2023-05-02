@@ -10,13 +10,15 @@
 
 <a href="#install-step-2---paste-activation-command-in-the-same-shell-the-first-command-was-entered-in-and-the-underground-nexus-will-build-and-activate-itself-2-commands-total-to-deploy---this-is-the-second-and-final-command-if-there-are-no-errors--if-the-command-does-not-seem-to-work-try-the-alternative-install-option-below">- Install Step 2</a>
 
-<a href="#underground-nexus-architecture">- Underground Nexus Architecture</a>
-
 <a href="#how-to-use-the-underground-nexus---once-deployed">- How to Use Underground Nexus</a>
 
 <a href="#deploying-virtual-machines-in-underground-nexus">- How to Deploy Virtual Machines in Underground Nexus</a>
 
-<a href="#learn-about-foundational-principles-for-cloud-native-and-devsecops-here-httpsgitlabcomnatoascodenist-draft-regulation-800-204c-comment-notes-and-timestamps">More Resources</a>
+<a href="#underground-nexus-architecture">- Underground Nexus Architecture</a>
+
+<a href="#learn-about-foundational-principles-for-cloud-native-and-devsecops-here-httpsgitlabcomnatoascodenist-draft-regulation-800-204c-comment-notes-and-timestamps">- More Resources</a>
+
+----------------------------------------------------
 
 ## INTRODUCTION
 
@@ -66,43 +68,6 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 ***The minimum recommended hardware for the Underground Nexus is the Raspberry Pi 4 (4GB RAM or more); anything more powerful will also certainly run the Underground Nexus well (compatible with amd64 and arm systems).***
 
 ----------------------------------------------------
-
-### Underground Nexus Architecture
-
-**Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
-
-**Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
-
-<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/super-root-cluster.svg" alt="Underground Nexus Super Roots">
-
-The Underground Nexus allows business owners to grow your #tech organically like a garden - start with what you have and grow it your way. What the heck is the Underground Nexus?!
-
-The Underground Nexus from Cloud Underground is a hyperconverged #datacenter and copy paste #software factory, meaning it is a microservices based and built data center that can scale even across hardware that might not be compatible to orchestrate otherwise.
-
-That was a mouthful, let's break it down a bit more...
-
-- The Underground Nexus is a containerized kernel known as a "super root" system. (DigitalOcean defines kernels here: https://lnkd.in/gcpQvnqZ)
-- A "super root" cluster is a cluster of Underground Nexus nodes, in which each node maps to hardware kernel inputs and outputs (IO) based on how the developer designs IO mappings for an Underground Nexus hosted application (can be a Swarm or it can use a rootless orchestrator such as being configured for rootless Kubernetes).
-- "Super root" clusters are defined as "super" due to the need to protect super root kernel layers since they possess privileged access to hardware IO, all super roots as a result come heavily equipped with monitoring out of the box alongside SIEM and XDR that's preconfigured for security use.
-- Super roots allow Underground Nexus users to start with whatever server infrastructure they currently have available, and scale with very few limits down the road as they grow without needing to build for 3+ years worth of computing costs up front (could start with a budget of $0 or $1,000 and then scale endlessly as you grow).
-- The Underground Nexus kernel (referred to as a "Git-BIOS") can be managed via a single source of truth in the form of a Git repository, which means 100% of the Underground Nexus can be managed with CICD runners.
-- Underground Nexus is a cloud native kernel, meaning that it can cluster multiple hardware nodes together to run as one single serverless server (even if the hardware isn't all the same or living in the same location).
-- The Underground Nexus can run on-premise or with any flavor of public cloud that can run Docker or Kubernetes, it can even make AWS, Azure, GCP, Linode and beyond all run together as one single orchestrated application hosting environment while also being less work than manually configuring one single computing environment.
-- GitLab powers the heart of the Underground Nexus, allowing a "super root" cluster to be capable of scaling with serverless functions, rather than exclusively scaling with your chosen container orchestrator.
-- Applications look the same on the surface for end users, except the lower hosting costs can mean superior customer service support budgets.
-
-The Underground Nexus is free to use anytime, #build at your own pace.
-
-Grow your glory!
-
-<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/software-factory-pipeline.svg" alt="Underground Nexus Software Factory Pipeline">
-
-<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/cloud-native-git-bios.svg" alt="Cloud Underground's Cloud-native Git-BIOS">
-
-<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/git-bios-engine.svg" alt="The Git-BIOS Engine">
-
-<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/developer-site-architecture.svg" alt="Underground Nexus Developer Site Architecture">
-
 
 ## ***How to use the Underground Nexus*** **- Once Deployed:**
 
@@ -173,6 +138,44 @@ Please see the images found in the repository for examples on how to use virtual
 
 ----------------------------------------------------
 
+## Underground Nexus Architecture
+
+**Underground Nexus - Cloud Native Server Architecture: *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Architecture.pdf***
+
+**Quick Start Guide (ESPECIALLY pay attention to *STEP 4* - if using the dockerhub pull, skip to *STEP 3* of guide): *https://github.com/Underground-Ops/underground-nexus/blob/main/Underground_Nexus_Quick_Guide.pdf***
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/super-root-cluster.svg" alt="Underground Nexus Super Roots">
+
+The Underground Nexus allows business owners to grow your #tech organically like a garden - start with what you have and grow it your way. What the heck is the Underground Nexus?!
+
+The Underground Nexus from Cloud Underground is a hyperconverged #datacenter and copy paste #software factory, meaning it is a microservices based and built data center that can scale even across hardware that might not be compatible to orchestrate otherwise.
+
+That was a mouthful, let's break it down a bit more...
+
+- The Underground Nexus is a containerized kernel known as a "super root" system. (DigitalOcean defines kernels here: https://lnkd.in/gcpQvnqZ)
+- A "super root" cluster is a cluster of Underground Nexus nodes, in which each node maps to hardware kernel inputs and outputs (IO) based on how the developer designs IO mappings for an Underground Nexus hosted application (can be a Swarm or it can use a rootless orchestrator such as being configured for rootless Kubernetes).
+- "Super root" clusters are defined as "super" due to the need to protect super root kernel layers since they possess privileged access to hardware IO, all super roots as a result come heavily equipped with monitoring out of the box alongside SIEM and XDR that's preconfigured for security use.
+- Super roots allow Underground Nexus users to start with whatever server infrastructure they currently have available, and scale with very few limits down the road as they grow without needing to build for 3+ years worth of computing costs up front (could start with a budget of $0 or $1,000 and then scale endlessly as you grow).
+- The Underground Nexus kernel (referred to as a "Git-BIOS") can be managed via a single source of truth in the form of a Git repository, which means 100% of the Underground Nexus can be managed with CICD runners.
+- Underground Nexus is a cloud native kernel, meaning that it can cluster multiple hardware nodes together to run as one single serverless server (even if the hardware isn't all the same or living in the same location).
+- The Underground Nexus can run on-premise or with any flavor of public cloud that can run Docker or Kubernetes, it can even make AWS, Azure, GCP, Linode and beyond all run together as one single orchestrated application hosting environment while also being less work than manually configuring one single computing environment.
+- GitLab powers the heart of the Underground Nexus, allowing a "super root" cluster to be capable of scaling with serverless functions, rather than exclusively scaling with your chosen container orchestrator.
+- Applications look the same on the surface for end users, except the lower hosting costs can mean superior customer service support budgets.
+
+The Underground Nexus is free to use anytime, #build at your own pace.
+
+Grow your glory!
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/software-factory-pipeline.svg" alt="Underground Nexus Software Factory Pipeline">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/cloud-native-git-bios.svg" alt="Cloud Underground's Cloud-native Git-BIOS">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/git-bios-engine.svg" alt="The Git-BIOS Engine">
+
+<img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/developer-site-architecture.svg" alt="Underground Nexus Developer Site Architecture">
+
+----------------------------------------------------
+
 ## Learn about foundational principles for Cloud Native and DevSecOps here: https://gitlab.com/natoascode/nist-draft-regulation-800-204c-comment-notes-and-timestamps
 
 ----------------------------------------------------
@@ -181,7 +184,7 @@ Please see the images found in the repository for examples on how to use virtual
 
 ----------------------------------------------------
 
-### Helpful Videos
+## Helpful Videos
 
 **Ditch VPN's and go 100% Zero Trust:** https://www.youtube.com/watch?v=IYmXPF3XUwo
 
