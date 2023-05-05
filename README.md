@@ -125,6 +125,8 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 **13.** Every amd64 version of the Underground Nexus using the standard recomended activation automatically builds a self-hosted GitLab environment. Other versions of the Underground Nexus deploy GitLab Runners that can be configured for use with an external GitLab environment - to access the self-hosted GitLab instance in a standard amd64 activation, the MATE admin webtop's has a default Git-BIOS home page with instructions on exactly how to get started with GitLab.
 
+***Learn more about using GitLab for DevSecOps here:*** https://learn.gitlab.com/cloud-underground/
+
 ----------------------------------------------------
 
 ## Deploying Virtual Machines in Underground Nexus:
