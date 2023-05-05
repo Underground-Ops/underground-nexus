@@ -28,7 +28,7 @@
 
 <img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/nexus-software-factory.svg" alt="Underground Nexus Software Factory">
 
-The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs.
+The Underground Nexus is a git powered **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs. The Underground Nexus container deployment is considered HCI (hyperconverged infrastructure).
 
 What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.">Learn more here!</a>
 
@@ -122,6 +122,8 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 **12.** Terraform comes pre-installed for immediate use from both the Underground Nexus MATE Desktop's terminal and the Athena0 Kali Linux node:
 - Use Terraform from the MATE Desktop terminal for general use
 - Use Terraform from the Athena0 node for more aggressive use that might require super admin level access and full `root` privileges
+
+**13.** Every amd64 version of the Underground Nexus using the standard recomended activation automatically builds a self-hosted GitLab environment. Other versions of the Underground Nexus deploy GitLab Runners that can be configured for use with an external GitLab environment - to access the self-hosted GitLab instance in a standard amd64 activation, the MATE admin webtop's has a default Git-BIOS home page with instructions on exactly how to get started with GitLab.
 
 ----------------------------------------------------
 
