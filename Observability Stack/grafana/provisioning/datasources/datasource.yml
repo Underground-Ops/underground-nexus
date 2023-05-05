@@ -56,6 +56,7 @@ datasources:
   type: loki
   access: proxy
   url: http://loki:3100
+  editable: true
   jsonData:
     maxLines: 1000
 
@@ -64,9 +65,11 @@ datasources:
   access: proxy
   url: https://wazuh.indexer:9200
   basicAuth: true
-  basicAuthUser: admin
-  basicAuthPassword: SecretPassword
+  basicAuthUser: "admin"
+  editable: true
   jsonData:
     tlsSkipVerify: true
     tlsAuth: false
     tlsAuthWithCACert: false
+  secureJsonData:
+    basicAuthPassword: "SecretPassword"
