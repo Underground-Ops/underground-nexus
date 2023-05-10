@@ -34,7 +34,7 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 ***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
 
-***Check out how to get started with Underground Nexus quick-start guidance here:*** https://youtu.be/lhzhLCprrYE
+***Check out how to get started with Underground Nexus quick-start guidance here:*** https://www.youtube.com/live/gIImmm7TLzo
 
 ### Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
