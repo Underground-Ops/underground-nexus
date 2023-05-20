@@ -10,7 +10,7 @@ docker run -itd --name=Security-Operation-Center -h Security-Operation-Center -e
 echo "FROM natoascode/workbench0" >> /nexus-bucket/workbench.dockerfile
 echo "RUN bash workbench.sh" >> /nexus-bucket/workbench.dockerfile
 docker build -f /nexus-bucket/workbench.dockerfile -t workbench:latest /nexus-bucket
-docker run -itd --name=workbench -h workbench -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock workbench:latest
+docker run -itd --privileged --name=workbench -h workbench -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock workbench:latest
 docker exec workbench echo docker exec workbench sudo apt -y update >> /nexus-bucket/workbench.sh
 docker exec workbench echo docker exec workbench sudo apt install -y wget >> /nexus-bucket/workbench.sh
 docker exec workbench echo docker exec Security-Operation-Center sudo apk update >> /nexus-bucket/workbench.sh
