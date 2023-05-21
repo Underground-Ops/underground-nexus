@@ -28,13 +28,13 @@
 
 <img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/nexus-software-factory.svg" alt="Underground Nexus Software Factory">
 
-The Underground Nexus is a **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs.
+The Underground Nexus is a git powered **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs. The Underground Nexus container deployment is considered HCI (hyperconverged infrastructure).
 
 What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.">Learn more here!</a>
 
 ***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
 
-***Check out how to get started with Underground Nexus quick-start guidance here:*** https://youtu.be/lhzhLCprrYE
+***Check out how to get started with Underground Nexus quick-start guidance here:*** https://www.youtube.com/live/gIImmm7TLzo
 
 ### Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
@@ -93,9 +93,9 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 
 **9.** Default URLs will show up if Nexus deploys without errors - **the links below can be used from inside the Nexus desktop if accessing this GitHub URL from inside the Firefox browser within the Nexus MATE desktop itself** (these will ONLY exist from inside a webtop web browser - Firefox works with these addresses from within the Nexus desktops):
 - Portainer: https://10.20.0.1:9443
-- Pi hole: http://10.20.0.20:800 (can change password from within Portainer)
-- Grafana: https://grafana.underground-ops.me/ and http://10.20.0.1:3000/
-- Wazuh: https://wazuh.underground-ops.me:5601/ and https://10.20.0.1:5601/
+- Pi hole: http://inner-dns-control/admin/login.php (can change password from within Portainer)
+- Grafana: https://grafana.underground-ops.me/ and http://10.20.0.1:3000/ (default `user`:`password` is `admin`:`notiaPoint1`)
+- Wazuh: https://wazuh.underground-ops.me:5601/ and https://10.20.0.1:5601/ (default `user`:`password` is `admin`:`SecretPassword`)
 - Cyber Life Torpedo (S3 bucket): http://10.20.0.1:9010 (default `user`:`password` is `minioadmin`:`minioadmin`)
 - Ubuntu MATE Admin Desktop: `http://10.20.0.1:1000` (runs as root - default `user`:`password` is `abc`:`abc` - don't access this host from inside the Underground Nexus MATE Desktop)
 - Ubuntu KDE Security Operation Center Desktop: http://10.20.0.1:2000 (least privilege - default `user`:`password` is `abc`:`abc`)
@@ -122,6 +122,10 @@ What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.co
 **12.** Terraform comes pre-installed for immediate use from both the Underground Nexus MATE Desktop's terminal and the Athena0 Kali Linux node:
 - Use Terraform from the MATE Desktop terminal for general use
 - Use Terraform from the Athena0 node for more aggressive use that might require super admin level access and full `root` privileges
+
+**13.** Every amd64 version of the Underground Nexus using the standard recomended activation automatically builds a self-hosted GitLab environment. Other versions of the Underground Nexus deploy GitLab Runners that can be configured for use with an external GitLab environment - to access the self-hosted GitLab instance in a standard amd64 activation, the MATE admin webtop's has a default Git-BIOS home page with instructions on exactly how to get started with GitLab.
+
+***Learn more about using GitLab for DevSecOps here:*** https://learn.gitlab.com/cloud-underground/
 
 ----------------------------------------------------
 

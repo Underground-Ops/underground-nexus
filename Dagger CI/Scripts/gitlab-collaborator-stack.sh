@@ -39,9 +39,12 @@ docker stack deploy -c ./docker-stack.yml underground-observability
 cd /var/lib/docker/volumes/pihole_config/_data/
 echo "10.20.0.1 underground-ops.me" >> custom.list
 
+sort custom.list | uniq > NEWcustom.list
+rm custom.list
+mv NEWcustom.list custom.list
+
 cd /var/lib/docker/volumes/pihole_DNS_data/_data/
-rm 05-pihole-custom-cname.conf
-echo "cname=api.underground-ops.me,underground-ops.me" > 05-pihole-custom-cname.conf
+echo "cname=api.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=gitlab.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=workbench.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=grafana.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
@@ -49,6 +52,10 @@ echo "cname=alertmanager.underground-ops.me,underground-ops.me" >> 05-pihole-cus
 echo "cname=indexer.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=prometheus.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=wazuh.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+
+sort 05-pihole-custom-cname.conf | uniq > NEW05-pihole-custom-cname.conf
+rm 05-pihole-custom-cname.conf
+mv NEW05-pihole-custom-cname.conf 05-pihole-custom-cname.conf
 
 #Build SIEM and EDR Wazuh stack
 cd /
