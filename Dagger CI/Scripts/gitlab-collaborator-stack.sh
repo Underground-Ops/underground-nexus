@@ -35,6 +35,11 @@ docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.ym
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
 
+#Build the Cloud Knowledge Base Stack
+cd /nexus-bucket/underground-nexus/'Cloud Knowledge Base Stack'/
+docker stack deploy -c ./knowledge-base-proxy-deploy.yml underground-knowledge
+docker stack deploy -c ./nextcloud-proxy-deploy.yml underground-cloud
+
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /var/lib/docker/volumes/pihole_config/_data/
 echo "10.20.0.1 underground-ops.me" >> custom.list
