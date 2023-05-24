@@ -33,8 +33,8 @@ services:
        - bookstack_db
      image: lscr.io/linuxserver/bookstack
      #container_name: bookstack
-     #ports:
-       #- 6875:80
+     ports:
+       - 6875:80
      volumes:
        - knowledge_base:/config
      #restart: unless-stopped
@@ -60,7 +60,7 @@ services:
          memory: 1024M
       labels:
         - traefik.port=80
-        - traefik.frontend.rule=Host(knowledge.underground-ops.me)
+        - traefik.frontend.rule=Host(`knowledge.underground-ops.me`)
         # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
         ##- traefik.http.middlewares.bookstack-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
         - traefik.docker.network=proxy
@@ -71,10 +71,10 @@ services:
         # It can be re-used by other stacks in other Docker Compose files
         - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
         - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-        - traefik.http.routers.bookstack-http.rule=Host(knowledge.underground-ops.me)
+        - traefik.http.routers.bookstack-http.rule=Host(`knowledge.underground-ops.me`)
         - traefik.http.routers.bookstack-http.entrypoints=http
         - traefik.http.routers.bookstack-http.middlewares=https-redirect
-        - traefik.http.routers.bookstack-https.rule=Host(knowledge.underground-ops.me)
+        - traefik.http.routers.bookstack-https.rule=Host(`knowledge.underground-ops.me`)
         - traefik.http.routers.bookstack-https.entrypoints=https
         - traefik.http.routers.bookstack-https.tls=true
         - traefik.http.routers.bookstack-https.tls.certresolver=le
