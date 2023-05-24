@@ -52,6 +52,8 @@ echo "cname=alertmanager.underground-ops.me,underground-ops.me" >> 05-pihole-cus
 echo "cname=indexer.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=prometheus.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 echo "cname=wazuh.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=knowledge.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
+echo "cname=cloud.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cname.conf
 
 sort 05-pihole-custom-cname.conf | uniq > NEW05-pihole-custom-cname.conf
 rm 05-pihole-custom-cname.conf
