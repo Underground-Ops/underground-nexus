@@ -1,0 +1,92 @@
+version: '3'
+
+services:
+   kb:
+     image: ghcr.io/linuxserver/mariadb
+     deploy:
+       resources:
+         limits:
+           cpus: '1.00'
+           memory: 1024M
+     container_name: bookstack_db
+     volumes:
+       - db_data:/config
+     restart: always
+     environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=Augustu53CannotFly148235
+      - MYSQL_DATABASE=bookstackapp
+      - MYSQL_USER=bookstack
+      - MYSQL_PASSWORD=Apoll0HasSh03s148299
+     networks:
+      #- default
+      #- Inner-Athena
+      - traefik-public
+     dns:
+      - 10.20.0.1
+     expose:
+       - "3306"
+
+   bookstack:
+     depends_on:
+       - bookstack_db
+     image: lscr.io/linuxserver/bookstack
+     container_name: bookstack_db
+     ports:
+       - 6875:80
+     volumes:
+       - knowledge_base:/config
+     restart: always
+     environment:
+      - PUID=1000
+      - PGID=1000
+      - APP_URL=knowledge.underground-ops.me
+      - DB_HOST=bookstack_db
+      - DB_PORT=3306
+      - DB_USER=bookstack
+      - DB_PASS=Apoll0HasSh03s148299
+      - DB_DATABASE=bookstackapp
+     networks:
+      #- default
+      #- Inner-Athena
+      - traefik-public
+     dns:
+      - 10.20.0.1
+     deploy:
+      resources:
+        limits:
+         cpus: '1.00'
+         memory: 1024M
+      labels:
+        - traefik.port=80
+        - traefik.frontend.rule=Host(knowledge.underground-ops.me)
+        # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
+        ##- traefik.http.middlewares.bookstack-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
+        - traefik.docker.network=proxy
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        # https-redirect middleware to redirect HTTP to HTTPS
+        # It can be re-used by other stacks in other Docker Compose files
+        - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+        - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+        - traefik.http.routers.bookstack-http.rule=Host(knowledge.underground-ops.me)
+        - traefik.http.routers.bookstack-http.entrypoints=http
+        - traefik.http.routers.bookstack-http.middlewares=https-redirect
+        - traefik.http.routers.bookstack-https.rule=Host(knowledge.underground-ops.me)
+        - traefik.http.routers.bookstack-https.entrypoints=https
+        - traefik.http.routers.bookstack-https.tls=true
+        - traefik.http.routers.bookstack-https.tls.certresolver=le
+        # Enable HTTP Basic auth, using the middleware created above
+        ##- traefik.http.routers.bookstack-https.middlewares=bookstack-auth
+        - traefik.http.services.bookstack.loadbalancer.server.port=80
+
+volumes:
+    db_data: {}
+    knowledge_base: {}
+networks:
+  Inner-Athena:
+    external: true
+  traefik-public:
+    external: true
