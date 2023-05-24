@@ -6,7 +6,7 @@ services:
      container_name: nextcloud
      volumes:
        - nextcloud_config:/config
-       - cloud_data:/data
+       - volume_data:/data
      ports:
        - 4000:443
      restart: unless-stopped
@@ -25,7 +25,7 @@ services:
          cpus: '2.00'
          memory: 2048M
       labels:
-        - traefik.port=80
+        - traefik.port=443
         - traefik.frontend.rule=Host(cloud.underground-ops.me)
         # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
         ##- traefik.http.middlewares.nextcloud-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
@@ -37,7 +37,7 @@ services:
         # It can be re-used by other stacks in other Docker Compose files
         - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
         - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-        - traefik.http.routers.cloud-http.rule=Host(cloud.underground-ops.me)
+        - traefik.http.routers.nextcloud-http.rule=Host(cloud.underground-ops.me)
         - traefik.http.routers.nextcloud-http.entrypoints=http
         - traefik.http.routers.nextcloud-http.middlewares=https-redirect
         - traefik.http.routers.nextcloud-https.rule=Host(cloud.underground-ops.me)
@@ -46,11 +46,11 @@ services:
         - traefik.http.routers.nextcloud-https.tls.certresolver=le
         # Enable HTTP Basic auth, using the middleware created above
         ##- traefik.http.routers.nextcloud-https.middlewares=nextcloud-auth
-        - traefik.http.services.nextcloud.loadbalancer.server.port=80
+        - traefik.http.services.nextcloud.loadbalancer.server.port=443
 
 volumes:
     nextcloud_config: {}
-    cloud_data: {}
+    volume_data: {}
 networks:
   Inner-Athena:
     external: true

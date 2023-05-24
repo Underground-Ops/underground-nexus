@@ -11,7 +11,7 @@ services:
      container_name: bookstack_db
      volumes:
        - db_data:/config
-     restart: always
+     restart: unless-stopped
      environment:
       - PUID=1000
       - PGID=1000
@@ -32,12 +32,12 @@ services:
      depends_on:
        - bookstack_db
      image: lscr.io/linuxserver/bookstack
-     container_name: bookstack_db
-     ports:
-       - 6875:80
+     container_name: bookstack
+     #ports:
+       #- 6875:80
      volumes:
        - knowledge_base:/config
-     restart: always
+     restart: unless-stopped
      environment:
       - PUID=1000
       - PGID=1000
