@@ -9,8 +9,7 @@ services:
            cpus: '1.00'
            memory: 1024M
      volumes:
-       - db_data:/var/lib/mysql
-     restart: unless-stopped
+       - db_data:/config
      environment:
       MYSQL_ROOT_PASSWORD: Augustu53CannotFly14823599
       MYSQL_DATABASE: bookstack
@@ -25,11 +24,11 @@ services:
    app:
      depends_on:
        - db
-     image: solidnerd/bookstack:latest
+     image: lscr.io/linuxserver/bookstack:latest
      ports:
-       - 4180:8080
+       - 4050:80
      environment:
-      DB_HOST: underground-knowledge_db:3306
+      DB_HOST: db:3306
       DB_DATABASE: bookstack
       DB_USER: bookstack
       DB_PASSWORD: Apoll0HasSh03s148299
@@ -44,7 +43,7 @@ services:
          cpus: '1.00'
          memory: 1024M
       labels:
-        - traefik.port=8080
+        - traefik.port=80
         - traefik.frontend.rule=Host(`knowledge.underground-ops.me`)
         # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
         ##- traefik.http.middlewares.bookstack-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
@@ -65,7 +64,7 @@ services:
         - traefik.http.routers.bookstack-https.tls.certresolver=le
         # Enable HTTP Basic auth, using the middleware created above
         ##- traefik.http.routers.bookstack-https.middlewares=bookstack-auth
-        - traefik.http.services.bookstack.loadbalancer.server.port=8080
+        - traefik.http.services.bookstack.loadbalancer.server.port=80
 
 volumes:
     db_data: {}
