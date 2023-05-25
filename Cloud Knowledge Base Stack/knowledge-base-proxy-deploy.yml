@@ -71,6 +71,7 @@ services:
 
 volumes:
     db_data: {}
+    knowledge_base: {}
 networks:
   Inner-Athena:
     external: true
