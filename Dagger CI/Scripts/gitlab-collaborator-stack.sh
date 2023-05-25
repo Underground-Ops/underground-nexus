@@ -23,10 +23,7 @@ docker stack deploy -c /nexus-bucket/underground-nexus/traefik-api-proxy.yml tra
 docker stack deploy -c /nexus-bucket/underground-nexus/gitlab-proxy-deploy.yml gitlab
 docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.yml collaborator-workbench
 
-#Build the Cloud Knowledge Base Stack
-cd /nexus-bucket/underground-nexus/'Cloud Knowledge Base Stack'/
-docker stack deploy -c ./knowledge-base-proxy-deploy.yml underground-knowledge
-docker stack deploy -c ./nextcloud-proxy-deploy.yml underground-cloud
+
 
 #Set up "Control Panel" stack - powered by Wordpress
 mkdir /var/lib/docker/volumes/underground-wordpress_db_data
@@ -35,6 +32,11 @@ cd /var/lib/docker/volumes/underground-wordpress_db_data/
 unzip _data.zip
 rm -r /var/lib/docker/volumes/underground-wordpress_db_data/_data.zip
 docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.yml underground-wordpress
+
+#Build the Cloud Knowledge Base Stack
+cd /nexus-bucket/underground-nexus/'Cloud Knowledge Base Stack'/
+docker stack deploy -c ./knowledge-base-proxy-deploy.yml underground-knowledge
+docker stack deploy -c ./nextcloud-proxy-deploy.yml underground-cloud
 
 #Build the Underground Observability Stack
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
@@ -83,5 +85,5 @@ bash /wazuh-agent.sh
 exit
 
 #Update the Cloud Knowledge Base Stack
-docker service update underground-knowledge_db
-docker service update underground-knowledge_app
+#docker service update underground-knowledge_db
+#docker service update underground-knowledge_app
