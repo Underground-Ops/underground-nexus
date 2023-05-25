@@ -23,6 +23,11 @@ docker stack deploy -c /nexus-bucket/underground-nexus/traefik-api-proxy.yml tra
 docker stack deploy -c /nexus-bucket/underground-nexus/gitlab-proxy-deploy.yml gitlab
 docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.yml collaborator-workbench
 
+#Build the Cloud Knowledge Base Stack
+cd /nexus-bucket/underground-nexus/'Cloud Knowledge Base Stack'/
+docker stack deploy -c ./knowledge-base-proxy-deploy.yml underground-knowledge
+docker stack deploy -c ./nextcloud-proxy-deploy.yml underground-cloud
+
 #Set up "Control Panel" stack - powered by Wordpress
 mkdir /var/lib/docker/volumes/underground-wordpress_db_data
 cp /nexus-bucket/underground-nexus/'Production Artifacts'/Wordpress/_data.zip /var/lib/docker/volumes/underground-wordpress_db_data/
@@ -34,11 +39,6 @@ docker stack deploy -c /nexus-bucket/underground-nexus/wordpress-proxy-deploy.ym
 #Build the Underground Observability Stack
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
-
-#Build the Cloud Knowledge Base Stack
-cd /nexus-bucket/underground-nexus/'Cloud Knowledge Base Stack'/
-docker stack deploy -c ./knowledge-base-proxy-deploy.yml underground-knowledge
-docker stack deploy -c ./nextcloud-proxy-deploy.yml underground-cloud
 
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /var/lib/docker/volumes/pihole_config/_data/
@@ -81,3 +81,7 @@ docker cp wazuh-agent.sh workbench:/
 docker exec -it workbench bash
 bash /wazuh-agent.sh
 exit
+
+#Update the Cloud Knowledge Base Stack
+docker service update underground-knowledge_app
+docker service update underground-knowledge_db

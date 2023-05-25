@@ -6,8 +6,8 @@ services:
      deploy:
        resources:
          limits:
-           cpus: '1.00'
-           memory: 1024M
+           cpus: '2.00'
+           memory: 2048M
      volumes:
        - db_data:/config
      environment:
@@ -43,8 +43,8 @@ services:
      deploy:
       resources:
         limits:
-         cpus: '1.00'
-         memory: 1024M
+         cpus: '2.00'
+         memory: 2048M
       labels:
         - traefik.port=80
         - traefik.frontend.rule=Host(`knowledge.underground-ops.me`)
