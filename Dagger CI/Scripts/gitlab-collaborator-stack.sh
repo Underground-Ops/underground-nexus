@@ -23,8 +23,6 @@ docker stack deploy -c /nexus-bucket/underground-nexus/traefik-api-proxy.yml tra
 docker stack deploy -c /nexus-bucket/underground-nexus/gitlab-proxy-deploy.yml gitlab
 docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.yml collaborator-workbench
 
-
-
 #Set up "Control Panel" stack - powered by Wordpress
 mkdir /var/lib/docker/volumes/underground-wordpress_db_data
 cp /nexus-bucket/underground-nexus/'Production Artifacts'/Wordpress/_data.zip /var/lib/docker/volumes/underground-wordpress_db_data/
