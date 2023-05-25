@@ -12,12 +12,12 @@ services:
        - db_data:/config
      restart: unless-stopped
      environment:
-      - PUID=1000
-      - PGID=1000
-      - MYSQL_ROOT_PASSWORD=Augustu53CannotFly148235
-      - MYSQL_DATABASE=bookstackapp
-      - MYSQL_USER=bookstack
-      - MYSQL_PASSWORD=Apoll0HasSh03s148299
+      PUID: 7070
+      PGID: 7070
+      MYSQL_ROOT_PASSWORD: Augustu53CannotFly148235
+      MYSQL_DATABASE: bookstackapp
+      MYSQL_USER: bookstack
+      MYSQL_PASSWORD: Apoll0HasSh03s148299
      networks:
       #- default
       #- Inner-Athena
@@ -37,14 +37,13 @@ services:
        - knowledge_base:/config
      #restart: unless-stopped
      environment:
-      - PUID=1000
-      - PGID=1000
-      - APP_URL=knowledge.underground-ops.me
-      - DB_HOST=bookstack_db
-      - DB_PORT=3306
-      - DB_USER=bookstack
-      - DB_PASS=Apoll0HasSh03s148299
-      - DB_DATABASE=bookstackapp
+      PUID: 7070
+      PGID: 7070
+      APP_URL: knowledge.underground-ops.me
+      BOOKSTACK_DB_HOST: kb:3306
+      BOOKSTACK_DB_USER: bookstack
+      BOOKSTACK_DB_PASS: Apoll0HasSh03s148299
+      BOOKSTACK_DB_NAME: bookstackapp
      networks:
       #- default
       #- Inner-Athena

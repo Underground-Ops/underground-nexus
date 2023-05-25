@@ -3,13 +3,11 @@ version: '3'
 services:
    nextcloud:
      image: lscr.io/linuxserver/nextcloud:latest
-     container_name: nextcloud
      volumes:
        - nextcloud_config:/config
        - volume_data:/data
      ports:
        - 4000:443
-     restart: unless-stopped
      environment:
        - PUID=1000
        - PGID=1000
