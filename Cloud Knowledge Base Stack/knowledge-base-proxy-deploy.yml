@@ -9,7 +9,7 @@ services:
            cpus: '1.00'
            memory: 1024M
      volumes:
-       - db_data:/config
+       - db_data:/var/lib/mysql
      restart: unless-stopped
      environment:
       MYSQL_RANDOM_ROOT_PASSWORD: true
