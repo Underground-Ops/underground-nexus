@@ -32,7 +32,7 @@ services:
        - db
      image: lscr.io/linuxserver/bookstack
      ports:
-       - 4050:80
+       - 6875:80
      volumes:
        - knowledge_base:/config
      #restart: unless-stopped
