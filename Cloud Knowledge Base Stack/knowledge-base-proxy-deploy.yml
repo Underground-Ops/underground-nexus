@@ -40,10 +40,10 @@ services:
       PUID: 7070
       PGID: 7070
       #APP_URL: knowledge.underground-ops.me
-      BOOKSTACK_DB_HOST: db:3306
-      BOOKSTACK_DB_USER: bookstack
-      BOOKSTACK_DB_PASSWORD: Apoll0HasSh03s148299
-      BOOKSTACK_DB_NAME: bookstackapp
+      DB_HOST: db:3306
+      DB_USER: bookstack
+      DB_PASSWORD: Apoll0HasSh03s148299
+      DB_NAME: bookstackapp
      networks:
       #- default
       #- Inner-Athena
