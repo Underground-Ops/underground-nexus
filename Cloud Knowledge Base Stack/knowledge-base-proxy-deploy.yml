@@ -31,8 +31,8 @@ services:
      depends_on:
        - kb
      image: lscr.io/linuxserver/bookstack
-     #ports:
-       #- 6875:80
+     ports:
+       - 4050:80
      volumes:
        - knowledge_base:/config
      #restart: unless-stopped

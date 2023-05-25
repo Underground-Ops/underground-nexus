@@ -8,7 +8,7 @@ services:
        - nextcloud_config:/config
        - volume_data:/data
      ports:
-       - 443:443
+       - 4000:443
      restart: unless-stopped
      environment:
        - PUID=1000
