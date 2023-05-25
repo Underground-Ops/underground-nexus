@@ -2,7 +2,7 @@ version: '3'
 
 services:
    db:
-     image: ghcr.io/linuxserver/mariadb
+     image: mariadb:latest
      deploy:
        resources:
          limits:
@@ -12,10 +12,8 @@ services:
        - db_data:/config
      restart: unless-stopped
      environment:
-      PUID: 7070
-      PGID: 7070
-      MYSQL_ROOT_PASSWORD: Augustu53CannotFly148235
-      MYSQL_DATABASE: bookstackapp
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: bookstack
       MYSQL_USER: bookstack
       MYSQL_PASSWORD: Apoll0HasSh03s148299
      networks:
@@ -24,26 +22,22 @@ services:
       - traefik-public
      dns:
       - 10.20.0.1
-     #expose:
-       #- "3306"
 
    bookstack:
      depends_on:
        - db
-     image: lscr.io/linuxserver/bookstack
-     ports:
-       - 6875:80
+     image: solidnerd/bookstack:latest
+     #ports:
+       #- 6875:80
      volumes:
        - knowledge_base:/config
      #restart: unless-stopped
      environment:
-      PUID: 7070
-      PGID: 7070
       #APP_URL: knowledge.underground-ops.me
-      DB_HOST: db:3306
-      DB_USER: bookstack
+      DB_HOST: bookstack_db:3306
+      DB_DATABASE: bookstack
+      DB_USERNAME: bookstack
       DB_PASSWORD: Apoll0HasSh03s148299
-      DB_NAME: bookstackapp
      networks:
       #- default
       #- Inner-Athena
@@ -56,7 +50,7 @@ services:
          cpus: '1.00'
          memory: 1024M
       labels:
-        - traefik.port=80
+        - traefik.port=4180
         - traefik.frontend.rule=Host(`knowledge.underground-ops.me`)
         # To hash password use (openssl passwd -apr1 | sed -E "s:[\$]:\$\$:g") - default password is "notiaPoint!1"
         ##- traefik.http.middlewares.bookstack-auth.basicauth.users=admin:$$apr1$$nIkVDmwy$$xkGIleRnQ0GJ6o96am.cb/
@@ -77,7 +71,7 @@ services:
         - traefik.http.routers.bookstack-https.tls.certresolver=le
         # Enable HTTP Basic auth, using the middleware created above
         ##- traefik.http.routers.bookstack-https.middlewares=bookstack-auth
-        - traefik.http.services.bookstack.loadbalancer.server.port=80
+        - traefik.http.services.bookstack.loadbalancer.server.port=4180
 
 volumes:
     db_data: {}
