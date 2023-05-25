@@ -8,7 +8,6 @@ services:
          limits:
            cpus: '1.00'
            memory: 1024M
-     container_name: bookstack_db
      volumes:
        - db_data:/config
      restart: unless-stopped
@@ -30,11 +29,10 @@ services:
 
    bookstack:
      depends_on:
-       - bookstack_db
+       - kb
      image: lscr.io/linuxserver/bookstack
-     #container_name: bookstack
-     ports:
-       - 6875:80
+     #ports:
+       #- 6875:80
      volumes:
        - knowledge_base:/config
      #restart: unless-stopped
