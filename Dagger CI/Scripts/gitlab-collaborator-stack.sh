@@ -83,5 +83,5 @@ bash /wazuh-agent.sh
 exit
 
 #Update the Cloud Knowledge Base Stack
-docker service update underground-knowledge_app
 docker service update underground-knowledge_db
+docker service update underground-knowledge_app
