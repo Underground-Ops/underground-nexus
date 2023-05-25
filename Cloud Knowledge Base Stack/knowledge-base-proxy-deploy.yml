@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-   kb:
+   db:
      image: ghcr.io/linuxserver/mariadb
      deploy:
        resources:
@@ -24,12 +24,12 @@ services:
       - traefik-public
      dns:
       - 10.20.0.1
-     expose:
-       - "3306"
+     #expose:
+       #- "3306"
 
    bookstack:
      depends_on:
-       - kb
+       - db
      image: lscr.io/linuxserver/bookstack
      ports:
        - 4050:80
@@ -39,8 +39,8 @@ services:
      environment:
       PUID: 7070
       PGID: 7070
-      APP_URL: knowledge.underground-ops.me
-      BOOKSTACK_DB_HOST: kb:3306
+      #APP_URL: knowledge.underground-ops.me
+      BOOKSTACK_DB_HOST: db:3306
       BOOKSTACK_DB_USER: bookstack
       BOOKSTACK_DB_PASSWORD: Apoll0HasSh03s148299
       BOOKSTACK_DB_NAME: bookstackapp
