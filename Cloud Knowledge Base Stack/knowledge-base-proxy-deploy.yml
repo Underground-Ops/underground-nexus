@@ -12,7 +12,7 @@ services:
        - db_data:/var/lib/mysql
      restart: unless-stopped
      environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_ROOT_PASSWORD: Augustu53CannotFly14823599
       MYSQL_DATABASE: bookstack
       MYSQL_USER: bookstack
       MYSQL_PASSWORD: Apoll0HasSh03s148299
