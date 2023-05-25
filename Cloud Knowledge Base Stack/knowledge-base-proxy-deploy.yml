@@ -27,11 +27,8 @@ services:
      depends_on:
        - db
      image: solidnerd/bookstack:latest
-     #ports:
-       #- 6875:80
-     volumes:
-       - knowledge_base:/config
-     #restart: unless-stopped
+     ports:
+       - 4180:8080
      environment:
       #APP_URL: knowledge.underground-ops.me
       DB_HOST: bookstack_db:3306
@@ -75,7 +72,6 @@ services:
 
 volumes:
     db_data: {}
-    knowledge_base: {}
 networks:
   Inner-Athena:
     external: true
