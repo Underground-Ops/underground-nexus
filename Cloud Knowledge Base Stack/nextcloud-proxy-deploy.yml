@@ -6,7 +6,7 @@ services:
      volumes:
        - nextcloud_config:/config
        - volume_data:/data
-       - /nexus-bucket:/data/admin/files/nexus-bucket
+       - /nexus-bucket:/data/nexus-bucket
      ports:
        - 4000:443
      environment:
