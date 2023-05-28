@@ -11,8 +11,8 @@ services:
      #container_name: mariadb
      volumes:
        - db_data:/config
-     ports:
-       - 3307:3306
+     #ports:
+       #- 3306:3306
      restart: always
      environment:
        MYSQL_ROOT_PASSWORD: Augustu53CannotFly148235
@@ -38,7 +38,7 @@ services:
        #- "8080:80"
      restart: always
      environment:
-       WORDPRESS_DB_HOST: 10.20.0.1:3307
+       WORDPRESS_DB_HOST: db:3306
        WORDPRESS_DB_USER: wordpressuser
        WORDPRESS_DB_PASSWORD: Augustu5CanFly1482
        WORDPRESS_DB_NAME: wordpressdb
