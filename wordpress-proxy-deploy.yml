@@ -20,9 +20,9 @@ services:
        MYSQL_USER: wordpressuser
        MYSQL_PASSWORD: Augustu5CanFly1482
      networks:
-      #- default
+      - internal
       #- Inner-Athena
-      - traefik-public
+      #- traefik-public
      dns:
       - 10.20.0.1
      expose:
@@ -44,7 +44,7 @@ services:
        WORDPRESS_DB_NAME: wordpressdb
 
      networks:
-      #- default
+      - internal
       #- Inner-Athena
       - traefik-public
      dns:
@@ -86,3 +86,8 @@ networks:
     external: true
   traefik-public:
     external: true
+  internal:
+    driver: overlay
+    ipam:
+      config:
+        - subnet: 172.16.32.0/24
