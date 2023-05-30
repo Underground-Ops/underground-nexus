@@ -20,7 +20,7 @@ services:
        MYSQL_USER: wordpressuser
        MYSQL_PASSWORD: Augustu5CanFly1482
      networks:
-      - internal
+      - underground-wordpress_internal
      dns:
       - 10.20.0.1
      expose:
@@ -42,7 +42,7 @@ services:
        WORDPRESS_DB_NAME: wordpressdb
 
      networks:
-      - internal
+      - underground-wordpress_internal
       - traefik-public
      dns:
       - 10.20.0.1
@@ -83,5 +83,5 @@ networks:
     external: true
   traefik-public:
     external: true
-  internal:
+  underground-wordpress_internal:
     external: true
