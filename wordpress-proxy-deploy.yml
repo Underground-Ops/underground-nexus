@@ -85,6 +85,3 @@ networks:
     external: true
   internal:
     driver: overlay
-    ipam:
-      config:
-        - subnet: 172.16.32.0/24
