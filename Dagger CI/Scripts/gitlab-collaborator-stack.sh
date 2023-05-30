@@ -24,7 +24,6 @@ docker stack deploy -c /nexus-bucket/underground-nexus/gitlab-proxy-deploy.yml g
 docker stack deploy -c /nexus-bucket/underground-nexus/workbench-proxy-deploy.yml collaborator-workbench
 
 #Set up "Control Panel" stack - powered by Wordpress
-docker network create -d overlay --subnet=172.16.32.0/24 underground-wordpress_internal
 mkdir /var/lib/docker/volumes/underground-wordpress_db_data
 cp /nexus-bucket/underground-nexus/'Production Artifacts'/Wordpress/_data.zip /var/lib/docker/volumes/underground-wordpress_db_data/
 cd /var/lib/docker/volumes/underground-wordpress_db_data/

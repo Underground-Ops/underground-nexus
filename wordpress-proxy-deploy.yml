@@ -86,5 +86,8 @@ networks:
     external: true
   traefik-public:
     external: true
-  internal:
-    external: true
+  internal-web:
+    driver: overlay
+    ipam:
+      config:
+        - subnet: 172.16.32.0/24
