@@ -84,4 +84,4 @@ networks:
   traefik-public:
     external: true
   internal:
-    driver: overlay
+    external: true
