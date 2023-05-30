@@ -87,6 +87,7 @@ networks:
   traefik-public:
     external: true
   internal:
+    external: false
     driver: overlay
     ipam:
       config:
