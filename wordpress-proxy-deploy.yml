@@ -21,8 +21,6 @@ services:
        MYSQL_PASSWORD: Augustu5CanFly1482
      networks:
       - internal
-      #- Inner-Athena
-      #- traefik-public
      dns:
       - 10.20.0.1
      expose:
@@ -45,7 +43,6 @@ services:
 
      networks:
       - internal
-      #- Inner-Athena
       - traefik-public
      dns:
       - 10.20.0.1
@@ -86,7 +83,7 @@ networks:
     external: true
   traefik-public:
     external: true
-  internal-web:
+  internal:
     driver: overlay
     ipam:
       config:
