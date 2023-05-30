@@ -163,6 +163,7 @@ RUN echo "curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/rel
 RUN echo "k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> deploy-olympiad.sh; exit 0
 
 #Deploy Traefik loadbalancer, GitLab for Git-BIOS alongside the collaborator-workbench service - build "underground-ops.me" domain proxy gateway
+RUN echo "docker network create -d overlay --subnet=172.16.32.0/24 underground-wordpress_internal" >> deploy-olympiad.sh
 RUN echo "curl https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/gitlab-collaborator-stack.sh | sh" >> deploy-olympiad.sh
 
 #Configure firefox browser defaults
