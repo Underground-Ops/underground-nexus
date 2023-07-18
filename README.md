@@ -30,11 +30,13 @@
 
 The Underground Nexus is a git powered **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs. The Underground Nexus container deployment is considered HCI (hyperconverged infrastructure).
 
-What is a hyperconverged data center? **-->** <a href="https://www.sdxcentral.com/data-center/hyperconverged/definitions/what-is-hyperconverged-data-center/#:~:text=A%20hyperconverged%20data%20center%20is,network%2C%20and%20storage%20commodity%20hardware.">Learn more here!</a>
+What is a hyperconverged data center? **-->** <a href="https://cloudunderground.dev/pages/what-is-hci">Learn more here!</a>
+
+Learn why platform engineering matters to DevSecOps: https://youtu.be/ghzsBm8vOms
 
 ***The Underground Nexus official repository lives here:*** https://github.com/Underground-Ops/underground-nexus
 
-***Check out how to get started with Underground Nexus quick-start guidance here:*** https://www.youtube.com/live/gIImmm7TLzo
+***Check out how to get started with Underground Nexus quick-start guidance here:*** https://youtube.com/playlist?list=PLhu9nsQUxzfFHMlMXkfEUd_X1iMEXAnev
 
 ### Docker Desktop is recommended for developing with the Underground Nexus - Download Docker Desktop here: https://www.docker.com/products/docker-desktop
 
