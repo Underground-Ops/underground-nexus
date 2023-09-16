@@ -36,6 +36,8 @@ Build pregoverned enterprise configurations for governance, risk and compliance 
 
 Build a home lab to learn in.
 
+Turn an entire data center into a copy paste template.
+
 The Underground Nexus is a git powered **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs. The Underground Nexus container deployment is considered HCI (hyperconverged infrastructure).
 
 What is a hyperconverged data center? **-->** <a href="https://cloudunderground.dev/pages/what-is-hci">Learn more here!</a>
