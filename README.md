@@ -28,6 +28,14 @@
 
 <img src="https://github.com/Underground-Ops/underground-nexus/blob/cdcb0a3ee862c8c4f029fed6c45fe280786d4173/Graphics/SVG/nexus-software-factory.svg" alt="Underground Nexus Software Factory">
 
+Underground Nexus is a foundation for building autonomous cloud native companies.
+
+Build a minimum viable product.
+
+Build pregoverned enterprise configurations for governance, risk and compliance automations.
+
+Build a home lab to learn in.
+
 The Underground Nexus is a git powered **hyperconverged data center** that contains a specialized cloud construction toolkit for cloud-native engineering, DevSecOps and all-around general data center needs. The Underground Nexus container deployment is considered HCI (hyperconverged infrastructure).
 
 What is a hyperconverged data center? **-->** <a href="https://cloudunderground.dev/pages/what-is-hci">Learn more here!</a>
