@@ -69,10 +69,10 @@ Learn why platform engineering matters to DevSecOps: https://youtu.be/ghzsBm8vOm
 ***ACTIVATE the Underground Nexus (this is the only necessary command to run IMMEDIATELY after deploying the Underground Nexus to activate it):***
 **`docker exec Underground-Nexus bash deploy-olympiad.sh`**
 
-**ALTERNATIVE ACTIVATION** - From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
+**ALTERNATIVE ACTIVATION** - _From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus_, enter this command from inside the Underground Nexus container itself for activation:
 `bash deploy-olympiad.sh`
 
-**ALTERNATIVE FOR LOW POWERED DEVICES AND "LIGHTWEIGHT" DEPLOYMENT ACTIVATIONS** - *Systems with **under 8GB worth of RAM** will perform best using the light deployment of the Underground Nexus that that lacks KuberNexus, the underground-ops.me domain and non-essential tools. (apps remoed include Vault, the SOC, Traefik, Wordpress, GitLab, collaborator workbenches, k3d/Kubernetes)* -- From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus, enter this command from inside the Underground Nexus container itself for activation:
+**ALTERNATIVE FOR LOW POWERED DEVICES AND "LIGHTWEIGHT" DEPLOYMENT ACTIVATIONS** - *Systems with **under 8GB worth of RAM** will perform best using the light deployment of the Underground Nexus that that lacks KuberNexus, the underground-ops.me domain and non-essential tools. (apps remoed include Vault, the SOC, Traefik, Wordpress, GitLab, collaborator workbenches, k3d/Kubernetes)* -- _From inside of either a Docker Desktop shell to the Underground Nexus container or a Portainer shell into the Nexus_, enter this command from inside the Underground Nexus container itself for activation:
 `bash olympiad-deploy-light.sh`
 
 **Head to Portainer to Log In at - *https://localhost:9050*:**
