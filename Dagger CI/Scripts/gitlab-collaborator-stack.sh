@@ -71,6 +71,8 @@ rm -r /wazuh-docker
 cp -r /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker /
 cd /wazuh-docker/single-node/
 apt install -y docker-compose
+apk add docker-cli-compose
+apk add docker-compose
 #docker-compose -f /wazuh-docker/single-node/generate-indexer-certs.yml run --rm generator
 #docker-compose up -d
 echo "docker-compose -f generate-indexer-certs.yml run --rm generator && docker-compose up -d" > build-wazuh.sh
