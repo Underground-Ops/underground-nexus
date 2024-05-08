@@ -77,7 +77,7 @@ services:
       # Do not expose all Docker services, only the ones explicitly exposed - changed to true instead
       - --providers.swarm.exposedbydefault=false
       # Enable Docker Swarm mode
-      - --providers.swarm.endpoint=tcp://127.0.0.1:2377
+      - --providers.swarm.endpoint=unix:///var/run/docker.sock
       - --providers.swarm.watch
       # Create an entrypoint "http" listening on address 80
       - --entrypoints.http.address=:80
