@@ -20,10 +20,16 @@ services:
       - "--api"
       - "--metrics"
       - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
-      - "--docker"
-      - "--docker.swarmMode"
-      - "--docker.domain=docker.localhost"
-      - "--docker.watch"
+      #use docker commands below instead of the swarm commands for Traefik V2
+      #- "--docker"
+      #- "--docker.swarmMode"
+      #- "--docker.domain=docker.localhost"
+      #- "--docker.watch"
+      #use the swarm following commands for Traefik V3
+      - "--providers.swarm.endpoint=tcp://127.0.0.1:2377"
+      - "--swarm"
+      - "--swarm.domain=swarm.localhost"
+      - "--swarm.watch"
     networks:
       - traefik
       - monitor-net
