@@ -70,15 +70,15 @@ services:
       - traefik-public-certificates:/certificates
     command:
       # Enable Docker in Traefik, so that it reads labels from Docker services
-      - --providers.docker
+      - --providers.swarm
       # Add a constraint to only use services with the label "traefik.constraint-label=traefik-public"
-      - --providers.docker.constraints=Label(`traefik.constraint-label`, `traefik-public`)
+      - --providers.swarm.constraints=Label(`traefik.constraint-label`, `traefik-public`)
       #- --providers.docker.constraint=node.role==manager
       # Do not expose all Docker services, only the ones explicitly exposed - changed to true instead
-      - --providers.docker.exposedbydefault=false
+      - --providers.swarm.exposedbydefault=false
       # Enable Docker Swarm mode
-      - --providers.docker.swarmmode
-      - --providers.docker.watch
+      - --providers.swarm.endpoint=tcp://127.0.0.1:2377
+      - --providers.swarm.watch
       # Create an entrypoint "http" listening on address 80
       - --entrypoints.http.address=:80
       # Create an entrypoint "https" listening on address 443
