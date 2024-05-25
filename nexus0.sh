@@ -32,11 +32,12 @@ apt -y upgrade --fix-broken
 
 #------------------------------------
 #Change kde background
-#KDE wallpaper location: /usr/share/wallpapers/Next/contents/images/1440x900.jpg
+#KDE wallpaper location: /usr/share/wallpapers/KubuntuLight/contents/images/1440x900.jpg
+#Old version wallpaper location: /usr/share/wallpapers/Next/contents/images/1440x900.jpg
 #------------------------------------
 
 #sea-space-jelly wallpaper for kde ubuntu
-cd /usr/share/wallpapers/Next/contents/images/
+cd /usr/share/wallpapers/KubuntuLight/contents/images
 sudo rm 1440x900.jpg
 sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly-highres.jpg -O 1440x900.jpg
 sudo rm 1280x800.jpg
@@ -69,14 +70,15 @@ sudo cp 1080x1920.jpg 720x1440.jpg
 
 echo "abc:notiaPoint1" | chpasswd
 
-#Set up firefox homepage
-cd /config/.mozilla
-sudo apt install -y zip unzip
-sudo rm -r firefox
-sudo rm firefox.zip
-sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
-sudo unzip firefox.zip
-sudo chmod -R a+rwx firefox
+## Set up firefox homepage
+#cd /config/.mozilla
+#sudo apt install -y zip unzip
+#sudo rm -r firefox
+#sudo rm firefox.zip
+## Pull firefox files from repository containing homepage configuration
+#sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
+#sudo unzip firefox.zip
+#sudo chmod -R a+rwx firefox
 
 su - abc
 #------------------------------------
