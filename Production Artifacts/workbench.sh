@@ -19,6 +19,7 @@ sudo apt install -y qemu
 sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils qemu-system qemu-system-x86 qemu-system-arm
 sudo apt install -y virt-manager
 sudo apt install -y synaptic
+sudo apt install -y terminator
 #docker exec Athena0 wget https://raw.githubusercontent.com/rancher/k3d/main/install.sh
 #docker exec Athena0 bash /install.sh
 #docker exec Athena0 sh /nexus-bucket/build-kubernexus.sh
