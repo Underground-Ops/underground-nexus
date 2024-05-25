@@ -32,38 +32,38 @@ apt -y upgrade --fix-broken
 
 #------------------------------------
 #Change kde background
-#KDE wallpaper location: /usr/share/wallpapers/KubuntuLight/contents/images/1440x900.jpg
+#KDE wallpaper location: /usr/share/wallpapers/KubuntuLight/contents/images/1440x900.png
 #Old version wallpaper location: /usr/share/wallpapers/Next/contents/images/1440x900.jpg
 #------------------------------------
 
 #sea-space-jelly wallpaper for kde ubuntu
 cd /usr/share/wallpapers/KubuntuLight/contents/images
-sudo rm 1440x900.jpg
-sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly-highres.jpg -O 1440x900.jpg
-sudo rm 1280x800.jpg
-sudo cp 1440x900.jpg 1280x800.jpg
-sudo rm 1366x768.jpg
-sudo cp 1440x900.jpg 1366x768.jpg
-sudo rm 1600x1200.jpg
-sudo cp 1440x900.jpg 1600x1200.jpg
-sudo rm 1680x1050.jpg
-sudo cp 1440x900.jpg 1680x1050.jpg
-sudo rm 1920x1080.jpg
-sudo cp 1440x900.jpg 1920x1080.jpg
-sudo rm 1920x1200.jpg
-sudo cp 1440x900.jpg 1920x1200.jpg
-sudo rm 2560x1440.jpg
-sudo cp 1440x900.jpg 2560x1440.jpg
-sudo rm 1280x1024.jpg
-sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly.jpg -O 1280x1024.jpg
-sudo rm 1024x768.jpg
-sudo cp 1280x1024.jpg 1024x768.jpg
-sudo rm 1080x1920.jpg
-sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-moon-jelly.jpg -O 1080x1920.jpg
-sudo rm 360x720.jpg
-sudo cp 1080x1920.jpg 360x720.jpg
-sudo rm 720x1440.jpg
-sudo cp 1080x1920.jpg 720x1440.jpg
+sudo rm 1440x900.png
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly-highres.png -O 1440x900.png
+sudo rm 1280x800.png
+sudo cp 1440x900.png 1280x800.png
+sudo rm 1366x768.png
+sudo cp 1440x900.png 1366x768.png
+sudo rm 1600x1200.png
+sudo cp 1440x900.png 1600x1200.png
+sudo rm 1680x1050.png
+sudo cp 1440x900.png 1680x1050.png
+sudo rm 1920x1080.png
+sudo cp 1440x900.png 1920x1080.png
+sudo rm 1920x1200.png
+sudo cp 1440x900.png 1920x1200.png
+sudo rm 2560x1440.png
+sudo cp 1440x900.png 2560x1440.png
+sudo rm 1280x1024.png
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly.png -O 1280x1024.png
+sudo rm 1024x768.png
+sudo cp 1280x1024.png 1024x768.png
+sudo rm 1080x1920.png
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-moon-jelly.png -O 1080x1920.png
+sudo rm 360x720.png
+sudo cp 1080x1920.png 360x720.png
+sudo rm 720x1440.png
+sudo cp 1080x1920.png 720x1440.png
 
 #service ssh enable
 #service ssh start
