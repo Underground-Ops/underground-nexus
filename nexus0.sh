@@ -82,7 +82,7 @@ echo "abc:notiaPoint1" | chpasswd
 #sudo chmod -R a+rwx firefox
 
 #add nexus-creator-vault-control-panel site
-sudo wget -O /config/Desktop/nexus-creator-vault-control-panel.html https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/Wordpress/nexus-creator-vault/nexus-creator-vault-control-panel.html
+sudo wget -O /nexus-creator-vault-control-panel.html https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/Wordpress/nexus-creator-vault/nexus-creator-vault-control-panel.html
 
 su - abc
 #------------------------------------
