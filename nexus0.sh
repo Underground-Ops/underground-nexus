@@ -17,8 +17,9 @@ apt install -y wget
 wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb
 sudo dpkg -i chrome-remote-desktop_current_amd64.deb
 apt install -y -f
+#download optional github dekstop script
 wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/github-desktop.sh
-bash github-desktop.sh
+#bash github-desktop.sh
 apt update
 wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
 sudo dpkg -i gitkraken-amd64.deb
