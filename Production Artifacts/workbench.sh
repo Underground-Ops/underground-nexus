@@ -7,13 +7,14 @@ sudo apt install -y wget
 #docker exec Security-Operation-Center sudo apk upgrade
 sudo apt install -y git
 sudo apt install -y iputils-ping
-sudo wget https://github.com/shiftkey/desktop/releases/download/release-3.1.1-linux1/GitHubDesktop-linux-3.1.1-linux1.deb
-sudo dpkg -i GitHubDesktop-linux-2.9.6-linux1.deb
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/github-desktop.sh
+sudo bash github-desktop.sh
 sudo apt install -y apt-transport-https curl
 wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb
 sudo dpkg -i chrome-remote-desktop_current_amd64.deb
 wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
 sudo dpkg -i gitkraken-amd64.deb
+wget -O discord.deb https://discordapp.com/api/download?platform=linux&format=deb
 sudo dpkg -i discord.deb
 sudo apt install -y qemu
 sudo apt install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils qemu-system qemu-system-x86 qemu-system-arm
