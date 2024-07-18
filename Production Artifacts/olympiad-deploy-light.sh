@@ -2,7 +2,7 @@
 docker swarm init
 apk add docker-compose
 docker network create -d bridge --subnet=10.20.0.0/24 Inner-Athena
-docker run -itd -p 53:53/tcp -p 53:53/udp -p 67:67 -p 800:80 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v pihole_config:/etc/pihole/ pihole/pihole:latest
+docker run -itd -p 800:80 -h Inner-DNS-Control --name=Inner-DNS-Control --net=Inner-Athena --ip=10.20.0.20 --restart=always -v pihole_DNS_data:/etc/dnsmasq.d/ -v pihole_config:/etc/pihole/ pihole/pihole:latest
 docker volume create portainer_data
 docker run -d -p 8000:8000 -p 9443:9443 --name=Olympiad0 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 docker run -itd --name=workbench -h workbench --privileged -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock linuxserver/webtop:ubuntu-mate
