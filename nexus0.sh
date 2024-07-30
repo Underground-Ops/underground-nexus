@@ -87,6 +87,10 @@ echo "abc:notiaPoint1" | chpasswd
 #add nexus-creator-vault-control-panel site
 sudo wget -O /nexus-creator-vault-control-panel.html https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/Wordpress/nexus-creator-vault/nexus-creator-vault-control-panel.html
 
+#Back sudoers up and add www-data to sudoers lists for CGI script usage
+sudo cp /etc/sudoers /root/sudoers.bak
+echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 su - abc
 #------------------------------------
 #run "sh nexus0.sh" to execute
