@@ -22,9 +22,13 @@ RUN apt-get install -y \
     htop \
     nmap
 
+# Install dagger for built-in CI/CD
 RUN curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
 RUN mkdir -p /root/.local/share/bash-completion/completions
 RUN dagger completion bash > /root/.local/share/bash-completion/completions/dagger
+
+# Clone the Underground Nexus repository
+RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus
 
 #-------------------------------
 
@@ -36,9 +40,6 @@ RUN sh underground-nexus-update.sh; exit 0
 RUN sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/underground-nexus-dagger-ci.sh; exit 0
 
 #-------------------------------
-
-# Clone the Underground Nexus repository
-RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus
 
 WORKDIR "/"
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash; exit 0
