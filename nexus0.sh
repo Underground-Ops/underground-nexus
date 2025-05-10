@@ -1,29 +1,48 @@
 #!/bin/bash
 #------------------------------------
-#Nexus0 is a "copy paste" Cloud Native server node that may be deployed to container orchestrators (such as Kubernetes and Docker) - *Though Nexus0 is a component of the Underground Nexus "copy paste" datacenter environment, it __may run as a standalone server__ node even without the Underground Nexus*
+# Nexus0 is a "copy paste" Cloud Native server node that may be deployed to container orchestrators (such as Kubernetes and Docker) - *Though Nexus0 is a component of the Underground Nexus "copy paste" datacenter environment, it __may run as a standalone server__ node even without the Underground Nexus*
 #------------------------------------
 #--*Copy paste* this "nexus0" template inside of a Kubernetes (or KuberNexus) cluster to test: `kubectl run nexus0 -i --tty --image natoascode/nexus0:latest`
 #------------------------------------
-#name a file "nexus0.sh" and paste this script inside with "sudo apt update" then "sudo apt install nano" to ubild a script -- ctrl + x , y, enter (to save inside nano)
+# Name a file "nexus0.sh" and paste this script inside with "sudo apt update" then "sudo apt install nano" to build a script -- ctrl + x , y, enter (to save inside nano)
 #------------------------------------
-#alternatively this script may be pulled with `wget` or `curl` (install wget example: `apt update && apt install -y wget`)
-#download example string with `wget` to pull this script to a computer: `wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/nexus0.sh`
+# Alternatively this script may be pulled with `wget` or `curl` (install wget example: `apt update && apt install -y wget`)
+# Download example string with `wget` to pull this script to a computer: `wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/nexus0.sh`
 #------------------------------------
-#the following command can be used to enter the nexus0 shell using kubectl: `kubectl exec -it nexus0 -- /bin/bash`
+# The following command can be used to enter the nexus0 shell using kubectl: `kubectl exec -it nexus0 -- /bin/bash`
 #------------------------------------
 apt update
-apt install -y ssh
-apt install -y wget
+apt install -y ssh wget nano
+
+# Install Chrome Remote Desktop
 wget https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb
 sudo dpkg -i chrome-remote-desktop_current_amd64.deb
 apt install -y -f
-#download optional github dekstop script
+
+# Download optional GitHub Desktop script
 wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/github-desktop.sh
-#bash github-desktop.sh
+# bash github-desktop.sh
+
+# Install GitKraken
 apt update
 wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
 sudo dpkg -i gitkraken-amd64.deb
 apt -y upgrade --fix-broken
+
+# Install KVM, cpu-checker, QEMU, virt-manager, and libvirt
+sudo apt install -y qemu-kvm qemu-system qemu-kvm qemu-system-x86 qemu-system-arm64 cpu-checker virt-manager libvirt-daemon-system libvirt-clients
+sudo /usr/sbin/libvirtd &
+sudo /usr/sbin/virtlogd &
+
+# Install Ollama LLM
+curl -fsSL https://ollama.com/install.sh | sh
+sudo apt install -y -f
+sudo ollama serve &
+
+# Enable and start SSH service
+service ssh enable
+service ssh start
+
 #to manually enable ssh - `service ssh enable`
 #to start ssh - `service ssh start`
 #get ip address - `hostname -i`
@@ -41,63 +60,51 @@ apt -y upgrade --fix-broken
 
 #sea-space-jelly wallpaper for kde ubuntu
 cd /usr/share/wallpapers/KubuntuLight/contents/images
-sudo rm 1440x900.jpg
-sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly-highres.jpg -O 1440x900.jpg
-sudo rm 1280x800.jpg
-sudo cp 1440x900.jpg 1280x800.jpg
-sudo rm 1366x768.jpg
-sudo cp 1440x900.jpg 1366x768.jpg
-sudo rm 1600x1200.jpg
-sudo cp 1440x900.jpg 1600x1200.jpg
-sudo rm 1680x1050.jpg
-sudo cp 1440x900.jpg 1680x1050.jpg
-sudo rm 1920x1080.jpg
-sudo cp 1440x900.jpg 1920x1080.jpg
-sudo rm 1920x1200.jpg
-sudo cp 1440x900.jpg 1920x1200.jpg
-sudo rm 2560x1440.jpg
-sudo cp 1440x900.jpg 2560x1440.jpg
-sudo rm 1280x1024.jpg
-sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly.jpg -O 1280x1024.jpg
-sudo rm 1024x768.jpg
-sudo cp 1280x1024.jpg 1024x768.jpg
-sudo rm 1080x1920.jpg
-sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-moon-jelly.jpg -O 1080x1920.jpg
-sudo rm 360x720.jpg
-sudo cp 1080x1920.jpg 360x720.jpg
-sudo rm 720x1440.jpg
-sudo cp 1080x1920.jpg 720x1440.jpg
-sudo rm -r *.png
+sudo rm "1440x900.jpg"
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly-highres.jpg -O "1440x900.jpg"
+sudo rm "1280x800.jpg"
+sudo cp "1440x900.jpg" "1280x800.jpg"
+sudo rm "1366x768.jpg"
+sudo cp "1440x900.jpg" "1366x768.jpg"
+sudo rm "1600x1200.jpg"
+sudo cp "1440x900.jpg" "1600x1200.jpg"
+sudo rm "1680x1050.jpg"
+sudo cp "1440x900.jpg" "1680x1050.jpg"
+sudo rm "1920x1080.jpg"
+sudo cp "1440x900.jpg" "1920x1080.jpg"
+sudo rm "1920x1200.jpg"
+sudo cp "1440x900.jpg" "1920x1200.jpg"
+sudo rm "2560x1440.jpg"
+sudo cp "1440x900.jpg" "2560x1440.jpg"
+sudo rm "1280x1024.jpg"
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-sea-space-jelly.jpg -O "1280x1024.jpg"
+sudo rm "1024x768.jpg"
+sudo cp "1280x1024.jpg" "1024x768.jpg"
+sudo rm "1080x1920.jpg"
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Wallpapers/nexus0-moon-jelly.jpg -O "1080x1920.jpg"
+sudo rm "360x720.jpg"
+sudo cp "1080x1920.jpg" "360x720.jpg"
+sudo rm "720x1440.jpg"
+sudo cp "1080x1920.jpg" "720x1440.jpg"
+sudo rm -r "*.png"
 
-#service ssh enable
-#service ssh start
-
+# Set SSH password for user abc
 echo "abc:notiaPoint1" | chpasswd
 
-## Set up firefox homepage
-#cd /config/.mozilla
-#sudo apt install -y zip unzip
-#sudo rm -r firefox
-#sudo rm firefox.zip
-## Pull firefox files from repository containing homepage configuration
-#sudo wget https://github.com/Underground-Ops/underground-nexus/raw/main/Production%20Artifacts/firefox.zip
-#sudo unzip firefox.zip
-#sudo chmod -R a+rwx firefox
-
-#add nexus-creator-vault-control-panel site
+# Add nexus-creator-vault-control-panel site
 sudo wget -O /nexus-creator-vault-control-panel.html https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Production%20Artifacts/Wordpress/nexus-creator-vault/nexus-creator-vault-control-panel.html
 
-#Back sudoers up and add www-data to sudoers lists for CGI script usage
+# Backup sudoers and add www-data and abc to sudoers list
 sudo cp -f /etc/sudoers /root/sudoers.bak
 echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 echo "abc ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
 sort /etc/sudoers | uniq > /etc/sudoers-NEW
 sudo mv -f /etc/sudoers-NEW /etc/sudoers
 
+# Switch to user abc
 su - abc
 #------------------------------------
-#run "sh nexus0.sh" to execute
+# Run "sh nexus0.sh" to execute
 #------------------------------------
 
 #------------------------------------
