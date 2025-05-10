@@ -28,7 +28,7 @@ RUN mkdir -p /root/.local/share/bash-completion/completions
 RUN dagger completion bash > /root/.local/share/bash-completion/completions/dagger
 
 # Clone the Underground Nexus repository
-RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus
+RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus; exit 0
 
 #-------------------------------
 
