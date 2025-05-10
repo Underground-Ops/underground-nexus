@@ -38,7 +38,7 @@ RUN sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/underground-nexus-dag
 #-------------------------------
 
 # Clone the Underground Nexus repository
-git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus
+RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus
 
 WORKDIR "/"
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash; exit 0
