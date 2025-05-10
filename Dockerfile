@@ -51,7 +51,7 @@ RUN useradd -m -s /bin/bash notitia && echo "notitia:notiaPoint1" | chpasswd
 RUN mkdir /var/run/sshd; exit 0 && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
 # Create startup script to start services
-RUN echo '#!/bin/bash\nservice ssh start\nservice cron start' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
+RUN echo '#!/bin/bash\nservice ssh start\nservice cron start\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
 
 #-------------------------------
 
