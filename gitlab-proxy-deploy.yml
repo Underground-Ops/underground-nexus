@@ -26,6 +26,7 @@ services:
         limits:
           cpus: '4.00'
           memory: 4096M
+      replicas: 0
       labels:
         - traefik.port=80
         - traefik.frontend.rule=Host(`gitlab.underground-ops.me`)
