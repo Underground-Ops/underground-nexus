@@ -34,8 +34,7 @@ RUN mkdir -p /root/.local/share/bash-completion/completions
 RUN dagger completion bash > /root/.local/share/bash-completion/completions/dagger
 
 # Clone the Underground Nexus repository
-RUN /nexus-bucket/underground-nexus; exit 0
-RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus
+RUN git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus || true
 
 #-------------------------------
 
@@ -72,3 +71,6 @@ RUN rm -r install.*; exit 0
 
 # Set the entrypoint to the startup script
 ENTRYPOINT ["/usr/local/bin/start_services.sh"]
+
+# Run the update script on startup
+CMD ["bash", "-c", "wget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh && bash /underground-nexus-dagger-ci.sh && exec bash"]
