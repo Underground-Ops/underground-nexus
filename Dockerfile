@@ -61,7 +61,7 @@ RUN useradd -m -s /bin/bash notitia && echo "notitia:notiaPoint1" | chpasswd
 RUN mkdir /var/run/sshd; exit 0 && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
 # Create startup script to start services
-RUN echo '#!/bin/bash\nservice ssh start\nservice cron start\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
+RUN echo '#!/bin/bash\nservice ssh start\nservice cron start\nwget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh\nbash /underground-nexus-dagger-ci.sh\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
 
 #-------------------------------
 
@@ -71,6 +71,3 @@ RUN rm -r install.*; exit 0
 
 # Set the entrypoint to the startup script
 ENTRYPOINT ["/usr/local/bin/start_services.sh"]
-
-# Run the update script on startup
-CMD ["bash", "-c", "wget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh && bash /underground-nexus-dagger-ci.sh && exec bash"]
