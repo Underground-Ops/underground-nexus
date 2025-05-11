@@ -2,11 +2,9 @@
 #-------------------------------
 #apt install git
 cd /nexus-bucket/
-git clone https://github.com/Underground-Ops/underground-nexus.git
+git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus || true
 cd /nexus-bucket/underground-nexus/
-dagger project init
-dagger project update
-dagger do build
+
 #Install k3d for Kubernetes on Docker when Athena0 is deployed wtih Docker engine access
 cd /
 wget https://raw.githubusercontent.com/rancher/k3d/main/install.sh
@@ -27,7 +25,7 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash 
 
 #----------------------------------------------------------------------
 #Configure the Underground Nexus automated weekly update scheduling kit
-mv underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
+mv -f underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
 #wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
 #sh re-initialize-dagger-ci.sh
 #Cleanup

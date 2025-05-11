@@ -14,10 +14,10 @@ RUN apk add wget
 
 #-------------------------------
 #Configure kubectl, helm and k3d
-RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash; exit 0
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl; exit 0
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl; exit 0
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/; exit 0
+RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash || true
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl || true
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl || true
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ || true
 #RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg && echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list && apk update && apk add terraform; exit 0
 WORKDIR "/usr/local"
 RUN curl -L https://dl.dagger.io/dagger/install.sh | sh
@@ -50,7 +50,7 @@ RUN echo "echo "FROM natoascode/workbench0" >> /nexus-bucket/workbench.dockerfil
 RUN echo "echo "RUN bash workbench.sh" >> /nexus-bucket/workbench.dockerfile" >> deploy-olympiad.sh
 RUN echo "docker build -f /nexus-bucket/workbench.dockerfile -t workbench:latest /nexus-bucket" >> deploy-olympiad.sh
 RUN echo "docker run -itd  --privileged --name=workbench -h workbench -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /dev:/dev -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock workbench:latest" >> deploy-olympiad.sh
-RUN echo "docker run -itd  --privileged --name=workbench -h workbench -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /dev:/dev -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/workbench0" >> deploy-olympiad.sh; exit 0
+RUN echo "docker run -itd  --privileged --name=workbench -h workbench -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v /dev:/dev -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/workbench0" >> deploy-olympiad.sh || true
 #RUN echo "docker run -itd  --privileged --name=workbench -h workbench -e PUID=1000 -e PGID=1000 -e TZ=America/Colorado -p 1000:3000 --dns=10.20.0.20 --net=Inner-Athena --restart=always -v workbench0:/config -v /nexus-bucket:/config/Desktop/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock linuxserver/webtop:ubuntu-mate" >> deploy-olympiad.sh
 
 #Build workbench stack
@@ -93,8 +93,8 @@ RUN echo "docker exec workbench echo "docker exec Athena0 wget https://raw.githu
 RUN echo "docker exec workbench echo "docker exec Athena0 bash /install.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec Athena0 k3d cluster create KuberNexus --network Inner-Athena --api-port 10.20.0.1:6443 -p 18080:8080@loadbalancer -p 8443:8443@loadbalancer -p 2222:22@loadbalancer -p 179:179@loadbalancer -p 2375:2376@loadbalancer -p 2378:2379@loadbalancer -p 2381:2380@loadbalancer -p 8472:8472@loadbalancer -p 8843:443@loadbalancer -p 4789:4789@loadbalancer -p 9099:9099@loadbalancer -p 9100:9100@loadbalancer -p 7443:9443@loadbalancer -p 9796:9796@loadbalancer -p 6783:6783@loadbalancer -p 10250:10250@loadbalancer -p 10254:10254@loadbalancer -p 31896:31896@loadbalancer -v /nexus-bucket:/nexus-bucket -v /dev:/dev --servers 1 --registry-create KuberNexus-registry --kubeconfig-update-default" >> /nexus-bucket/build-kubernexus.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec Athena0 export KUBECONFIG=/root/.k3d/kubeconfig-KuberNexus.yaml" >> /nexus-bucket/build-kubernexus.sh" >> deploy-olympiad.sh
-RUN echo "docker exec workbench echo "docker exec Athena0 #cp /root/.k3d/kubeconfig-KuberNexus.yaml /nexus-bucket/" >> /nexus-bucket/build-kubernexus.sh" >> deploy-olympiad.sh; exit 0
-RUN echo "docker exec workbench echo "docker exec Athena0 k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> /nexus-bucket/build-kubernexus.sh" >> deploy-olympiad.sh; exit 0
+RUN echo "docker exec workbench echo "docker exec Athena0 #cp /root/.k3d/kubeconfig-KuberNexus.yaml /nexus-bucket/" >> /nexus-bucket/build-kubernexus.sh" >> deploy-olympiad.sh || true
+RUN echo "docker exec workbench echo "docker exec Athena0 k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> /nexus-bucket/build-kubernexus.sh" >> deploy-olympiad.sh || true
 RUN echo "docker exec workbench echo "docker exec Athena0 sh /nexus-bucket/build-kubernexus.sh" >> /nexus-bucket/workbench.sh" >> deploy-olympiad.sh
 RUN echo "docker exec workbench echo "docker exec Athena0 sh /enable-weekly-updates.sh" >> /nexus-bucket/enable-weekly-updates.sh" >> deploy-olympiad.sh
 
@@ -160,9 +160,9 @@ RUN echo "docker exec Athena0 sh /nexus-bucket/workbench.sh" >> deploy-olympiad.
 #Install KuberNexus ETCD Kubernetes Cluster Backup Process if first KuberNexus deployment fails
 RUN echo "curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash" >> deploy-olympiad.sh
 RUN echo "#k3d cluster create KuberNexus -p 8080:8080@loadbalancer -p 8443:8443@loadbalancer -p 2222:22@loadbalancer -p 179:179@loadbalancer -p 2375:2376@loadbalancer -p 2378:2379@loadbalancer -p 2381:2380@loadbalancer -p 8472:8472@loadbalancer -p 8843:443@loadbalancer -p 4789:4789@loadbalancer -p 9099:9099@loadbalancer -p 9100:9100@loadbalancer -p 7443:9443@loadbalancer -p 9796:9796@loadbalancer -p 6783:6783@loadbalancer -p 10250:10250@loadbalancer -p 10254:10254@loadbalancer -p 31896:31896@loadbalancer -v /nexus-bucket:/nexus-bucket --servers 3 --registry-create KuberNexus-registry --kubeconfig-update-default" >> deploy-olympiad.sh
-RUN echo "curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl" >> deploy-olympiad.sh; exit 0
+RUN echo "curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl" >> deploy-olympiad.sh || true
 #RUN echo "curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl" >> deploy-olympiad.sh; exit 0
-RUN echo "k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> deploy-olympiad.sh; exit 0
+RUN echo "k3d kubeconfig merge KuberNexus --kubeconfig-merge-default" >> deploy-olympiad.sh || true
 
 #Deploy Traefik loadbalancer, GitLab for Git-BIOS alongside the collaborator-workbench service - build "underground-ops.me" domain proxy gateway
 RUN echo "docker network create -d overlay --subnet=172.16.32.0/24 underground-wordpress_internal" >> deploy-olympiad.sh
