@@ -4,6 +4,12 @@ FROM kalilinux/kali-rolling
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Expose SSH port
+EXPOSE 22
+
+#Add persistent volumes
+VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
+
 # Install necessary tools and dependencies
 RUN apt-get update
 RUN apt-get install -y \
@@ -63,12 +69,6 @@ RUN echo '#!/bin/bash\nservice ssh start\nservice cron start\nexec /bin/bash' > 
 RUN apt -y update --fix-missing; exit 0
 RUN apt -y upgrade
 RUN rm -r install.*; exit 0
-
-# Expose SSH port
-EXPOSE 22
-
-#Add persistent volumes
-VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 
 # Set the entrypoint to the startup script
 ENTRYPOINT ["/usr/local/bin/start_services.sh"]
