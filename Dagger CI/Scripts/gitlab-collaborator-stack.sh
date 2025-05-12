@@ -42,6 +42,12 @@ cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
 
 #Set up DNS and CNAME Records to make underground-ops.me available
+cd /
+cp /nexus-bucket/underground-nexus/'Production Artifacts'/Inner-DNS-Control_teleporter.zip /var/lib/docker/volumes/pihole_DNS_data/_data/Inner-DNS-Control_teleporter.zip
+docker exec Inner-DNS-Control cp /etc/dnsmasq.d/Inner-DNS-Control_teleporter.zip /Inner-DNS-Control_teleporter.zip
+# add a restore command once ready to use from inside the pihole itself, or deploy a script from the nexus bucket to work wtih /Inner-DNS-Control_teleporter.zip from inside Inner-DNS-Control
+# Check for Pi hole backup file with this command: docker exec Inner-DNS-Control ls /
+
 cd /var/lib/docker/volumes/pihole_config/_data/
 echo "10.20.0.1 underground-ops.me" >> custom.list
 
