@@ -41,10 +41,14 @@ docker stack deploy -c ./nextcloud-proxy-deploy.yml underground-cloud
 cd /nexus-bucket/underground-nexus/'Observability Stack'/
 docker stack deploy -c ./docker-stack.yml underground-observability
 
+#-------------------------------------------------------------------------
+# CRITICAL PIHOLE CONFIGURATIONS - NOTHING WORKS WITHOUT THIS
 #Set up DNS and CNAME Records to make underground-ops.me available
 cd /
 cp /nexus-bucket/underground-nexus/'Production Artifacts'/Inner-DNS-Control_teleporter.zip /var/lib/docker/volumes/pihole_DNS_data/_data/Inner-DNS-Control_teleporter.zip
 docker exec Inner-DNS-Control cp /etc/dnsmasq.d/Inner-DNS-Control_teleporter.zip /Inner-DNS-Control_teleporter.zip
+cp /nexus-bucket/underground-nexus/'Production Artifacts'/pihole.toml /var/lib/docker/volumes/pihole_DNS_data/_data/pihole.toml
+docker exec Inner-DNS-Control cp /etc/dnsmasq.d/pihole.toml /etc/pihole/pihole.toml
 # add a restore command once ready to use from inside the pihole itself, or deploy a script from the nexus bucket to work wtih /Inner-DNS-Control_teleporter.zip from inside Inner-DNS-Control
 # Check for Pi hole backup file with this command: docker exec Inner-DNS-Control ls /
 
@@ -70,6 +74,8 @@ echo "cname=cloud.underground-ops.me,underground-ops.me" >> 05-pihole-custom-cna
 sort 05-pihole-custom-cname.conf | uniq > NEW05-pihole-custom-cname.conf
 rm 05-pihole-custom-cname.conf
 mv NEW05-pihole-custom-cname.conf 05-pihole-custom-cname.conf
+
+#-------------------------------------------------------------------------
 
 #Build SIEM and EDR Wazuh stack
 cd /
