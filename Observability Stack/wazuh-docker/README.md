@@ -8,19 +8,19 @@
 In this repository you will find the containers to run:
 
 * Wazuh manager: it runs the Wazuh manager, Wazuh API and Filebeat OSS
-* Wazuh dashboard: provides a web user interface to browse through alerts data and allows you to visualize agents configuration and status.
+* Wazuh dashboard: provides a web user interface to browse through alert data and allows you to visualize the agents configuration and status.
 * Wazuh indexer: Wazuh indexer container (working as a single-node cluster or as a multi-node cluster). **Be aware to increase the `vm.max_map_count` setting, as it's detailed in the [Wazuh documentation](https://documentation.wazuh.com/current/docker/wazuh-container.html#increase-max-map-count-on-your-host-linux).**
 
 The folder `build-docker-images` contains a README explaining how to build the Wazuh images and the necessary assets.
 The folder `indexer-certs-creator` contains a README explaining how to create the certificates creator tool and the necessary assets.
 The folder `single-node` contains a README explaining how to run a Wazuh environment with one Wazuh manager, one Wazuh indexer, and one Wazuh dashboard.
-The folder `multi-node` contains a README explaining how to run a Wazuh environment with two Wazuh managers, three Wazuh indexer, and one Wazuh dashboard.
+The folder `multi-node` contains a README explaining how to run a Wazuh environment with two Wazuh managers, three Wazuh indexers, and one Wazuh dashboard.
 
 ## Documentation
 
 * [Wazuh full documentation](http://documentation.wazuh.com)
 * [Wazuh documentation for Docker](https://documentation.wazuh.com/current/docker/index.html)
-* [Docker hub](https://hub.docker.com/u/wazuh)
+* [Docker Hub](https://hub.docker.com/u/wazuh)
 
 
 ### Setup SSL certificate
@@ -38,11 +38,11 @@ Default values are included when available.
 ```
 API_USERNAME="wazuh-wui"                            # Wazuh API username
 API_PASSWORD="MyS3cr37P450r.*-"                     # Wazuh API password - Must comply with requirements
-                                                    # (8+ length, uppercase, lowercase, specials chars)
+                                                    # (8+ length, uppercase, lowercase, special chars)
 
 INDEXER_URL=https://wazuh.indexer:9200              # Wazuh indexer URL
 INDEXER_USERNAME=admin                              # Wazuh indexer Username
-INDEXER_PASSWORD=admin                              # Wazuh indexer Password
+INDEXER_PASSWORD=SecretPassword                     # Wazuh indexer Password
 FILEBEAT_SSL_VERIFICATION_MODE=full                 # Filebeat SSL Verification mode (full or none)
 SSL_CERTIFICATE_AUTHORITIES=""                      # Path of Filebeat SSL CA
 SSL_CERTIFICATE=""                                  # Path of Filebeat SSL Certificate
@@ -53,24 +53,10 @@ SSL_KEY=""                                          # Path of Filebeat SSL Key
 ```
 PATTERN="wazuh-alerts-*"        # Default index pattern to use
 
-CHECKS_PATTERN=true             # Defines which checks must to be consider by the healthcheck
-CHECKS_TEMPLATE=true            # step once the Wazuh app starts. Values must to be true or false
+CHECKS_PATTERN=true             # Defines which checks must be considered by the healthcheck
+CHECKS_TEMPLATE=true            # step once the Wazuh app starts. Values must be true or false
 CHECKS_API=true
 CHECKS_SETUP=true
-
-EXTENSIONS_PCI=true             # Enable PCI Extension
-EXTENSIONS_GDPR=true            # Enable GDPR Extension
-EXTENSIONS_HIPAA=true           # Enable HIPAA Extension
-EXTENSIONS_NIST=true            # Enable NIST Extension
-EXTENSIONS_TSC=true             # Enable TSC Extension
-EXTENSIONS_AUDIT=true           # Enable Audit Extension
-EXTENSIONS_OSCAP=false          # Enable OpenSCAP Extension
-EXTENSIONS_CISCAT=false         # Enable CISCAT Extension
-EXTENSIONS_AWS=false            # Enable AWS Extension
-EXTENSIONS_GCP=false            # Enable GCP Extension
-EXTENSIONS_VIRUSTOTAL=false     # Enable Virustotal Extension
-EXTENSIONS_OSQUERY=false        # Enable OSQuery Extension
-EXTENSIONS_DOCKER=false         # Enable Docker Extension
 
 APP_TIMEOUT=20000               # Defines maximum timeout to be used on the Wazuh app requests
 
@@ -89,18 +75,23 @@ WAZUH_MONITORING_REPLICAS=0         ##
 ## Directory structure
 
     ├── build-docker-images
-    │   ├── docker-compose.yml
+    │   ├── build-images.sh
+    │   ├── build-images.yml
+    │   ├── README.md
     │   ├── wazuh-dashboard
     │   │   ├── config
     │   │   │   ├── config.sh
     │   │   │   ├── config.yml
+    │   │   │   ├── dl_base.sh
     │   │   │   ├── entrypoint.sh
+    │   │   │   ├── install_wazuh_app.sh
     │   │   │   ├── opensearch_dashboards.yml
     │   │   │   ├── wazuh_app_config.sh
     │   │   │   └── wazuh.yml
     │   │   └── Dockerfile
     │   ├── wazuh-indexer
     │   │   ├── config
+    │   │   │   ├── action_groups.yml
     │   │   │   ├── config.sh
     │   │   │   ├── config.yml
     │   │   │   ├── entrypoint.sh
@@ -112,6 +103,7 @@ WAZUH_MONITORING_REPLICAS=0         ##
     │   │   └── Dockerfile
     │   └── wazuh-manager
     │       ├── config
+    │       │   ├── check_repository.sh
     │       │   ├── create_user.py
     │       │   ├── etc
     │       │   │   ├── cont-init.d
@@ -124,19 +116,21 @@ WAZUH_MONITORING_REPLICAS=0         ##
     │       │   │       │   └── run
     │       │   │       └── ossec-logs
     │       │   │           └── run
+    │       │   ├── filebeat_module.sh
     │       │   ├── filebeat.yml
     │       │   ├── permanent_data.env
-    │       │   ├── permanent_data.sh
-    │       │   └── wazuh.repo
+    │       │   └── permanent_data.sh
     │       └── Dockerfile
     ├── CHANGELOG.md
     ├── indexer-certs-creator
     │   ├── config
     │   │   └── entrypoint.sh
-    │   └── Dockerfile
+    │   ├── Dockerfile
+    │   └── README.md
     ├── LICENSE
     ├── multi-node
     │   ├── config
+    │   │   ├── certs.yml
     │   │   ├── nginx
     │   │   │   └── nginx.conf
     │   │   ├── wazuh_cluster
@@ -145,56 +139,73 @@ WAZUH_MONITORING_REPLICAS=0         ##
     │   │   ├── wazuh_dashboard
     │   │   │   ├── opensearch_dashboards.yml
     │   │   │   └── wazuh.yml
-    │   │   ├── wazuh_indexer
-    │   │   │   ├── internal_users.yml
-    │   │   │   ├── wazuh1.indexer.yml
-    │   │   │   ├── wazuh2.indexer.yml
-    │   │   │   └── wazuh3.indexer.yml
-    │   │   └── wazuh_indexer_ssl_certs
-    │   │       └── certs.yml
+    │   │   └── wazuh_indexer
+    │   │       ├── internal_users.yml
+    │   │       ├── wazuh1.indexer.yml
+    │   │       ├── wazuh2.indexer.yml
+    │   │       └── wazuh3.indexer.yml
     │   ├── docker-compose.yml
     │   ├── generate-indexer-certs.yml
-    │   ├── Migration-to-Wazuh-4.3.md
+    │   ├── Migration-to-Wazuh-4.4.md
+    │   ├── README.md
     │   └── volume-migrator.sh
     ├── README.md
+    ├── SECURITY.md
     ├── single-node
     │   ├── config
+    │   │   ├── certs.yml
     │   │   ├── wazuh_cluster
     │   │   │   └── wazuh_manager.conf
     │   │   ├── wazuh_dashboard
     │   │   │   ├── opensearch_dashboards.yml
     │   │   │   └── wazuh.yml
-    │   │   ├── wazuh_indexer
-    │   │   │   ├── internal_users.yml
-    │   │   │   └── wazuh.indexer.yml
-    │   │   └── wazuh_indexer_ssl_certs
-    │   │       ├── admin-key.pem
-    │   │       ├── admin.pem
-    │   │       ├── certs.yml
-    │   │       ├── root-ca.key
-    │   │       ├── root-ca.pem
-    │   │       ├── wazuh.dashboard-key.pem
-    │   │       ├── wazuh.dashboard.pem
-    │   │       ├── wazuh.indexer-key.pem
-    │   │       ├── wazuh.indexer.pem
-    │   │       ├── wazuh.manager-key.pem
-    │   │       └── wazuh.manager.pem
+    │   │   └── wazuh_indexer
+    │   │       ├── internal_users.yml
+    │   │       └── wazuh.indexer.yml
     │   ├── docker-compose.yml
     │   ├── generate-indexer-certs.yml
     │   └── README.md
-    └── VERSION
-
+    └── VERSION.json
 
 
 ## Branches
 
-* `master` branch contains the latest code, be aware of possible bugs on this branch.
-* `stable` branch on correspond to the last Wazuh stable version.
+* `main` branch contains the latest code, be aware of possible bugs on this branch.
+* `stable` branch corresponds to the last Wazuh stable version.
 
 ## Compatibility Matrix
 
 | Wazuh version | ODFE    | XPACK  |
 |---------------|---------|--------|
+| v5.0.0        |         |        |
+| v4.10.2       |         |        |
+| v4.10.1       |         |        |
+| v4.10.0       |         |        |
+| v4.9.2        |         |        |
+| v4.9.1        |         |        |
+| v4.9.0        |         |        |
+| v4.8.2        |         |        |
+| v4.8.1        |         |        |
+| v4.8.0        |         |        |
+| v4.7.5        |         |        |
+| v4.7.4        |         |        |
+| v4.7.3        |         |        |
+| v4.7.2        |         |        |
+| v4.7.1        |         |        |
+| v4.7.0        |         |        |
+| v4.6.0        |         |        |
+| v4.5.4        |         |        |
+| v4.5.3        |         |        |
+| v4.5.2        |         |        |
+| v4.5.1        |         |        |
+| v4.5.0        |         |        |
+| v4.4.5        |         |        |
+| v4.4.4        |         |        |
+| v4.4.3        |         |        |
+| v4.4.2        |         |        |
+| v4.4.1        |         |        |
+| v4.4.0        |         |        |
+| v4.3.11       |         |        |
 | v4.3.10       |         |        |
 | v4.3.9        |         |        |
 | v4.3.8        |         |        |
@@ -233,7 +244,7 @@ These Docker containers are based on:
 *  "deviantony" dockerfiles which can be found at [https://github.com/deviantony/docker-elk](https://github.com/deviantony/docker-elk)
 *  "xetus-oss" dockerfiles, which can be found at [https://github.com/xetus-oss/docker-ossec-server](https://github.com/xetus-oss/docker-ossec-server)
 
-We thank you them and everyone else who has contributed to this project.
+We thank them and everyone else who has contributed to this project.
 
 ## License and copyright
 

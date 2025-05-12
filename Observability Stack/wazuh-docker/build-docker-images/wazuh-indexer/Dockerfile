@@ -1,22 +1,23 @@
 # Wazuh Docker Copyright (C) 2017, Wazuh Inc. (License GPLv2)
-FROM ubuntu:focal AS builder
+FROM amazonlinux:2023 AS builder
 
 ARG WAZUH_VERSION
 ARG WAZUH_TAG_REVISION
 
-RUN apt-get update -y && apt-get install curl openssl xz-utils -y
+RUN yum install curl-minimal openssl xz tar findutils shadow-utils -y
+
+COPY config/check_repository.sh /
+RUN chmod 775 /check_repository.sh && \
+    source /check_repository.sh
+
+RUN yum install wazuh-indexer-${WAZUH_VERSION}-${WAZUH_TAG_REVISION} -y && \
+    yum clean all
 
 COPY config/opensearch.yml /
 
 COPY config/config.sh .
 
 COPY config/config.yml /
-
-COPY config/internal_users.yml /
-
-COPY config/roles_mapping.yml /
-
-COPY config/roles.yml /
 
 RUN bash config.sh
 
@@ -25,13 +26,25 @@ RUN bash config.sh
 #
 # Copy wazuh-indexer from stage 0
 # Add entrypoint
+
 ################################################################################
-FROM ubuntu:focal
+FROM amazonlinux:2023
 
 ENV USER="wazuh-indexer" \
     GROUP="wazuh-indexer" \
     NAME="wazuh-indexer" \
     INSTALL_DIR="/usr/share/wazuh-indexer"
+
+# Set $JAVA_HOME
+RUN echo "export JAVA_HOME=$INSTALL_DIR/jdk" >> /etc/profile.d/java_home.sh && \
+    echo "export PATH=\$PATH:\$JAVA_HOME/bin" >> /etc/profile.d/java_home.sh
+ENV JAVA_HOME="$INSTALL_DIR/jdk"
+ENV PATH=$PATH:$JAVA_HOME/bin:$INSTALL_DIR/bin
+
+# Add k-NN lib directory to library loading path variable
+ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$INSTALL_DIR/plugins/opensearch-knn/lib"
+
+RUN yum install curl-minimal shadow-utils findutils hostname -y
 
 RUN getent group $GROUP || groupadd -r -g 1000 $GROUP
 
@@ -54,19 +67,21 @@ RUN chmod 700 /entrypoint.sh && chmod 700 /securityadmin.sh
 
 RUN chown 1000:1000 /*.sh
 
-COPY --from=builder --chown=1000:1000 /debian/wazuh-indexer/usr/share/wazuh-indexer /usr/share/wazuh-indexer
+COPY --from=builder --chown=1000:1000 /usr/share/wazuh-indexer /usr/share/wazuh-indexer
+COPY --from=builder --chown=1000:1000 /etc/wazuh-indexer /usr/share/wazuh-indexer
 COPY --from=builder --chown=0:0 /debian/wazuh-indexer/usr/lib/systemd /usr/lib/systemd
 COPY --from=builder --chown=0:0 /debian/wazuh-indexer/usr/lib/sysctl.d /usr/lib/sysctl.d
 COPY --from=builder --chown=0:0 /debian/wazuh-indexer/usr/lib/tmpfiles.d /usr/lib/tmpfiles.d
 
+RUN chown -R 1000:1000 /usr/share/wazuh-indexer
 
 RUN mkdir -p /var/lib/wazuh-indexer && chown 1000:1000 /var/lib/wazuh-indexer && \
     mkdir -p /usr/share/wazuh-indexer/logs && chown 1000:1000 /usr/share/wazuh-indexer/logs && \
     mkdir -p /run/wazuh-indexer && chown 1000:1000 /run/wazuh-indexer && \
     mkdir -p /var/log/wazuh-indexer && chown 1000:1000 /var/log/wazuh-indexer && \
-    chmod 700 /usr/share/wazuh-indexer/config && \
-    chmod 600 /usr/share/wazuh-indexer/config/jvm.options && \
-    chmod 600 /usr/share/wazuh-indexer/config/opensearch.yml
+    chmod 700 /usr/share/wazuh-indexer && \
+    chmod 600 /usr/share/wazuh-indexer/jvm.options && \
+    chmod 600 /usr/share/wazuh-indexer/opensearch.yml
 
 USER wazuh-indexer
 

@@ -51,7 +51,7 @@ mount_permanent_data() {
         print "Installing ${permanent_dir}"
         exec_cmd "cp -a ${data_tmp}. ${permanent_dir}"
       else
-        print "The path ${permanent_dir} is empty, skiped"
+        print "The path ${permanent_dir} is empty, skipped"
       fi
     fi
   done
@@ -184,8 +184,9 @@ set_rids_owner() {
 ##############################################################################
 
 set_correct_permOwner() {
-  find / -group 997 -exec chown :101 {} +;
-  find / -user 999 -exec chown 101 {} +;
+  find / -group 997 -exec chown :999 {} +;
+  find / -group 101 -exec chown :999 {} +;
+  find / -user 101 -exec chown 999 {} +;
 }
 
 ##############################################################################
@@ -198,7 +199,7 @@ main() {
 
   # Restore files stored in permanent data that are not permanent  (i.e. internal_options.conf)
   apply_exclusion_data
-  
+
   # Apply correct permission and ownership
   set_correct_permOwner
 
