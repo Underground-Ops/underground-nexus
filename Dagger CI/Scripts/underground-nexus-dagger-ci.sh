@@ -24,10 +24,10 @@ apt-get install -y kubectl
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ $$ rm /install.sh
 
 #Update the Pihole by updating the pihole.toml and updating the restore .zip file
-cp /nexus-bucket/underground-nexus/'Production Artifacts'/Inner-DNS-Control_teleporter.zip /var/lib/docker/volumes/pihole_DNS_data/_data/Inner-DNS-Control_teleporter.zip
-docker exec Inner-DNS-Control cp /etc/dnsmasq.d/Inner-DNS-Control_teleporter.zip /Inner-DNS-Control_teleporter.zip
-cp /nexus-bucket/underground-nexus/'Production Artifacts'/pihole.toml /var/lib/docker/volumes/pihole_DNS_data/_data/pihole.toml
-docker exec Inner-DNS-Control cp /etc/dnsmasq.d/pihole.toml /etc/pihole/pihole.toml
+cp /nexus-bucket/underground-nexus/'Production Artifacts'/Inner-DNS-Control_teleporter.zip /var/lib/docker/volumes/pihole_DNS_data/_data/Inner-DNS-Control_teleporter.zip || true
+docker exec Inner-DNS-Control cp /etc/dnsmasq.d/Inner-DNS-Control_teleporter.zip /Inner-DNS-Control_teleporter.zip || true
+cp /nexus-bucket/underground-nexus/'Production Artifacts'/pihole.toml /var/lib/docker/volumes/pihole_DNS_data/_data/pihole.toml || true
+docker exec Inner-DNS-Control cp /etc/dnsmasq.d/pihole.toml /etc/pihole/pihole.toml || true
 
 #----------------------------------------------------------------------
 #Configure the Underground Nexus automated weekly update scheduling kit
