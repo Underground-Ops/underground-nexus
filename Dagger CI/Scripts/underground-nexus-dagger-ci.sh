@@ -29,6 +29,21 @@ docker exec Inner-DNS-Control cp /etc/dnsmasq.d/Inner-DNS-Control_teleporter.zip
 cp /nexus-bucket/underground-nexus/'Production Artifacts'/pihole.toml /var/lib/docker/volumes/pihole_DNS_data/_data/pihole.toml || true
 docker exec Inner-DNS-Control cp /etc/dnsmasq.d/pihole.toml /etc/pihole/pihole.toml || true
 
+# Get the current KubeVirt version
+VERSION=$(kubectl get kubevirt.kubevirt.io/kubevirt -n kubevirt -o=jsonpath="{.status.observedKubeVirtVersion}")
+
+# Determine system architecture
+ARCH="$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/')"
+
+# Download virtctl
+curl -L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH}"
+
+# Make it executable
+chmod +x virtctl
+
+# Move it to a directory in your PATH
+sudo install virtctl /usr/local/bin/
+
 #----------------------------------------------------------------------
 #Configure the Underground Nexus automated weekly update scheduling kit
 mv -f underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
