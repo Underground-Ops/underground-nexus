@@ -26,7 +26,9 @@ RUN apt-get install -y \
     cron \
     sudo \
     htop \
-    nmap
+    nmap \
+    iputils-ping \
+    metasploit-framework
 
 # Install dagger for built-in CI/CD
 RUN curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
