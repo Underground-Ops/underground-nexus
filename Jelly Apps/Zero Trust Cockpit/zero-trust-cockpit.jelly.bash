@@ -1,3 +1,3 @@
-sudo docker exec Athena0 docker run -itd --name=zero-trust-cockpit -h zero-trust-cockpit --net=Inner-Athena --dns=10.20.0.20 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1050:3000 --restart unless-stopped -v cockpit000:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/zero-trust-cockpit:latest
+sudo docker exec Athena0 docker run -itd --privileged --name=zero-trust-cockpit -h zero-trust-cockpit --net=Inner-Athena --dns=10.20.0.20 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1050:3000 --restart unless-stopped -v cockpit000:/config -v /var/run/docker.sock:/var/run/docker.sock -v /dev:/dev natoascode/zero-trust-cockpit:latest
 sudo docker exec Athena0 docker start zero-trust-cockpit
 xdg-open http://10.20.0.1:1050

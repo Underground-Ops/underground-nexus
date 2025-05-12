@@ -1,5 +1,5 @@
 #Using this file from inside of an Underground Nexus environment will deploy a Nexus Creator Vault with improved security, easier collaboration and automation support
-sudo docker exec Athena0 docker run -itd --name=nexus-creator-vault -h nexus-creator-vault --net=Inner-Athena --dns=10.20.0.20 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1050:3000 --restart unless-stopped -v creator-vault000:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/zero-trust-cockpit:creator-vault
+sudo docker exec Athena0 docker run -itd --privileged --name=nexus-creator-vault -h nexus-creator-vault --net=Inner-Athena --dns=10.20.0.20 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado -p 1050:3000 --restart unless-stopped -v creator-vault000:/config -v /var/run/docker.sock:/var/run/docker.sock -v /dev:/dev natoascode/zero-trust-cockpit:creator-vault
 sudo docker exec Athena0 docker start nexus-creator-vault
 sleep 10
 xdg-mime default firefox.desktop x-scheme-handler/https x-scheme-handler/http
