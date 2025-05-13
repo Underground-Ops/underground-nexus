@@ -1,6 +1,10 @@
 # Wazuh App Copyright (C) 2017, Wazuh Inc. (License GPLv2)
 version: '3.7'
 
+networks:
+  traefik-public:
+    external: true
+
 services:
   wazuh.manager:
     image: wazuh/wazuh-manager:4.12.0
