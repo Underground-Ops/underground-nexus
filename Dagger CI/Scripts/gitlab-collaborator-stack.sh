@@ -82,6 +82,8 @@ cd /
 rm -r /wazuh-docker
 cp -r /nexus-bucket/underground-nexus/'Observability Stack'/wazuh-docker /
 cd /wazuh-docker/single-node/
+chmod 644 ./config/wazuh_indexer_ssl_certs/*.pem
+chmod 644 ./config/wazuh_indexer_ssl_certs/*.key
 #cp generate-certs.yml generate-indexer-certs.yml || true
 apt install -y docker-compose
 apk add docker-cli-compose

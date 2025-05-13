@@ -1,9 +1,11 @@
 # Wazuh App Copyright (C) 2017, Wazuh Inc. (License GPLv2)
-version: '3.7'
+version: '3.8'
 
 networks:
   traefik-public:
     external: true
+  wazuh-net:
+    driver: bridge
 
 services:
   wazuh.manager:
@@ -27,6 +29,7 @@ services:
       - "55000:55000"
     networks:
       - traefik-public
+      - wazuh-net
     dns:
       - 10.20.0.1
     environment:
@@ -74,6 +77,7 @@ services:
       - "9200:9200"
     networks:
       - traefik-public
+      - wazuh-net
     dns:
       - 10.20.0.1
     environment:
@@ -107,7 +111,7 @@ services:
       CLUSTER_ROUTING_ALLOCATION_DISK_THRESHOLD_ENABLED: "false"
     volumes:
       - wazuh-indexer-data:/var/lib/wazuh-indexer
-      - ./config/wazuh_indexer_ssl_certs/root-ca.pem:/usr/share/wazuh-indexer/certs/root-ca.pem
+      - ./config/wazuh_indexer_ssl_certs/root-ca.pem:/usr/share/wazuh-indexer/certs/root-ca.pem:ro
       - ./config/wazuh_indexer_ssl_certs/wazuh.indexer-key.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.key
       - ./config/wazuh_indexer_ssl_certs/wazuh.indexer.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.pem
       - ./config/wazuh_indexer_ssl_certs/admin.pem:/usr/share/wazuh-indexer/certs/admin.pem
@@ -156,6 +160,7 @@ services:
       - 5601:5601
     networks:
       - traefik-public
+      - wazuh-net
     dns:
       - 10.20.0.1
     environment:
