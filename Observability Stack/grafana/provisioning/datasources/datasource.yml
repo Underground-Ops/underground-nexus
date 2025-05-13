@@ -72,4 +72,4 @@ datasources:
     tlsAuth: false
     tlsAuthWithCACert: false
   secureJsonData:
-    basicAuthPassword: "SecretPassword"
+    basicAuthPassword: "admin"
