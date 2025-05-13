@@ -48,11 +48,6 @@ chmod +x virtctl
 # Move it to a directory in your PATH
 sudo install virtctl /usr/local/bin/
 
-
-ARCH=$(uname -s | tr A-Z a-z)-$(uname -m | sed 's/x86_64/amd64/') || windows-amd64.exe
-curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH} || true
-
-
 #----------------------------------------------------------------------
 #Configure the Underground Nexus automated weekly update scheduling kit
 mv -f underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
