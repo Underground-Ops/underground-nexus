@@ -32,17 +32,26 @@ docker exec Inner-DNS-Control cp /etc/dnsmasq.d/pihole.toml /etc/pihole/pihole.t
 # Get the current KubeVirt version
 VERSION=$(kubectl get kubevirt.kubevirt.io/kubevirt -n kubevirt -o=jsonpath="{.status.observedKubeVirtVersion}")
 
-# Determine system architecture
+# Determine system architecture and download file if download can resolve
+ARCH=$(uname -s | tr A-Z a-z)-$(uname -m | sed 's/x86_64/amd64/') || windows-amd64.exe
+curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH} || true
+
+# If the above commands fail to download then a second determination will be made
 ARCH="$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/')"
 
-# Download virtctl
-curl -L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH}"
+# Download virtctl if this fails then the first download will be used for virtctl
+curl -L -o virtctl "https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH}" || true
 
 # Make it executable
 chmod +x virtctl
 
 # Move it to a directory in your PATH
 sudo install virtctl /usr/local/bin/
+
+
+ARCH=$(uname -s | tr A-Z a-z)-$(uname -m | sed 's/x86_64/amd64/') || windows-amd64.exe
+curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH} || true
+
 
 #----------------------------------------------------------------------
 #Configure the Underground Nexus automated weekly update scheduling kit
