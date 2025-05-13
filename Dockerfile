@@ -182,5 +182,6 @@ RUN echo "docker exec Athena0 curl https://raw.githubusercontent.com/Underground
 
 RUN echo "docker restart Inner-DNS-Control" >> deploy-olympiad.sh
 RUN echo "docker restart workbench" >> deploy-olympiad.sh
+RUN echo "docker restart Athena0" >> deploy-olympiad.sh
 
 RUN apk upgrade
