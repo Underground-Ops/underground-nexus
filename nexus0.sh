@@ -88,6 +88,11 @@ sudo rm "720x1440.jpg"
 sudo cp "1080x1920.jpg" "720x1440.jpg"
 sudo rm -r "*.png"
 
+# Install Visual Studio Code
+cd /
+sudo wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/main/visual-studio-code.sh
+sudo bash visual-studio-code.sh || true
+
 # Set SSH password for user abc
 echo "abc:notiaPoint1" | chpasswd
 
