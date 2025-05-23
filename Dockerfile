@@ -28,7 +28,8 @@ RUN apt-get install -y \
     htop \
     nmap \
     iputils-ping \
-    metasploit-framework
+    metasploit-framework \
+    radare2
 
 # Install dagger for built-in CI/CD
 RUN curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
