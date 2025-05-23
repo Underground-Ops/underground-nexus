@@ -49,6 +49,8 @@ chmod +x virtctl
 sudo install virtctl /usr/local/bin/
 
 #----------------------------------------------------------------------
+#Install and configure gpg
+rm /etc/apt/sources.list.d/kubernetes.list || true && apt update && apt install gpg -y && apt update --fix-missing && rm /etc/apt/keyrings/kubernetes-apt-keyring.gpg && curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list  || true && apt update && apt upgrade --fix-broken -y || true
 #Configure the Underground Nexus automated weekly update scheduling kit
 mv -f underground-nexus-dagger-ci.sh old-underground-nexus-dagger-ci.sh
 #wget -O re-initialize-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh
