@@ -76,17 +76,17 @@ To save type `ctrl+x`, next `y` and `enter`
 # Choose the Underground Nexus install that's right for you.
 Once you've activated the Underground Nexus Installer, choose the Underground Nexus install script that matches your use case from the list below. Copy the code below from your chosen install, and paste it into the  Underground Nexus Installer terminal. 
 
-# Staging Sandbox Desktop [Recommended Install]
+# DEV- Staging Sandbox Desktop [Recommended Install]
 - Install a Nexus Creator Vault configured for acceleration with AI powered by Ollama and GitHub Copilot.
 
 `docker run -itd --name=nexus-creator-vault -h nexus-creator-vault -p 1050:3000 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado --restart unless-stopped -v /dev:/dev -v creator-vault000:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/zero-trust-cockpit:creator-vault`
 
-# Security, CICD, Provisioning
+# SEC- Security, CICD, Provisioning
 - Install a complete Underground Nexus management pipeline: provision, stage and release to production.
 
 `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 80:80 -p 8080:8080 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9010:9010 -p 9050:9443 -p 18080:8080 -p 18443:18443 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64 && docker exec Underground-Nexus bash deploy-olympiad.sh`
 
-# Compatibility & Scaling Node
+# OPS- Compatibility & Scaling Node
 - Unactivated underground nexus ready to integrate with an Underground Nexus swarm or run Nexus Creator Vault in compatibility mode.
 
 `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1050:1050 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
