@@ -29,6 +29,14 @@ Debian Linux/Ubuntu: Requires Docker
 
 **Tools and Package Management Resources Include:**
 
+*- complete underground pipeline support:*
+
+*-- DEV - launch the DEV option for a desktop*
+
+*-- SEC - deploy the SEC option for a full provisioning environment*
+
+*-- OPS - use OPS to add compatibility and emulation support to a production pipeline (OPS can also be used to scale SEC provisioning environments or solve compatibility challenges for DEV environments)*
+
 *- zarf*
 
 *- git*
