@@ -62,9 +62,13 @@ To save type `ctrl+x`, next `y` and `enter`
 
 # _INSTALL HYPERVISOR AND DEVSECOPS PACKAGE MANAGER - *Run the following commands to set up the Underground Nexus Package Manager called the Cerberus Manager*_
 
+__Run Underground Nexus Installer Script in Ubuntu / Debian (or from WSL with Ubuntu if using Windows)__
+
 `wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/cerberus0/underground-nexus-installer.sh && sudo bash underground-nexus-installer.sh`
 
-Script contents:
+------------------------------------------------------------------------------ 
+
+__Script Contents:__
 
 `#!/bin/bash`
 
