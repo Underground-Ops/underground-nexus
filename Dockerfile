@@ -32,6 +32,9 @@ RUN apt-get install -y \
     locales && \
     rm -rf /var/lib/apt/lists/* || true
 
+# Configure DEV, SEC and OPS commands for DevSecOps lifecycle management and package installation
+RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/main/Dagger%20CI/Scripts/nexus-devsecops-appinator.sh && bash nexus-devsecops-appinator.sh || true
+
 # Set locale (Homebrew needs this)
 RUN locale-gen en_US.UTF-8
 ENV LANG=en_US.UTF-8
