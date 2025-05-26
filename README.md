@@ -65,6 +65,8 @@ To save type `ctrl+x`, next `y` and `enter`
   `mv virtctl-\$VERSION-linux-amd64 /usr/local/bin/virtctl;`
   `"`
 
+`sudo bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/virtual-machine-engine.sh`
+
 `sudo docker exec -it Cerberus-Manager bash`
 
 # Once installed then you can enter the Cerberus-Manager shell to get started using: 
