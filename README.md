@@ -51,6 +51,23 @@ Debian Linux/Ubuntu: Requires Docker
 
 ------------------------------------------------------------------------------  
 
+# Get started quickly with Ubuntu - build a hypervisor in minutes on fast networks
+
+- hypervisor resources work best on bare metal installs or virtual machines with nested virtualization - works best with at least 50mbps download speeds though 100mbps download speed is recommended
+- test network speeds at [speedtest.net](https://www.speedtest.net/)
+
+__Fastest way to get started - download Ubuntu Server LTS (works with Ubuntu 18 and newer):__
+
+- https://ubuntu.com/download/server
+
+__Fastest way to install Docker so you can get started:__
+
+`#make sure wget and curl are installed`
+`apt update && apt install wget curl sudo -y`
+`curl -fsSL https://get.docker.com | sudo bash`
+
+------------------------------------------------------------------------------  
+
 Wishlist is preconfigured to allow this package manager to be used as an ssh server, the startup script at `/usr/local/bin/start_services.sh` can be edited to modify startup services.
 
 Use this command to modify the startup services:
