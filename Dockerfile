@@ -33,7 +33,8 @@ RUN apt-get install -y \
     rm -rf /var/lib/apt/lists/* || true
 
 # Configure DEV, SEC and OPS commands for DevSecOps lifecycle management and package installation
-RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/main/Dagger%20CI/Scripts/nexus-devsecops-appinator.sh && bash nexus-devsecops-appinator.sh || true
+RUN wget -O /nexus-bucket/nexus-devsecops-appinator.sh "https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/main/Dagger%20CI/Scripts/nexus-devsecops-appinator.sh" && bash /nexus-bucket/nexus-devsecops-appinator.sh || true
+
 
 # Set locale (Homebrew needs this)
 RUN locale-gen en_US.UTF-8
@@ -117,7 +118,7 @@ RUN set -ex; \
 #-------------------------------
 
 # Create startup script to start services
-RUN echo '#!/bin/bash\nservice ssh start\nservice cron start\nbash -c "git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus || true"\n/bin/bash -c "/nexus-bucket/underground-nexus/update-git-packages.sh || true"\nbash -c "wishlist serve &"\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
+RUN echo '#!/bin/bash\nservice ssh start\nservice cron start\nbash -c "git clone https://github.com/Underground-Ops/underground-nexus.git /nexus-bucket/underground-nexus || true"\n/bin/bash -c "bash /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/nexus-devsecops-appinator.sh || true"\n/bin/bash -c "bash /nexus-bucket/underground-nexus/update-git-packages.sh || true"\nbash -c "wishlist serve &"\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
 
 #-------------------------------
 
