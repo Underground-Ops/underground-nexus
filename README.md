@@ -13,8 +13,11 @@ Learn more about Zarf here: https://docs.zarf.dev/
 This package manager does more than package management, CICD can be deployed with Dagger and Kubectl is installed by default for managing Kubernetes clusters.
 
 System Requirements:
+
 Windows (AMD64): Requires WSL (Ubuntu recommended)
+
 Apple Silicon: ARM support coming soon!
+
 Debian Linux/Ubuntu: Requires Docker
 
 ------------------------------------------------------------------------------  
