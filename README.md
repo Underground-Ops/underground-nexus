@@ -1,7 +1,39 @@
 # __Cerberus0 Cloud Native Cloud Package Manager and CICD Pipeline - *Agnostic Cloud CICD*__ (NEW updates on the way!)
+
 ------------------------------------------------------------------------------  
 
-# __INSTALL HYPERVISOR AND DEVSECOPS PACKAGE MANAGER - *Run the following commands to set up the Underground Nexus Package Manager called the Cerberus Manager*__
+Manage virtual machines alongside containers seemlessly with complete infrastructure lifecycle management, this resource is an alternative to VSPhere for cloud native engineering.
+
+This is the master package manager and installer for the Underground Nexus software hypervisor and DevSecOps platform.
+
+This package management pipeline includes Zarf to provide powerful package management for DevSecOps pipelines and airgapping capabilities.
+
+Learn more about Zarf here: https://docs.zarf.dev/
+
+This package manager does more than package management, CICD can be deployed with Dagger and Kubectl is installed by default for managing Kubernetes clusters.
+
+Tools and Package Management Resources Include:
+- zarf
+- git
+- kubevit hypervisor
+- helm package manager
+- homebrew package manager
+- soft serve git management server
+- dagger for cicd
+- nmap network scanner
+- cron scheduler
+- wishlist ssh management
+
+Wishlist is preconfigured to allow this package manager to be used as an ssh server, the startup script at `/usr/local/bin/start_services.sh` can be edited to modify startup services.
+
+Use this command to modify the startup services:
+`nano /usr/local/bin/start_services.sh`
+
+To save type `ctrl+x`, next `y` and `enter`
+
+------------------------------------------------------------------------------  
+
+# _INSTALL HYPERVISOR AND DEVSECOPS PACKAGE MANAGER - *Run the following commands to set up the Underground Nexus Package Manager called the Cerberus Manager*_
 
 `sudo mkdir -p ~/nexus-bucket`
 `#sudo chmod 755 ~/nexus-bucket`
@@ -19,3 +51,6 @@
   `"`
 
 `sudo docker exec -it Cerberus-Manager bash`
+
+# Once installed then you can enter the Cerberus-Manager shell to get started using: `docker exec -it Cerberus-Manager bash`
+

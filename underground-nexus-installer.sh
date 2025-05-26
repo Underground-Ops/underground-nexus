@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script installs the Cerberus Manager which is the package manager for the Underground Nexus - this also deploys the Underground Nexus Hypervisor Engine
+# UNDERGROUND NEXUS INSTALLER - This script installs the Cerberus Manager which is the package manager for the Underground Nexus - this also deploys the Underground Nexus Hypervisor Engine
 
 sudo mkdir -p ~/nexus-bucket
 #sudo chmod 755 ~/nexus-bucket
