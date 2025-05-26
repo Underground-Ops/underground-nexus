@@ -1,8 +1,7 @@
-# __Cerberus0 Cloud Native Cloud Package Manager and CICD Pipeline - *Agnostic Cloud CICD*__ (NEW updates on the way!)
-------------------------------------------------------------------------------  
+#!/bin/bash
 
-# __INSTALL HYPERVISOR AND DEVSECOPS PACKAGE MANAGER - *Run the following commands to set up the Underground Nexus Package Manager called the Cerberus Manager*__
-`
+# This script installs the Cerberus Manager which is the package manager for the Underground Nexus - this also deploys the Underground Nexus Hypervisor Engine
+
 sudo mkdir -p ~/nexus-bucket
 #sudo chmod 755 ~/nexus-bucket
 
@@ -19,4 +18,3 @@ sudo docker exec -it Cerberus-Manager sh -c "
 "
 
 sudo docker exec -it Cerberus-Manager bash
-`
