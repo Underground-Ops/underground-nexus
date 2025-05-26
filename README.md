@@ -81,14 +81,50 @@ Once you've activated the Underground Nexus Installer, choose the Underground Ne
 
 `docker run -itd --name=nexus-creator-vault -h nexus-creator-vault -p 1050:3000 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado --restart unless-stopped -v /dev:/dev -v creator-vault000:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/zero-trust-cockpit:creator-vault`
 
+Once complete head over to: http://localhost:1050
+
+This is a powerful hardware accellerated virtual desktop space where you can accellerate resources that can be used for AI, blockchain, graphics generation and beyond.
+
+If you need to build a Virtual Machine to test or learn with and do not need the scalability of KubeVirt, this virtual desktop contains a hypervisor engine that allows you to build and manage virtual machines.
+
+The virtual machines built that you decide to scale can be deployed to KubeVirt for production use and increased scalability.
+
+To verify that your hardware has virtualization enabled - type the following command to make sure "accelleration" is enabled:
+`sudo kvm-ok`
+
+This virtual desktop is AI powered with Ollama.
+
+To start using AI try opening a terminal such as Konsole and type:
+`ollama run mistral`
+
+Congratulations, you now have a local AI instance running on your hardware that's private just for you!
+
+Don't forget to check out Visual Studio Code and explore the GitHub Copilot integration to get a boost to your coding efforts.
+
+This system may be used as an MCP server if configured to be used as one with Ollama or an alternative for private AI system management.
+
+Since this is open source and based on Ubuntu, you may integrate any other AI resource of choice!
+
 # SEC - Security, CICD, Provisioning
 - Install a complete Underground Nexus management pipeline: provision, stage and release to production.
 
 `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22:22 -p 80:80 -p 8080:8080 -p 443:443 -p 1000:1000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 9010:9010 -p 9050:9443 -p 18080:8080 -p 18443:18443 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64 && docker exec Underground-Nexus bash deploy-olympiad.sh`
 
+Deploy an entire Underground Nexus containerized engine that can be used to manage security and DevSecOps. This layer can be used for provisioning and debugging, it is also a great place to host fellow engineers in Nexus Creator Vault virtual destktops so they may contribue to projects.
+
+Check out the Underground Nexus to learn more: https://github.com/Underground-Ops/underground-nexus 
+
 # OPS - Compatibility & Scaling Node
 - Unactivated underground nexus ready to integrate with an Underground Nexus swarm or run Nexus Creator Vault in compatibility mode.
 
 `docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1050:1050 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
+
+If the Nexus Creator Vault is not deploying properly, or if you are testing and debugging then this allows you to experience improved compatibility by building containers inside of this docker in docker container.
+
+This docker in docker container can also be used to swarm with Underground Nexus Managers ready to scale.
+
+Try building a Docker Swarm cluster with this to see how it works!
+
+Learn more about buildng Swarm Clusters: https://docs.docker.com/engine/swarm/ 
 
 # *__Congratulations! Now you've installed your first Underground Nexus, and you're ready to start building out your cloud.__*
