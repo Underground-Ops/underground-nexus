@@ -2,6 +2,15 @@
 
 # UNDERGROUND NEXUS INSTALLER - This script installs the Cerberus Manager which is the package manager for the Underground Nexus - this also deploys the Underground Nexus Hypervisor Engine
 
+# Ensure the script is run as sudo
+if [ "$EUID" -ne 0 ]; then
+  echo "This script must be run as sudo. Trying with sudo..."
+  exec sudo "$0" "$@"
+  exit
+fi
+
+# UNDERGROUND NEXUS INSTALLER - This script installs the Cerberus Manager...
+
 mkdir -p ~/nexus-bucket
 chmod 755 ~/nexus-bucket
 

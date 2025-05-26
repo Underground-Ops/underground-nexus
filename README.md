@@ -58,9 +58,22 @@ To save type `ctrl+x`, next `y` and `enter`
 
 # _INSTALL HYPERVISOR AND DEVSECOPS PACKAGE MANAGER - *Run the following commands to set up the Underground Nexus Package Manager called the Cerberus Manager*_
 
-`wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/cerberus0/underground-nexus-installer.sh && bash underground-nexus-installer.sh`
+`wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/cerberus0/underground-nexus-installer.sh && sudo bash underground-nexus-installer.sh`
 
 Script contents:
+
+`#!/bin/bash`
+
+`# UNDERGROUND NEXUS INSTALLER - This script installs the Cerberus Manager which is the package manager for the Underground Nexus - this also deploys the Underground Nexus Hypervisor Engine`
+
+`# Ensure the script is run with sudo`
+`if [ "$EUID" -ne 0 ]; then`
+  `echo "This script must be run with sudo. Trying with sudo..."`
+  `exec sudo "$0" "$@"`
+  `exit`
+`fi`
+
+`# UNDERGROUND NEXUS INSTALLER - This script installs the Cerberus Manager...`
 
 `mkdir -p ~/nexus-bucket`
 
