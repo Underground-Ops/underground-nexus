@@ -1,4 +1,4 @@
-# Underground Nexus Installer
+# -- Underground Nexus Installer -- Virtual Machine and Container Orchestration Engine --
 
 - Learn more about the Underground Nexus: https://github.com/Underground-Ops/underground-nexus
 
@@ -49,6 +49,15 @@ Debian Linux/Ubuntu: Requires Docker
 
 *- wishlist ssh management*
 
+------------------------------------------------------------------------------
+
+Wishlist is preconfigured to allow this package manager to be used as an ssh server, the startup script at `/usr/local/bin/start_services.sh` can be edited to modify startup services.
+
+Use this command to modify the startup services:
+`nano /usr/local/bin/start_services.sh`
+
+To save type `ctrl+x`, next `y` and `enter`
+  
 ------------------------------------------------------------------------------  
 
 # Get started quickly with Ubuntu - build a hypervisor in minutes on fast networks
@@ -65,15 +74,6 @@ __Fastest way to install Docker so you can get started:__
 `#make sure wget and curl are installed`
 `apt update && apt install wget curl sudo -y`
 `curl -fsSL https://get.docker.com | sudo bash`
-
-------------------------------------------------------------------------------  
-
-Wishlist is preconfigured to allow this package manager to be used as an ssh server, the startup script at `/usr/local/bin/start_services.sh` can be edited to modify startup services.
-
-Use this command to modify the startup services:
-`nano /usr/local/bin/start_services.sh`
-
-To save type `ctrl+x`, next `y` and `enter`
 
 ------------------------------------------------------------------------------  
 
