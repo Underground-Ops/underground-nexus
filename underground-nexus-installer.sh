@@ -17,4 +17,6 @@ sudo docker exec -it Cerberus-Manager sh -c "
   mv virtctl-\$VERSION-linux-amd64 /usr/local/bin/virtctl;
 "
 
+sudo bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/virtual-machine-engine.sh
+
 sudo docker exec -it Cerberus-Manager bash
