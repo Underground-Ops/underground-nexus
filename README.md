@@ -94,8 +94,12 @@ To verify that your hardware has virtualization enabled - type the following com
 
 This virtual desktop is AI powered with Ollama.
 
+Learn more about Ollama: https://ollama.com/ 
+
 To start using AI try opening a terminal such as Konsole and type:
 `ollama run mistral`
+
+Learn more about Mistral: https://ollama.com/library/mistral:7b 
 
 Congratulations, you now have a local AI instance running on your hardware that's private just for you!
 
