@@ -12,17 +12,31 @@ Learn more about Zarf here: https://docs.zarf.dev/
 
 This package manager does more than package management, CICD can be deployed with Dagger and Kubectl is installed by default for managing Kubernetes clusters.
 
+------------------------------------------------------------------------------  
+
 **Tools and Package Management Resources Include:**
+
 *- zarf*
+
 *- git*
+
 *- kubevit hypervisor*
+
 *- helm package manager*
+
 *- homebrew package manager*
+
 *- soft serve git management server*
+
 *- dagger for cicd*
+
 *- nmap network scanner*
+
 *- cron scheduler*
+
 *- wishlist ssh management*
+
+------------------------------------------------------------------------------  
 
 Wishlist is preconfigured to allow this package manager to be used as an ssh server, the startup script at `/usr/local/bin/start_services.sh` can be edited to modify startup services.
 
