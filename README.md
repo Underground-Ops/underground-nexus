@@ -14,7 +14,7 @@ This package manager does more than package management, CICD can be deployed wit
 
 System Requirements:
 
-Windows (AMD64): Requires WSL (Ubuntu recommended)
+Windows (AMD64): Requires WSL (Ubuntu recommended - Docker must be installed in WSL)
 
 Apple Silicon: ARM support coming soon!
 
