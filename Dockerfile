@@ -30,7 +30,7 @@ RUN apt-get install -y \
     procps \
     file \
     locales && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* || true
 
 # Set locale (Homebrew needs this)
 RUN locale-gen en_US.UTF-8
