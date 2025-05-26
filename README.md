@@ -1,6 +1,6 @@
 # __Cerberus0 Cloud Native Cloud Package Manager and CICD Pipeline - *Agnostic Cloud CICD*__ (NEW updates on the way!)
 
-- (The cloud native VMWare / VSPhere alterntive with a complete DevSecOps pipeline from prototype to production) 
+- The cloud native VMWare / VSPhere alterntive with a complete DevSecOps pipeline from prototype to production 
 ------------------------------------------------------------------------------  
 
 Manage virtual machines alongside containers seemlessly with complete infrastructure lifecycle management, this resource is an alternative to VSPhere for cloud native engineering.
@@ -13,7 +13,7 @@ Learn more about Zarf here: https://docs.zarf.dev/
 
 This package manager does more than package management, CICD can be deployed with Dagger and Kubectl is installed by default for managing Kubernetes clusters.
 
-System Requirements:
+__System Requirements:__
 
 Windows (AMD64): Requires WSL (Ubuntu recommended - Docker must be installed in WSL)
 
@@ -58,25 +58,29 @@ To save type `ctrl+x`, next `y` and `enter`
 
 # _INSTALL HYPERVISOR AND DEVSECOPS PACKAGE MANAGER - *Run the following commands to set up the Underground Nexus Package Manager called the Cerberus Manager*_
 
-`sudo mkdir -p ~/nexus-bucket`
+`wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/cerberus0/underground-nexus-installer.sh && bash underground-nexus-installer.sh`
 
-`#sudo chmod 755 ~/nexus-bucket`
+Script contents:
 
-`sudo docker run -itd --init --privileged --name=Cerberus-Manager -h Cerberus-Manager --net=host --restart=always -v /root/nexus-bucket:/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/cerberus0:latest sh -c "mkdir -p /root/nexus-bucket && cp /etc/rancher/k3s/k3s.yaml /root/nexus-bucket/k3s.yml && exec bash" && sleep 30 && sudo bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/install-k3s.sh`
+`mkdir -p ~/nexus-bucket`
 
-`sudo cp /etc/rancher/k3s/k3s.yaml /root/nexus-bucket/k3s.yml`
-`sudo docker exec Cerberus-Manager bash -c "mkdir -p /root/.kube && cp /nexus-bucket/k3s.yml /root/.kube/config"`
+`#chmod 755 ~/nexus-bucket`
 
-`sudo docker exec -it Cerberus-Manager sh -c "`
+`docker run -itd --init --privileged --name=Cerberus-Manager -h Cerberus-Manager --net=host --restart=always -v /root/nexus-bucket:/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/cerberus0:latest sh -c "mkdir -p /root/nexus-bucket && cp /etc/rancher/k3s/k3s.yaml /root/nexus-bucket/k3s.yml && exec bash" && sleep 30 && bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/install-k3s.sh`
+
+`cp /etc/rancher/k3s/k3s.yaml /root/nexus-bucket/k3s.yml`
+`docker exec Cerberus-Manager bash -c "mkdir -p /root/.kube && cp /nexus-bucket/k3s.yml /root/.kube/config"`
+
+`docker exec -it Cerberus-Manager sh -c "`
   `VERSION=\$(curl -s https://storage.googleapis.com/kubevirt-prow/release/kubevirt/kubevirt/stable.txt);`
   `wget https://github.com/kubevirt/kubevirt/releases/download/\$VERSION/virtctl-\$VERSION-linux-amd64;`
   `chmod +x virtctl-\$VERSION-linux-amd64;`
   `mv virtctl-\$VERSION-linux-amd64 /usr/local/bin/virtctl;`
   `"`
 
-`sudo bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/virtual-machine-engine.sh`
+`bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/virtual-machine-engine.sh`
 
-`sudo docker exec -it Cerberus-Manager bash`
+`docker exec -it Cerberus-Manager bash`
 
 # Once installed then you can enter the Cerberus-Manager shell to get started using: 
 
