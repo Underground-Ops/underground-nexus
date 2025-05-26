@@ -1,5 +1,6 @@
 # __Cerberus0 Cloud Native Cloud Package Manager and CICD Pipeline - *Agnostic Cloud CICD*__ (NEW updates on the way!)
 
+- (The cloud native VMWare / VSPhere alterntive with a complete DevSecOps pipeline from prototype to production) 
 ------------------------------------------------------------------------------  
 
 Manage virtual machines alongside containers seemlessly with complete infrastructure lifecycle management, this resource is an alternative to VSPhere for cloud native engineering.
