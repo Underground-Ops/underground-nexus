@@ -80,7 +80,9 @@ __Fastest way to get started - download Ubuntu Server LTS (works with Ubuntu 18 
 __Fastest way to install Docker so you can get started:__
 
 `#make sure wget and curl are installed`
+
 `apt update && apt install wget curl sudo -y`
+
 `curl -fsSL https://get.docker.com | sudo bash`
 
 ------------------------------------------------------------------------------  
