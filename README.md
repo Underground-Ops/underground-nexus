@@ -191,3 +191,25 @@ Try building a Docker Swarm cluster with this to see how it works!
 Learn more about buildng Swarm Clusters: https://docs.docker.com/engine/swarm/ 
 
 # *__Congratulations! Now you've installed your first Underground Nexus, and you're ready to start building out your cloud.__*
+
+------------------------------------------------------------------------------  
+
+# **__Use AI in the DEV desktop to configure into a VSPhere (from VMWare) alternative__**
+
+The Underground Nexus ecosystem is completely open source and vendor agnostic, making it an incredibly economic cloud native technology for managing production resources at scale.
+
+Use the DEV desktop (configured to http://localhost:1050 by default) to use GitHub Copilot and Ollama to upgrade your Kubernetes cluster to be a full enterprise grade VSPhere alternative.
+
+__--Policy Enforcement--__
+https://github.com/open-policy-agent/gatekeeper
+
+__--Backup Management--__
+https://github.com/vmware-tanzu/velero
+
+__--Virtual Machine Engine Upgrade for Storage Management and a Complete Orchestration Management UI--__
+https://docs.harvesterhci.io/v1.3/vm/index/
+
+__--Integrate wtih Rancher for Master UI - Manager Containers and VM's Together--__
+https://docs.harvesterhci.io/v1.2/rancher/index/
+
+*Provide these links to an AI to use `kubectl` from the Cerbereus Manager's shell to build out a complete Harvester configuration that uses Rancher to allow virtual machines and containers to be managed together seemlessly at scale.*
