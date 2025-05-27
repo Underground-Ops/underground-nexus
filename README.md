@@ -200,16 +200,28 @@ The Underground Nexus ecosystem is completely open source and vendor agnostic, m
 
 Use the DEV desktop (configured to http://localhost:1050 by default) to use GitHub Copilot and Ollama to upgrade your Kubernetes cluster to be a full enterprise grade VSPhere alternative.
 
-__--Policy Enforcement--__
+__--Gatekeeper - Policy Enforcement--__
+
 https://github.com/open-policy-agent/gatekeeper
 
-__--Backup Management--__
+__--Velero - Backup Management--__
+
 https://github.com/vmware-tanzu/velero
 
-__--Virtual Machine Engine Upgrade for Storage Management and a Complete Orchestration Management UI--__
+__--Harvester - Virtual Machine Engine Upgrade for Storage Management and a Complete Orchestration Management UI--__
+
 https://docs.harvesterhci.io/v1.3/vm/index/
 
-__--Integrate wtih Rancher for Master UI - Manager Containers and VM's Together--__
+__--Rancher - UI for Production Infrastructure Management--__
+
+https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster
+
+__--Harvetster Rancher Integration - Integrate wtih Rancher for Master UI - Manager Containers and VM's Together--__
+
 https://docs.harvesterhci.io/v1.2/rancher/index/
 
 *Provide these links to an AI to use `kubectl` from the Cerbereus Manager's shell to build out a complete Harvester configuration that uses Rancher to allow virtual machines and containers to be managed together seemlessly at scale.*
+
+**To get started - enter the Underground Nexus Package Manager called Cerberus Manager by typing - after running the command below to access the Cerberus-Manager CLI shell test Kubernetes by typing `kubectl get nodes` from the Cerberus-Manager:**
+
+`docker exec -it Cerberus-Manager bash`
