@@ -196,11 +196,47 @@ Learn more about buildng Swarm Clusters: https://docs.docker.com/engine/swarm/
 
 ------------------------------------------------------------------------------  
 
+# Here is your first virtual machine template that can be used to workshop with Ollama, GitLab Duo and GitHub Copilot
+
+Refer to the official documentation for how to make custom virtual machine configuration and execute helpful commands:
+
+- https://kubevirt.io/user-guide/user_workloads/accessing_virtual_machines/
+
+1. __Download and run the lubuntu virtual machine template - use nano to make any edits to resources incuding but not limited to CPU, RAM and any other virtual machine configuration:__
+
+`wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/cerberus0/Virtual%20Machine%20Templates/lubuntu-vm/deploy-lubuntu-vm-template.sh`
+
+(this script downloads a lubuntu .iso image, configures persistent storage and deploys a virtual machine)
+
+2. Review and edit the script using `nano` before running (optional):
+
+`nano deploy-lubuntu-vm-template.sh`
+
+(this file allows you to adjust the cpu an ram alongside any other setting for the virtual machine before executing the script - share this with an AI LLM helper of choice to get support to make desired changes)
+
+3. Run the command below then head to the virtual machine at the KubeVirt Manager UI to manage the virtual machine and access its desktop:
+
+`bash deploy-lubuntu-vm-template.sh`
+
+- __Access Virtual Machine Manager UI:__ http://localhost:8080 
+
+(if using the Undergrond Nexus SEC container instead of the default k3s kubernetes configuration depoyed from the Cerberus Manager then the default port is instead: http://localhost:18080)
+
+4. Install the lubuntu iso image and then once the virtual machine asks to eject the iso disk - run this command:
+
+`wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/refs/heads/cerberus0/Virtual%20Machine%20Templates/lubuntu-vm/eject-vm-iso-disk.sh && bash eject-vm-iso-disk.sh`
+
+(head back to the virtual machine manager to access your fully prepared ready-to-use lubuntu virtual machine)
+
+__Provide these templates to your favorite AI code helper to configure your next virtual machine!__
+
+------------------------------------------------------------------------------  
+
 # **__Use AI in the DEV desktop to configure into a VSPhere (from VMWare) alternative__**
 
 The Underground Nexus ecosystem is completely open source and vendor agnostic, making it an incredibly economic cloud native technology for managing production resources at scale.
 
-Use the DEV desktop (configured to http://localhost:1050 by default) to use GitHub Copilot and Ollama to upgrade your Kubernetes cluster to be a full enterprise grade VSPhere alternative.
+Use the DEV desktop (configured to http://localhost:1050 by default) to use GitHub Copilot, GitLab Duo and Ollama to upgrade your Kubernetes cluster to be a full enterprise grade VSPhere alternative.
 
 __--Gatekeeper - Policy Enforcement--__
 
