@@ -110,12 +110,14 @@ __Alternate Lighter Weight Install - Deploy with NO Virtual Machine Engine (best
 
 `docker run -itd --init --privileged --name=Cerberus-Manager -h Cerberus-Manager --net=host --restart=always -v /root/nexus-bucket:/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/cerberus0:latest sh -c "mkdir -p /root/nexus-bucket && bash /nexus-devsecops-appinator.sh || true && exec bash"`
 
-# Once installed, then you can enter the Cerberus-Manager CLI shell to get started. Use: 
+# ACCESS THE CERBERUS MANAGER CLI -- Once installed you can enter the Cerberus-Manager CLI shell to get started -- Use: 
 
 `docker exec -it Cerberus-Manager bash`
 
 # Choose the Underground Nexus installs that are right for your server build.
 Once you've activated the Underground Nexus Installer, choose the Underground Nexus install script that matches your use case from the list below. Copy the code below from your chosen install, and paste it into the Underground Nexus Installer terminal. 
+
+## NOTICE: The `DEV` and `SEC` commands can take a VERY long time - these commands may take 20+ minutes to complete (don't be surprised if these commands take a while)
 
 # DEV - Staging Sandbox Desktop [Recommended Install]
 - Install a Nexus Creator Vault configured for acceleration with AI, powered by Ollama and GitHub Copilot.
@@ -174,7 +176,7 @@ To deploy OPS mode type: `docker exec Cerberus-Manager OPS`
 
 (typing `OPS` in the Cerberus Manager CLI deploys the command below)
 
-`docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1050:1050 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
+`docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1060:1050 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
 
 If the Nexus Creator Vault is not deploying properly, or if you are testing and debugging, then this allows you to experience improved compatibility by building containers inside of this Docker-in-Docker container.
 
