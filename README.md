@@ -13,9 +13,13 @@ Manage virtual machines alongside containers seemlessly with complete infrastruc
 
 This is the master package manager and installer for the Underground Nexus software hypervisor and DevSecOps platform.
 
-This package-management pipeline includes Zarf to provide powerful package management for DevSecOps pipelines and airgapping capabilities.
+This package-management pipeline includes Zarf to provide powerful package management for DevSecOps pipelines and airgapping capabilities. (pre-installed)
 
 Learn more about Zarf here: https://docs.zarf.dev/
+
+Upgrade the Cerberus Manager to operate as a CICD pipeline with Dagger. (pre-installed)
+
+Learn more about Dagger here: https://docs.dagger.io/
 
 This package manager does more than package management: CICD can also be deployed with Dagger and Kubectl is installed by default for managing Kubernetes clusters.
 
@@ -187,6 +191,8 @@ If the Nexus Creator Vault is not deploying properly, or if you are testing and 
 This Docker-in-Docker container can also be used to swarm with Underground Nexus Managers ready to scale.
 
 Try building a Docker Swarm cluster with this to see how it works!
+
+This is also the a great place to deploy CICD (Continuous Integration and Continuous Deployment) runners that need their own Docker socket, especially quality assurance runners focussed on testing code before a project is sent to production.
 
 Learn more about buildng Swarm Clusters: https://docs.docker.com/engine/swarm/ 
 
