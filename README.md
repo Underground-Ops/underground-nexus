@@ -167,6 +167,10 @@ To deploy SEC mode type: `docker exec Cerberus-Manager SEC`
 
 Deploy an entire Underground Nexus containerized engine that can be used to manage security and DevSecOps. This layer can be used for provisioning and debugging. It is also a great place to host fellow engineers in their own Nexus Creator Vault virtual destktops so they may contribue to projects.
 
+Access the Underground Nexus workbench at: http://localhost:1000
+
+Access Portainer for an Underground Nexus container UI at: https://localhost:9050
+
 Check out the Underground Nexus to learn more: https://github.com/Underground-Ops/underground-nexus 
 
 # OPS - Compatibility & Scaling Node
