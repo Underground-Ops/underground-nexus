@@ -1,6 +1,7 @@
 # -- Underground Nexus Installer -- Virtual Machine and Container Orchestration Engine --
 
-- New here? Start with Cloud Jam - launch your Nexus, master deployment: https://cloudunderground.dev/products/cloud-jam
+## Learn to master cloud skills with Underground Nexus. Check out Cloud Jam: https://cloudunderground.dev/products/cloud-jam
+
 - Learn more about the Underground Nexus: https://github.com/Underground-Ops/underground-nexus
 
 # __Cerberus0 Cloud Native Cloud Package Manager and CICD Pipeline - *Agnostic Cloud CICD*__ (NEW updates on the way!)
@@ -255,3 +256,5 @@ https://docs.harvesterhci.io/v1.2/rancher/index/
 `docker exec -it Cerberus-Manager bash`
 
 *After running the command above, test Kubernetes by typing `kubectl get nodes` from the Cerberus-Manager shell.*
+
+## Learn to master cloud skills with Underground Nexus. Check out Cloud Jam: https://cloudunderground.dev/products/cloud-jam

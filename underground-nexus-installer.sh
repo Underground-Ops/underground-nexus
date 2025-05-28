@@ -30,4 +30,6 @@ bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/virtual-machine-en
 
 docker exec Cerberus-Manager bash /nexus-devsecops-appinator.sh
 
+docker restart Cerberus-Manager
+
 docker exec -it Cerberus-Manager bash
