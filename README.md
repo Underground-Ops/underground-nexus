@@ -55,6 +55,8 @@ __- Storage: 50gb minimum (200gb recommended)__
 
 *- git*
 
+*- k3s Kubernetes*
+
 *- kubevit hypervisor*
 
 *- helm package manager*
