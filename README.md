@@ -1,5 +1,6 @@
 # -- Underground Nexus Installer -- Virtual Machine and Container Orchestration Engine --
 
+- New here? Start with Cloud Jam - launch your Nexus, master deployment: https://cloudunderground.dev/products/cloud-jam
 - Learn more about the Underground Nexus: https://github.com/Underground-Ops/underground-nexus
 
 # __Cerberus0 Cloud Native Cloud Package Manager and CICD Pipeline - *Agnostic Cloud CICD*__ (NEW updates on the way!)
