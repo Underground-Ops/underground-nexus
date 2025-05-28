@@ -25,6 +25,14 @@ __System Requirements:__
 
 - Debian Linux/Ubuntu: Requires Docker
 
+__- CPU: 4cpu minimum (8 recommended)__
+
+__- RAM: 8gb minimum (32gb recommended)__
+
+__- Storage: 50gb minimum (200gb recommended)__
+
+*Since this technology includes a full hypervisor and infrastructure management / development focussed ecosystem, the more resources you have the more you can do with this technology.*
+
 ------------------------------------------------------------------------------  
 
 **Tools and Package Management Resources Include:**
