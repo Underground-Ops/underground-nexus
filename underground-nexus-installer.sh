@@ -28,4 +28,6 @@ docker exec -it Cerberus-Manager sh -c "
 
 bash /root/nexus-bucket/underground-nexus/'Dagger CI'/Scripts/virtual-machine-engine.sh
 
+docker exec Cerberus-Manager bash /nexus-devsecops-appinator.sh
+
 docker exec -it Cerberus-Manager bash
