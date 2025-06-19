@@ -186,7 +186,7 @@ To deploy OPS mode type: `docker exec Cerberus-Manager OPS`
 
 (typing `OPS` in the Cerberus Manager CLI deploys the command below)
 
-`docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1060:1050 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
+`docker run -itd --name=Underground-Ops -h Underground-Ops --privileged --init -p 1060:1050 -v /dev:/dev -v underground-ops-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket natoascode/underground-nexus:amd64`
 
 If the Nexus Creator Vault is not deploying properly, or if you are testing and debugging, then this allows you to experience improved compatibility by building containers inside of this Docker-in-Docker container.
 
