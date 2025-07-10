@@ -198,6 +198,16 @@ This is also the a great place to deploy CICD (Continuous Integration and Contin
 
 Learn more about buildng Swarm Clusters: https://docs.docker.com/engine/swarm/ 
 
+Use the following rebuild commands from `Cerberus-Manager` to automatically delete and rebuild any of the `DEV`, `SEC` or `OPS` instances:
+
+- `DEV-rebuild`
+
+- `SEC-rebuild`
+
+- `OPS-rebuild`
+
+**WARNING: These rebuild commands will completely *DELETE* all volumes and data stored in these intances! (only use these commands if you wish to fully wipe and reload the `DEV`, `SEC` or `OPS` environments)**
+
 # *__Congratulations! Now you've installed your first Underground Nexus, and you're ready to start building out your cloud.__*
 
 ------------------------------------------------------------------------------  
