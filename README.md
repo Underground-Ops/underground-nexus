@@ -114,7 +114,7 @@ __Run Underground Nexus Installer Script in Ubuntu / Debian (or from WSL with Ub
 
 __Alternate Lighter Weight Install - Deploy with NO Virtual Machine Engine (best option for **Docker Desktop** or Colima):__
 
-`docker run -itd --init --privileged --name=Cerberus-Manager -h Cerberus-Manager --net=host --restart=always -v /root/nexus-bucket:/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/cerberus0:latest sh -c "mkdir -p /root/nexus-bucket && bash /nexus-devsecops-appinator.sh || true && exec bash"`
+`docker run -itd --privileged --name=Cerberus-Manager -h Cerberus-Manager --net=host --restart=always -v /root/nexus-bucket:/nexus-bucket -v /var/run/docker.sock:/var/run/docker.sock natoascode/cerberus0:latest sh -c "mkdir -p /root/nexus-bucket && bash /nexus-devsecops-appinator.sh || true && exec bash"`
 
 # ACCESS THE CERBERUS MANAGER CLI -- Once installed you can enter the Cerberus-Manager CLI shell to get started -- Use: 
 
@@ -132,7 +132,7 @@ To deploy DEV mode type: `docker exec Cerberus-Manager DEV`
 
 (typing `DEV` in the Cerberus Manager CLI deploys the command below)
 
-`docker run -itd --name=nexus-creator-vault -h nexus-creator-vault -p 1050:3000 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado --restart unless-stopped -v /dev:/dev -v creator-vault000:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/zero-trust-cockpit:creator-vault`
+`docker run -itd --name=nexus-creator-vault -h nexus-creator-vault --privileged -p 1050:3000 -e PUID=1050 -e PGID=1050 -e TZ=America/Colorado --restart unless-stopped -v /dev:/dev -v creator-vault0:/config -v /var/run/docker.sock:/var/run/docker.sock natoascode/zero-trust-cockpit:creator-vault`
 
 Once complete head over to: http://localhost:1050
 
