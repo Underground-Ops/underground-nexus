@@ -13,7 +13,6 @@ VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 # Install necessary tools and dependencies
 RUN apt-get update
 RUN apt-get install -y \
-    firewalld \
     wireshark \
     kubectl \
     curl \
@@ -23,7 +22,6 @@ RUN apt-get install -y \
     nano \
     docker-compose \
     openssh-server \
-    cron \
     sudo \
     htop \
     nmap \
