@@ -25,7 +25,9 @@ VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 #     full systemd is never selected by apt's resolver.
 #   - Pre-provide /usr/lib/sysusers.d/basic.conf with the upstream content
 #     (sourced from systemd/sysusers.d/basic.conf.in) so the sysusers
-#     postinst can complete its sysusers run.
+#     postinst can complete its sysusers run. We use printf rather than
+#     a heredoc because Docker Hub's older BuildKit (May 2022) does not
+#     reliably parse heredoc syntax inside multi-line RUN blocks.
 #   - Seed /etc/machine-id and /run/systemd/container as belt-and-suspenders
 #     for any tool that does container detection.
 #   - Install policy-rc.d to deny service starts during package configure.
@@ -42,31 +44,31 @@ RUN set -eux; \
     echo "docker" > /run/systemd/container; \
     printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d; \
     chmod +x /usr/sbin/policy-rc.d; \
-    cat > /usr/lib/sysusers.d/basic.conf <<'BASICCONF'
-# Pre-provided by Athena0 build to satisfy systemd-standalone-sysusers
-# postinst on restricted build sandboxes. Sourced from the upstream
-# systemd basic.conf.in template.
-g root 0 - -
-u root 0:0 "Super User" /root
-g nogroup 65534 - -
-u! nobody 65534:65534 "Kernel Overflow User" -
-g adm - - -
-g wheel - - -
-g utmp - - -
-g audio - - -
-g cdrom - - -
-g dialout - - -
-g disk - - -
-g input - - -
-g kmem - - -
-g kvm - - -
-g lp - - -
-g render - - -
-g tape - - -
-g tty - - -
-g video - - -
-g users - - -
-BASICCONF
+    printf '%s\n' \
+      '# Pre-provided by Athena0 build to satisfy systemd-standalone-sysusers' \
+      '# postinst on restricted build sandboxes. Sourced from upstream' \
+      '# systemd basic.conf.in template.' \
+      'g root 0 - -' \
+      'u root 0:0 "Super User" /root' \
+      'g nogroup 65534 - -' \
+      'u! nobody 65534:65534 "Kernel Overflow User" -' \
+      'g adm - - -' \
+      'g wheel - - -' \
+      'g utmp - - -' \
+      'g audio - - -' \
+      'g cdrom - - -' \
+      'g dialout - - -' \
+      'g disk - - -' \
+      'g input - - -' \
+      'g kmem - - -' \
+      'g kvm - - -' \
+      'g lp - - -' \
+      'g render - - -' \
+      'g tape - - -' \
+      'g tty - - -' \
+      'g video - - -' \
+      'g users - - -' \
+      > /usr/lib/sysusers.d/basic.conf
 
 # Install systemd-standalone-sysusers FIRST, without recommends, so it
 # satisfies the alternative dependency that downstream packages need
