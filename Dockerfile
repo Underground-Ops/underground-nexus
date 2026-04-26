@@ -11,7 +11,11 @@ EXPOSE 22
 VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 
 # Install necessary tools and dependencies
-RUN apt-get update
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends dbus && \
+    dbus-uuidgen > /etc/machine-id && \
+    ln -sf /etc/machine-id /var/lib/dbus/machine-id
+RUN apt install systemd-standalone-sysusers
 RUN apt-get install -y \
     wireshark \
     kubectl \
@@ -22,7 +26,7 @@ RUN apt-get install -y \
     terraform \
     nano \
     docker-compose \
-    openssh-client \
+    openssh-server \
     sudo \
     htop \
     nmap \
@@ -52,7 +56,7 @@ RUN sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/underground-nexus-dag
 WORKDIR "/"
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash || true
 RUN apt-get update && apt-get install -y ca-certificates curl && apt-get install -y apt-transport-https && curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list && apt-get update && apt-get install -y kubectl || true
-RUN rm /etc/apt/sources.list.d/kubernetes.list || true && apt update && apt install gpg -y && apt update --fix-missing && rm /etc/apt/keyrings/kubernetes-apt-keyring.gpg && curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list  || true && apt update || true
+RUN rm /etc/apt/sources.list.d/kubernetes.list || true && apt update && apt install gpg -y && apt update --fix-missing && rm /etc/apt/keyrings/kubernetes-apt-keyring.gpg && curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list  || true && apt update && apt upgrade --fix-broken -y || true
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ || true
 RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/enable-weekly-updates.sh
 RUN sh enable-weekly-updates.sh || true
