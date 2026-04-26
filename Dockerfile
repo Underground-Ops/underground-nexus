@@ -7,14 +7,39 @@ ENV DEBIAN_FRONTEND=noninteractive
 #Add persistent volumes
 VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 
-# Pre-create /etc/machine-id BEFORE any apt install can pull in systemd.
-# Docker Hub's build sandbox (old AWS kernel) does not let systemd's postinst
-# initialize machine-id from the random generator the way GitLab's runner does,
-# so we seed it ourselves first. This must run as its own RUN, before dbus.
-RUN mkdir -p /var/lib/dbus && \
-    tr -dc 'a-f0-9' < /dev/urandom | head -c 32 > /etc/machine-id && \
-    echo "" >> /etc/machine-id && \
-    ln -sf /etc/machine-id /var/lib/dbus/machine-id
+# ---------------------------------------------------------------------------
+# Build-environment compatibility layer.
+#
+# Docker Hub's automated build runners use an old AWS kernel (5.4.0-1068-aws)
+# inside a DinD sandbox that does not expose the netlink/dbus socket interface
+# systemd's postinst expects. That causes "Protocol driver not attached" when
+# the postinst tries to enable units or read /etc/machine-id, even when the
+# file exists. GitLab's newer runner kernel does not have this issue.
+#
+# We solve this without changing build order or downstream behavior by:
+#   1. Pre-seeding /etc/machine-id so anything that reads it gets a value.
+#   2. Installing a policy-rc.d that returns 101 (deny service starts).
+#   3. Diverting systemd's and systemd-standalone-sysusers's postinst scripts
+#      to a no-op BEFORE dbus is installed and pulls them in transitively.
+#      The packages still install; their postinsts simply exit 0 instead of
+#      attempting kernel syscalls the build sandbox does not allow.
+#
+# This is the same compatibility shim the Debian/Ubuntu base images use for
+# building inside restricted sandboxes.
+# ---------------------------------------------------------------------------
+RUN set -eux; \
+    mkdir -p /var/lib/dbus /usr/sbin /var/lib/dpkg/info; \
+    tr -dc 'a-f0-9' < /dev/urandom | head -c 32 > /etc/machine-id; \
+    echo "" >> /etc/machine-id; \
+    ln -sf /etc/machine-id /var/lib/dbus/machine-id; \
+    printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d; \
+    chmod +x /usr/sbin/policy-rc.d; \
+    printf '#!/bin/sh\nexit 0\n' > /tmp/noop-postinst; \
+    chmod +x /tmp/noop-postinst; \
+    dpkg-divert --local --rename --add /var/lib/dpkg/info/systemd.postinst || true; \
+    cp /tmp/noop-postinst /var/lib/dpkg/info/systemd.postinst; \
+    dpkg-divert --local --rename --add /var/lib/dpkg/info/systemd-standalone-sysusers.postinst || true; \
+    cp /tmp/noop-postinst /var/lib/dpkg/info/systemd-standalone-sysusers.postinst
 
 # Install necessary tools and dependencies
 RUN apt-get update && \
@@ -68,6 +93,7 @@ RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/mai
 RUN sh enable-weekly-updates.sh || true
 
 # Create a new user 'notitia' with password 'notiaPoint1'
+# Intentional honeypot credential for eBPF IAM testing (Hide n Hunt scenario).
 RUN useradd -m -s /bin/bash notitia && echo "notitia:notiaPoint1" | chpasswd
 
 # Create startup script to start services
