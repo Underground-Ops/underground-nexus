@@ -11,61 +11,87 @@ VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 # Build-environment compatibility layer.
 #
 # Docker Hub's old runner kernel (5.4.0-1068-aws, May 2022 Docker engine)
-# can't satisfy systemd's postinst syscalls. After many attempts to pre-stage
-# what the postinsts want (machine-id, basic.conf, container marker,
-# policy-rc.d, dpkg-divert), the systemd-standalone-sysusers postinst
-# specifically still fails with "Failed to read 'basic.conf'" even when the
-# file is provably present in /usr/lib/sysusers.d/.
+# can't satisfy the syscalls systemd-sysusers needs, even when basic.conf
+# is pre-staged. The systemd-standalone-sysusers postinst keeps failing
+# with "Failed to read 'basic.conf'" regardless of where we put the file.
 #
-# Pragmatic strategy: don't fight the postinst. Let it fail, then force
-# dpkg to mark the package configured anyway. The actual binary
-# (systemd-sysusers) is installed and functional after this; only the
-# postinst's user-creation step gets skipped, which doesn't affect Athena0
-# at runtime since we create users explicitly later.
+# Final strategy: install the package, let the postinst fail, then replace
+# /bin/systemd-sysusers with a no-op stub and re-run dpkg --configure.
+# The re-configure invokes our stub (which exits 0), which tells dpkg the
+# package is fully configured. The "systemd | systemd-standalone-sysusers |
+# systemd-sysusers" alternative dependency is now satisfied for downstream
+# packages, and the install cascade completes normally.
 #
-# We still pre-stage the compat shims (machine-id, container marker,
-# policy-rc.d) because they help keep other packages' postinsts quiet.
+# We also stub out other postinst callers that fail in this restricted
+# sandbox (systemd-tmpfiles for tmpfiles.d entries) and pre-stage
+# /etc/dbus-1/system.conf and the messagebus user that dbus's postinst
+# needs.
 # ---------------------------------------------------------------------------
 RUN set -eux; \
-    mkdir -p /var/lib/dbus /run/systemd /usr/lib/sysusers.d /usr/sbin; \
+    mkdir -p /var/lib/dbus /run/systemd /usr/lib/sysusers.d /usr/sbin /etc/dbus-1; \
     tr -dc 'a-f0-9' < /dev/urandom | head -c 32 > /etc/machine-id; \
     echo "" >> /etc/machine-id; \
     ln -sf /etc/machine-id /var/lib/dbus/machine-id; \
     echo "docker" > /run/systemd/container; \
     echo '#!/bin/sh' > /usr/sbin/policy-rc.d; \
     echo 'exit 101' >> /usr/sbin/policy-rc.d; \
-    chmod +x /usr/sbin/policy-rc.d
+    chmod +x /usr/sbin/policy-rc.d; \
+    groupadd -r messagebus 2>/dev/null || true; \
+    useradd -r -g messagebus -d /nonexistent -s /usr/sbin/nologin messagebus 2>/dev/null || true
 
-# Install dbus and systemd-standalone-sysusers, ignoring postinst failures.
-# The packages get unpacked (binaries land on disk and work fine); only
-# the postinst's user/group seeding gets skipped, which we don't need
-# because Kali's base image already has the standard system users.
-# `|| true` and the follow-up `dpkg --configure --force-all` mark
-# everything as fully configured even if postinsts complained.
-RUN apt-get update && \
+# First-pass install: dbus and systemd-standalone-sysusers will fail their
+# postinsts. We expect this. Then we replace /bin/systemd-sysusers and
+# /bin/systemd-tmpfiles with no-op stubs and re-run dpkg --configure.
+# After this block, those packages are marked fully configured and
+# downstream packages can install normally.
+RUN set -eux; \
+    apt-get update; \
     apt-get install -y --no-install-recommends dbus systemd-standalone-sysusers || true; \
-    dpkg --configure --force-all -a || true; \
-    apt-get install -yf --no-install-recommends || true; \
+    if [ -f /bin/systemd-sysusers ]; then \
+        echo '#!/bin/sh' > /bin/systemd-sysusers; \
+        echo 'exit 0' >> /bin/systemd-sysusers; \
+        chmod +x /bin/systemd-sysusers; \
+    fi; \
+    if [ -f /bin/systemd-tmpfiles ]; then \
+        echo '#!/bin/sh' > /bin/systemd-tmpfiles; \
+        echo 'exit 0' >> /bin/systemd-tmpfiles; \
+        chmod +x /bin/systemd-tmpfiles; \
+    fi; \
+    dpkg --configure --force-all -a; \
+    apt-get install -yf --no-install-recommends; \
     dbus-uuidgen --ensure=/etc/machine-id || true
 
-RUN apt-get install -y \
-    wireshark \
-    kubectl \
-    curl \
-    wget \
-    cron \
-    cpu-checker \
-    terraform \
-    nano \
-    docker-compose \
-    sudo \
-    htop \
-    nmap \
-    iputils-ping \
-    metasploit-framework \
-    radare2 || true; \
-    dpkg --configure --force-all -a || true; \
-    apt-get install -yf || true
+# Now install the main toolset. The systemd-sysusers stub will be invoked
+# by any package's postinst that needs it, returning success.
+RUN set -eux; \
+    apt-get install -y --no-install-recommends \
+        wireshark \
+        kubectl \
+        curl \
+        wget \
+        cron \
+        cpu-checker \
+        terraform \
+        nano \
+        docker-compose \
+        sudo \
+        htop \
+        nmap \
+        iputils-ping \
+        metasploit-framework \
+        radare2 || true; \
+    if [ -f /bin/systemd-sysusers ]; then \
+        echo '#!/bin/sh' > /bin/systemd-sysusers; \
+        echo 'exit 0' >> /bin/systemd-sysusers; \
+        chmod +x /bin/systemd-sysusers; \
+    fi; \
+    if [ -f /bin/systemd-tmpfiles ]; then \
+        echo '#!/bin/sh' > /bin/systemd-tmpfiles; \
+        echo 'exit 0' >> /bin/systemd-tmpfiles; \
+        chmod +x /bin/systemd-tmpfiles; \
+    fi; \
+    dpkg --configure --force-all -a; \
+    apt-get install -yf
 
 # Install dagger for built-in CI/CD
 RUN curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
