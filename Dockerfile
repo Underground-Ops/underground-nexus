@@ -15,7 +15,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends dbus && \
     dbus-uuidgen > /etc/machine-id && \
     ln -sf /etc/machine-id /var/lib/dbus/machine-id
+
 RUN apt install systemd-standalone-sysusers -y
+
 RUN apt-get install -y \
     wireshark \
     kubectl \
