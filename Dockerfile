@@ -13,40 +13,42 @@ VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 # Docker Hub's automated build runners use an old AWS kernel (5.4.0-1068-aws)
 # inside a DinD sandbox that does not expose the netlink/dbus socket interface
 # systemd's postinst expects. That causes "Protocol driver not attached" when
-# the postinst tries to enable units or read /etc/machine-id, even when the
-# file exists. GitLab's newer runner kernel does not have this issue.
+# the postinst tries to enable units. GitLab's newer runner kernel does not
+# have this issue.
 #
-# We solve this without changing build order or downstream behavior by:
-#   1. Pre-seeding /etc/machine-id so anything that reads it gets a value.
-#   2. Installing a policy-rc.d that returns 101 (deny service starts).
-#   3. Diverting systemd's and systemd-standalone-sysusers's postinst scripts
-#      to a no-op BEFORE dbus is installed and pulls them in transitively.
-#      The packages still install; their postinsts simply exit 0 instead of
-#      attempting kernel syscalls the build sandbox does not allow.
+# The fix is to satisfy the "systemd | systemd-standalone-sysusers |
+# systemd-sysusers" alternative dependency that cron-daemon-common,
+# dbus-system-bus-common, and others use - WITHOUT letting full systemd be
+# pulled in. We do this by installing systemd-standalone-sysusers FIRST,
+# before anything else, so apt's dependency resolver picks it as the
+# satisfier for the alternative and never pulls in the systemd package whose
+# postinst is the actual problem.
 #
-# This is the same compatibility shim the Debian/Ubuntu base images use for
-# building inside restricted sandboxes.
+# We also seed /etc/machine-id and /run/systemd/container so any tool that
+# checks "am I in a container" gets the right answer and skips privileged
+# operations.
 # ---------------------------------------------------------------------------
 RUN set -eux; \
-    mkdir -p /var/lib/dbus /usr/sbin /var/lib/dpkg/info; \
+    mkdir -p /var/lib/dbus /run/systemd; \
     tr -dc 'a-f0-9' < /dev/urandom | head -c 32 > /etc/machine-id; \
     echo "" >> /etc/machine-id; \
     ln -sf /etc/machine-id /var/lib/dbus/machine-id; \
+    echo "docker" > /run/systemd/container; \
     printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d; \
-    chmod +x /usr/sbin/policy-rc.d; \
-    printf '#!/bin/sh\nexit 0\n' > /tmp/noop-postinst; \
-    chmod +x /tmp/noop-postinst; \
-    dpkg-divert --local --rename --add /var/lib/dpkg/info/systemd.postinst || true; \
-    cp /tmp/noop-postinst /var/lib/dpkg/info/systemd.postinst; \
-    dpkg-divert --local --rename --add /var/lib/dpkg/info/systemd-standalone-sysusers.postinst || true; \
-    cp /tmp/noop-postinst /var/lib/dpkg/info/systemd-standalone-sysusers.postinst
+    chmod +x /usr/sbin/policy-rc.d
 
-# Install necessary tools and dependencies
+# Install systemd-standalone-sysusers FIRST. This satisfies the
+# "systemd | systemd-standalone-sysusers | systemd-sysusers" alternative
+# that downstream packages need, so full systemd is never selected by
+# apt's dependency resolver.
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends dbus && \
-    dbus-uuidgen --ensure=/etc/machine-id || true
+    apt-get install -y --no-install-recommends systemd-standalone-sysusers
 
-RUN apt-get install -y systemd-standalone-sysusers
+# Now install dbus. Because systemd-sysusers is already satisfied by
+# systemd-standalone-sysusers, dbus will not pull in the full systemd
+# package whose postinst was failing.
+RUN apt-get install -y --no-install-recommends dbus && \
+    dbus-uuidgen --ensure=/etc/machine-id || true
 
 RUN apt-get install -y \
     wireshark \
