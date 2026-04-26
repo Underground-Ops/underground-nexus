@@ -63,7 +63,7 @@ RUN useradd -m -s /bin/bash notitia && echo "notitia:notiaPoint1" | chpasswd
 RUN mkdir /var/run/sshd || true && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
 
 # Create startup script to start services
-RUN echo -e '#!/bin/bash\nservice ssh start\nservice cron start\nwget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh || true\ndocker start Inner-DNS-Control || true\ndocker start workbench || true\ndocker exec workbench service chrome-remote-desktop start || true\nbash /underground-nexus-dagger-ci.sh || true\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
+RUN echo -e '#!/bin/bash\nservice ssh start\nwget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh || true\ndocker start Inner-DNS-Control || true\ndocker start workbench || true\ndocker exec workbench service chrome-remote-desktop start || true\nbash /underground-nexus-dagger-ci.sh || true\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
 
 #-------------------------------
 
