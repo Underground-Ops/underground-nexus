@@ -11,42 +11,71 @@ VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 # Build-environment compatibility layer.
 #
 # Docker Hub's automated build runners use an old AWS kernel (5.4.0-1068-aws)
-# inside a DinD sandbox that does not expose the netlink/dbus socket interface
-# systemd's postinst expects. That causes "Protocol driver not attached" when
-# the postinst tries to enable units. GitLab's newer runner kernel does not
-# have this issue.
+# inside a DinD sandbox. Two compounding problems result:
 #
-# The fix is to satisfy the "systemd | systemd-standalone-sysusers |
-# systemd-sysusers" alternative dependency that cron-daemon-common,
-# dbus-system-bus-common, and others use - WITHOUT letting full systemd be
-# pulled in. We do this by installing systemd-standalone-sysusers FIRST,
-# before anything else, so apt's dependency resolver picks it as the
-# satisfier for the alternative and never pulls in the systemd package whose
-# postinst is the actual problem.
+#   1. The systemd package's postinst tries to enable units via syscalls
+#      the sandbox doesn't allow ("Protocol driver not attached").
+#   2. systemd-standalone-sysusers (which we install instead, to satisfy
+#      the systemd-sysusers virtual provide for cron / dbus / etc) needs
+#      /usr/lib/sysusers.d/basic.conf at install time. That file is shipped
+#      by the systemd package - which we deliberately don't install.
 #
-# We also seed /etc/machine-id and /run/systemd/container so any tool that
-# checks "am I in a container" gets the right answer and skips privileged
-# operations.
+# Fix:
+#   - Install systemd-standalone-sysusers FIRST (without recommends) so
+#     full systemd is never selected by apt's resolver.
+#   - Pre-provide /usr/lib/sysusers.d/basic.conf with the upstream content
+#     (sourced from systemd/sysusers.d/basic.conf.in) so the sysusers
+#     postinst can complete its sysusers run.
+#   - Seed /etc/machine-id and /run/systemd/container as belt-and-suspenders
+#     for any tool that does container detection.
+#   - Install policy-rc.d to deny service starts during package configure.
+#
+# This pattern is used by the official debian/ubuntu Docker base images
+# and by AkihiroSuda/containerized-systemd. We're applying it explicitly
+# because Docker Hub's older runner doesn't apply it implicitly.
 # ---------------------------------------------------------------------------
 RUN set -eux; \
-    mkdir -p /var/lib/dbus /run/systemd; \
+    mkdir -p /var/lib/dbus /run/systemd /usr/lib/sysusers.d /usr/sbin; \
     tr -dc 'a-f0-9' < /dev/urandom | head -c 32 > /etc/machine-id; \
     echo "" >> /etc/machine-id; \
     ln -sf /etc/machine-id /var/lib/dbus/machine-id; \
     echo "docker" > /run/systemd/container; \
     printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d; \
-    chmod +x /usr/sbin/policy-rc.d
+    chmod +x /usr/sbin/policy-rc.d; \
+    cat > /usr/lib/sysusers.d/basic.conf <<'BASICCONF'
+# Pre-provided by Athena0 build to satisfy systemd-standalone-sysusers
+# postinst on restricted build sandboxes. Sourced from the upstream
+# systemd basic.conf.in template.
+g root 0 - -
+u root 0:0 "Super User" /root
+g nogroup 65534 - -
+u! nobody 65534:65534 "Kernel Overflow User" -
+g adm - - -
+g wheel - - -
+g utmp - - -
+g audio - - -
+g cdrom - - -
+g dialout - - -
+g disk - - -
+g input - - -
+g kmem - - -
+g kvm - - -
+g lp - - -
+g render - - -
+g tape - - -
+g tty - - -
+g video - - -
+g users - - -
+BASICCONF
 
-# Install systemd-standalone-sysusers FIRST. This satisfies the
-# "systemd | systemd-standalone-sysusers | systemd-sysusers" alternative
-# that downstream packages need, so full systemd is never selected by
-# apt's dependency resolver.
+# Install systemd-standalone-sysusers FIRST, without recommends, so it
+# satisfies the alternative dependency that downstream packages need
+# without pulling in full systemd.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends systemd-standalone-sysusers
 
-# Now install dbus. Because systemd-sysusers is already satisfied by
-# systemd-standalone-sysusers, dbus will not pull in the full systemd
-# package whose postinst was failing.
+# Now install dbus. Because systemd-sysusers is already satisfied, dbus
+# will not pull in the full systemd package whose postinst was failing.
 RUN apt-get install -y --no-install-recommends dbus && \
     dbus-uuidgen --ensure=/etc/machine-id || true
 
