@@ -11,30 +11,23 @@ VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 # Build-environment compatibility layer.
 #
 # Docker Hub's automated build runners use an old AWS kernel (5.4.0-1068-aws)
-# inside a DinD sandbox. Two compounding problems result:
+# inside a DinD sandbox that does not support systemd's postinst syscalls.
+# Kali's official docs explicitly state systemd is not supported in their
+# Docker image.
 #
-#   1. The systemd package's postinst tries to enable units via syscalls
-#      the sandbox doesn't allow ("Protocol driver not attached").
-#   2. systemd-standalone-sysusers (which we install instead, to satisfy
-#      the systemd-sysusers virtual provide for cron / dbus / etc) needs
-#      /usr/lib/sysusers.d/basic.conf at install time. That file is shipped
-#      by the systemd package - which we deliberately don't install.
-#
-# Fix:
-#   - Install systemd-standalone-sysusers FIRST (without recommends) so
-#     full systemd is never selected by apt's resolver.
-#   - Pre-provide /usr/lib/sysusers.d/basic.conf with the upstream content
-#     (sourced from systemd/sysusers.d/basic.conf.in) so the sysusers
-#     postinst can complete its sysusers run. We use printf rather than
-#     a heredoc because Docker Hub's older BuildKit (May 2022) does not
-#     reliably parse heredoc syntax inside multi-line RUN blocks.
-#   - Seed /etc/machine-id and /run/systemd/container as belt-and-suspenders
-#     for any tool that does container detection.
-#   - Install policy-rc.d to deny service starts during package configure.
-#
-# This pattern is used by the official debian/ubuntu Docker base images
-# and by AkihiroSuda/containerized-systemd. We're applying it explicitly
-# because Docker Hub's older runner doesn't apply it implicitly.
+# Strategy:
+#   - Install systemd-standalone-sysusers (NOT full systemd) to satisfy
+#     the systemd-sysusers virtual provide that downstream packages need.
+#   - The systemd-standalone-sysusers package in Kali Rolling does not ship
+#     /usr/lib/sysusers.d/basic.conf - that file lives in the systemd
+#     package, which we deliberately don't install. So we provide
+#     basic.conf ourselves with the upstream content.
+#   - File creation, verification, and apt install are bundled into a
+#     single RUN block so that file existence is provable before the
+#     apt-get is allowed to run, and so layer caching cannot cause
+#     desynchronization between the file and the install.
+#   - All seeded compatibility files (machine-id, container marker,
+#     policy-rc.d) are also in this same block.
 # ---------------------------------------------------------------------------
 RUN set -eux; \
     mkdir -p /var/lib/dbus /run/systemd /usr/lib/sysusers.d /usr/sbin; \
@@ -42,43 +35,38 @@ RUN set -eux; \
     echo "" >> /etc/machine-id; \
     ln -sf /etc/machine-id /var/lib/dbus/machine-id; \
     echo "docker" > /run/systemd/container; \
-    printf '#!/bin/sh\nexit 101\n' > /usr/sbin/policy-rc.d; \
+    echo '#!/bin/sh' > /usr/sbin/policy-rc.d; \
+    echo 'exit 101' >> /usr/sbin/policy-rc.d; \
     chmod +x /usr/sbin/policy-rc.d; \
-    printf '%s\n' \
-      '# Pre-provided by Athena0 build to satisfy systemd-standalone-sysusers' \
-      '# postinst on restricted build sandboxes. Sourced from upstream' \
-      '# systemd basic.conf.in template.' \
-      'g root 0 - -' \
-      'u root 0:0 "Super User" /root' \
-      'g nogroup 65534 - -' \
-      'u! nobody 65534:65534 "Kernel Overflow User" -' \
-      'g adm - - -' \
-      'g wheel - - -' \
-      'g utmp - - -' \
-      'g audio - - -' \
-      'g cdrom - - -' \
-      'g dialout - - -' \
-      'g disk - - -' \
-      'g input - - -' \
-      'g kmem - - -' \
-      'g kvm - - -' \
-      'g lp - - -' \
-      'g render - - -' \
-      'g tape - - -' \
-      'g tty - - -' \
-      'g video - - -' \
-      'g users - - -' \
-      > /usr/lib/sysusers.d/basic.conf
-
-# Install systemd-standalone-sysusers FIRST, without recommends, so it
-# satisfies the alternative dependency that downstream packages need
-# without pulling in full systemd.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends systemd-standalone-sysusers
-
-# Now install dbus. Because systemd-sysusers is already satisfied, dbus
-# will not pull in the full systemd package whose postinst was failing.
-RUN apt-get install -y --no-install-recommends dbus && \
+    echo '# Pre-provided basic.conf for systemd-standalone-sysusers postinst' >  /usr/lib/sysusers.d/basic.conf; \
+    echo 'g root 0 - -'                                                       >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'u root 0:0 "Super User" /root'                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g nogroup 65534 - -'                                                >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'u! nobody 65534:65534 "Kernel Overflow User" -'                     >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g adm - - -'                                                        >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g wheel - - -'                                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g utmp - - -'                                                       >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g audio - - -'                                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g cdrom - - -'                                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g dialout - - -'                                                    >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g disk - - -'                                                       >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g input - - -'                                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g kmem - - -'                                                       >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g kvm - - -'                                                        >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g lp - - -'                                                         >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g render - - -'                                                     >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g tape - - -'                                                       >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g tty - - -'                                                        >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g video - - -'                                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo 'g users - - -'                                                      >> /usr/lib/sysusers.d/basic.conf; \
+    echo "=== basic.conf written to /usr/lib/sysusers.d/basic.conf ==="; \
+    ls -la /usr/lib/sysusers.d/basic.conf; \
+    cat /usr/lib/sysusers.d/basic.conf; \
+    echo "=== installing systemd-standalone-sysusers ==="; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends systemd-standalone-sysusers; \
+    echo "=== installing dbus ==="; \
+    apt-get install -y --no-install-recommends dbus; \
     dbus-uuidgen --ensure=/etc/machine-id || true
 
 RUN apt-get install -y \
