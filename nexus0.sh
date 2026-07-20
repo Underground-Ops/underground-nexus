@@ -1,8 +1,21 @@
 #!/usr/bin/env bash
 # =============================================================================
-# NEXUS0.SH v5.9 — Pure Package Installer + Runtime Hook Writer
+# NEXUS0.SH v6.0 — Pure Package Installer + Runtime Hook Writer
 # Cloud Underground · Underground Nexus
 # =============================================================================
+#
+# v6.0 CHANGES from v5.9:
+#   STEP 6 (Ollama) — two honest fixes, everything else untouched:
+#     1. Success is now judged by a RUNNABLE binary (ollama --version prints
+#        output), not merely a wrapper on PATH. STEP 6 no longer claims
+#        "Ollama ready" unconditionally — if the install didn't produce a
+#        working binary (e.g. network-blocked BuildKit/WSL2 build sandbox),
+#        it warns honestly and defers to the container runtime install hook.
+#     2. The s6 ollama run-script guards on a runnable binary and IDLES
+#        (sleep 30) instead of crash-looping when ollama isn't ready yet.
+#   Works on bare metal and normal builds exactly as before (install succeeds
+#   there); only changes behavior when the install can't reach the CDN, where
+#   it now fails honestly instead of shipping a false success.
 #
 # v5.9 CHANGES from v5.8:
 #   STEP 5B added: Sovereign Hypervisor branding
@@ -653,15 +666,29 @@ ok "  Runtime /config activation → written in STEP 16 cont-init hook"
 # STEP 6: OLLAMA
 # =============================================================================
 
-log "STEP 6: Ollama (installed — s6 service starts it at runtime)"
+log "STEP 6: Ollama"
 
-command -v ollama >/dev/null 2>&1 && ok "Ollama already installed" || \
-    retry 3 10 bash -c 'curl -fsSL https://ollama.com/install.sh | sh' \
-        && ok "Ollama installed" \
-        || warn "Ollama install failed"
+# v6.0: consider ollama present only if it actually RUNS — a wrapper on PATH
+# that produces no version output (a half-install) does NOT count. This is the
+# honest check STEP 6 lacked; it prevents claiming success over a broken binary.
+_ollama_ok() { command -v ollama >/dev/null 2>&1 && [ -n "$(ollama --version 2>/dev/null)" ]; }
 
-clear_dpkg_errors
-ok "Ollama ready (s6 starts at container boot → localhost:11434)"
+if _ollama_ok; then
+    ok "Ollama already installed ($(ollama --version 2>&1 | head -1))"
+else
+    retry 3 10 bash -c 'curl -fsSL https://ollama.com/install.sh | sh' || true
+    clear_dpkg_errors
+    if _ollama_ok; then
+        ok "Ollama installed ($(ollama --version 2>&1 | head -1))"
+    else
+        # v6.0: DON'T claim success. Network-blocked build sandboxes (e.g.
+        # BuildKit on WSL2) cannot reach the CDN during build. On bare metal
+        # and normal runtimes this branch is not hit. The s6 ollama unit idles
+        # until a binary is runnable, and the vault image's runtime cont-init
+        # hook completes the install at first boot where the network works.
+        warn "Ollama not runnable at this stage — s6 unit will idle; runtime install completes it"
+    fi
+fi
 
 # =============================================================================
 # STEP 7: CREATIVE SUITE
@@ -937,7 +964,7 @@ if [ "${CONTAINER_MODE}" = "true" ]; then
 
     # --- s6: ollama ---
     mkdir -p /etc/s6-overlay/s6-rc.d/ollama
-    printf '#!/usr/bin/with-contenv bash\ncommand -v ollama >/dev/null 2>&1 || { echo "[s6-ollama] not found"; exit 0; }\nexec ollama serve\n' \
+    printf '#!/usr/bin/with-contenv bash\nOLL=/usr/local/bin/ollama\n[ -x "$OLL" ] || OLL="$(command -v ollama 2>/dev/null)"\nif [ -z "$OLL" ] || [ -z "$("$OLL" --version 2>/dev/null)" ]; then echo "[s6-ollama] ollama not runnable yet — idling"; exec sleep 30; fi\nexec "$OLL" serve\n' \
         > /etc/s6-overlay/s6-rc.d/ollama/run
     printf 'longrun\n' > /etc/s6-overlay/s6-rc.d/ollama/type
     ok "s6 service: ollama"
