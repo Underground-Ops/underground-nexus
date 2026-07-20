@@ -35,7 +35,7 @@
 #    hard-refresh the Selkies tab (Ctrl+Shift+R), toggle the sidebar speaker
 #    icon ON, click once inside the desktop. All three matter.
 #
-#  Run as root:  docker exec -it nexus-creator-vault bash nexus-audio-driver-v3.sh
+#  Run as root:  docker exec -it nexus-creator-vault bash nexus-audio-driver-v4.sh
 #
 #  v3: adds s6-overlay persistence (matching the zero-trust-cockpit layer
 #  pattern) so the routing config re-applies on every container restart, and
@@ -48,22 +48,22 @@ set -o pipefail
 # Workbench, and other linuxserver.io Selkies webtops. It is NOT for bare
 # metal, VMs, or virtual appliances — those use normal system audio.
 if [ ! -S /defaults/native ] && [ ! -d /run/service/svc-selkies ] && [ "$(readlink -f "$HOME" 2>/dev/null)" != "/config" ]; then
-    echo "[audio-v3] ✗ No webtop container detected (no Selkies socket/service, HOME != /config)."
-    echo "[audio-v3]   This driver only applies inside Nexus Creator Vault / Workbench-class"
-    echo "[audio-v3]   containers. Bare metal and VMs use normal system audio — nothing to do."
+    echo "[audio-v4] ✗ No webtop container detected (no Selkies socket/service, HOME != /config)."
+    echo "[audio-v4]   This driver only applies inside Nexus Creator Vault / Workbench-class"
+    echo "[audio-v4]   containers. Bare metal and VMs use normal system audio — nothing to do."
     exit 1
 fi
 
 PULSE_DIR="/defaults"
 PULSE_SOCK="${PULSE_DIR}/native"
 LOCK="/dev/shm/audio.lock"
-LOG="/tmp/nexus-audio-driver-v3.log"
-say()  { echo "[audio-v3] $*"  | tee -a "$LOG"; }
-ok()   { echo "[audio-v3] ✓ $*" | tee -a "$LOG"; }
-skip() { echo "[audio-v3] ⏭ SKIP: $*" | tee -a "$LOG"; }
-rep()  { echo "[audio-v3] 🔧 REPAIR: $*" | tee -a "$LOG"; }
-warn() { echo "[audio-v3] ⚠ $*" | tee -a "$LOG"; }
-fail() { echo "[audio-v3] ✗ $*" | tee -a "$LOG"; }
+LOG="/tmp/nexus-audio-driver-v4.log"
+say()  { echo "[audio-v4] $*"  | tee -a "$LOG"; }
+ok()   { echo "[audio-v4] ✓ $*" | tee -a "$LOG"; }
+skip() { echo "[audio-v4] ⏭ SKIP: $*" | tee -a "$LOG"; }
+rep()  { echo "[audio-v4] 🔧 REPAIR: $*" | tee -a "$LOG"; }
+warn() { echo "[audio-v4] ⚠ $*" | tee -a "$LOG"; }
+fail() { echo "[audio-v4] ✗ $*" | tee -a "$LOG"; }
 
 pactl_abc() { s6-setuidgid abc env PULSE_RUNTIME_PATH="${PULSE_DIR}" pactl "$@" 2>>"$LOG"; }
 
@@ -71,7 +71,7 @@ pactl_abc() { s6-setuidgid abc env PULSE_RUNTIME_PATH="${PULSE_DIR}" pactl "$@" 
 : > "$LOG"
 
 say "═══════════════════════════════════════════════════════════"
-say " Nexus audio driver v3 — full-path restore + s6 persistence   $(date)"
+say " Nexus audio driver v4 — full-path restore + ORDERED s6 boot stage   $(date)"
 say "═══════════════════════════════════════════════════════════"
 
 # ---------------------------------------------------------------- 1. DIAGNOSE
@@ -79,7 +79,7 @@ say "STEP 1: Diagnosing..."
 [ -S "$PULSE_SOCK" ] && ok "Pulse socket: $PULSE_SOCK" || warn "no Pulse socket yet"
 [ -f "$LOCK" ] && say "audio.lock present (Selkies thinks sinks exist)" || say "audio.lock absent"
 SINKS="$(pactl_abc list short sinks || true)"
-say "current sinks:"; echo "$SINKS" | sed 's/^/[audio-v3]    /' | tee -a "$LOG"
+say "current sinks:"; echo "$SINKS" | sed 's/^/[audio-v4]    /' | tee -a "$LOG"
 echo "$SINKS" | grep -q "auto_null" && warn "auto_null (Dummy Output) present — the v1 failure signature"
 
 # --------------------------------------------------- 2. v1 LAYERS, IDEMPOTENT
@@ -234,13 +234,48 @@ S6=/etc/s6-overlay/s6-rc.d
 if [ -d /etc/s6-overlay ]; then
     mkdir -p "$S6/nexus-audio-routing/dependencies.d"
     echo oneshot > "$S6/nexus-audio-routing/type"
-    cp /custom-cont-init.d/95-selkies-audio.sh "$S6/nexus-audio-routing/script.sh"
+    # v4 boot stage: config layer + AFTER-selkies default-sink selection.
+    # Cold-boot root cause: selkies creates both null sinks, but Pulse's
+    # fallback ("default") sink lands on the LAST-loaded sink = "input",
+    # so every app plays into the mic sink and the stream captures silence.
+    # Ordered after svc-selkies (real s6 dependency), wait for the server,
+    # then set defaults BY NAME before any app starts. No selkies restart
+    # at boot — its capture starts fresh after the sinks exist.
+    cat > "$S6/nexus-audio-routing/script.sh" << 'BOOTS6'
+#!/bin/bash
+# nexus-audio-routing (s6 oneshot, after svc-selkies) — v4
+bash /custom-cont-init.d/95-selkies-audio.sh 2>/dev/null || true
+PULSE_DIR=/defaults
+pa() { s6-setuidgid abc env PULSE_RUNTIME_PATH="$PULSE_DIR" pactl "$@" 2>/dev/null; }
+for i in $(seq 1 40); do
+    [ -S "$PULSE_DIR/native" ] && pa info >/dev/null 2>&1 && break
+    sleep 0.5
+done
+if pa info >/dev/null 2>&1; then
+    pa list short sinks | grep -q "^[0-9]*[[:space:]]output[[:space:]]" ||         pa load-module module-null-sink sink_name=output 'sink_properties=device.description="output"' >/dev/null
+    pa list short sinks | grep -q "^[0-9]*[[:space:]]input[[:space:]]" ||         pa load-module module-null-sink sink_name=input 'sink_properties=device.description="input"' >/dev/null
+    pa set-default-sink output
+    pa set-default-source output.monitor
+    pa set-sink-mute output 0
+    pa set-sink-volume output 100%
+    echo "[nexus-audio-routing] boot defaults set: sink=output source=output.monitor"
+else
+    echo "[nexus-audio-routing] pulse never answered at $PULSE_DIR — config layer only"
+fi
+exit 0
+BOOTS6
     printf 'bash /etc/s6-overlay/s6-rc.d/nexus-audio-routing/script.sh\n' > "$S6/nexus-audio-routing/up"
     touch "$S6/nexus-audio-routing/dependencies.d/base"
+    if [ -d /run/service/svc-selkies ] || [ -d "$S6/svc-selkies" ]; then
+        touch "$S6/nexus-audio-routing/dependencies.d/svc-selkies"
+        ok "ordered AFTER svc-selkies (real s6 dependency)"
+    else
+        warn "svc-selkies unit not visible — oneshot will rely on its own wait loop"
+    fi
     mkdir -p "$S6/user/contents.d"
     touch "$S6/user/contents.d/nexus-audio-routing"
     chmod +x "$S6/nexus-audio-routing/script.sh"
-    ok "s6-overlay oneshot 'nexus-audio-routing' registered in the user bundle"
+    ok "s6-overlay oneshot 'nexus-audio-routing' v4 registered in the user bundle"
 else
     warn "/etc/s6-overlay not present — skipping s6 registration"
 fi
