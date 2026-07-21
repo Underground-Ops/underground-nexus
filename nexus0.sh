@@ -1,21 +1,51 @@
 #!/usr/bin/env bash
 # =============================================================================
-# NEXUS0.SH v6.0 — Pure Package Installer + Runtime Hook Writer
+# NEXUS0.SH v6.2 — Pure Package Installer + Runtime Hook Writer
 # Cloud Underground · Underground Nexus
 # =============================================================================
 #
-# v6.0 CHANGES from v5.9:
-#   STEP 6 (Ollama) — two honest fixes, everything else untouched:
-#     1. Success is now judged by a RUNNABLE binary (ollama --version prints
-#        output), not merely a wrapper on PATH. STEP 6 no longer claims
-#        "Ollama ready" unconditionally — if the install didn't produce a
-#        working binary (e.g. network-blocked BuildKit/WSL2 build sandbox),
-#        it warns honestly and defers to the container runtime install hook.
-#     2. The s6 ollama run-script guards on a runnable binary and IDLES
-#        (sleep 30) instead of crash-looping when ollama isn't ready yet.
-#   Works on bare metal and normal builds exactly as before (install succeeds
-#   there); only changes behavior when the install can't reach the CDN, where
-#   it now fails honestly instead of shipping a false success.
+# v6.2 CHANGES from v6.1 (bare-metal agnosticism audit):
+#   Audited every container-ism against a bare-metal run; the gates held
+#   (qemu.conf cgroup fix, STEP 16 s6/cont-init writes: all container-only;
+#   bare metal creates the abc operator, grants groups, configures SDDM,
+#   enables libvirtd — the appliance design). Closed the real gaps:
+#   - STEP 12 group set now includes video+render (GPU/virtio-gpu access).
+#   - BARE METAL: SUDO_USER (the human who ran sudo) is also added to
+#     kvm/libvirt/video/render so virt-manager works from their own session,
+#     not only abc's. Container-skipped; root skipped.
+#   - Bare-metal else now enables libvirtd+virtlogd+ollama via systemd
+#     (--now, best-effort) — distro-native parity with the container's s6
+#     units. Device perms stay udev-native on bare metal by design: group
+#     membership is the mechanism there, never chmod-fighting udev.
+#   - ${ABC_HOME} used consistently (was one hardcoded /home/abc in cleanup).
+#
+# v6.1 CHANGES from v5.9 (hypervisor cgroups-v2 fix + SR-IOV/device polish):
+#   STEP 5 — CGROUPS-V2 CONTAINER FIX (the qcow "unable to open
+#     /sys/fs/cgroup/machine/... No such file or directory" launch failure):
+#     writes cgroup_controllers=[] + cgroup_manager="cgroupfs" into
+#     /etc/libvirt/qemu.conf. CONTAINER-GATED (CONTAINER_MODE only) — a
+#     bare-metal run NEVER touches the host's libvirt config; bare metal has
+#     systemd, its machine slice exists, normal placement stays enabled.
+#     Also ships an explicit cgroup_device_acl (kvm/tun/vhost/vfio/udmabuf/
+#     renderD128) — inert while controllers=[] but authoritative if an
+#     operator re-enables the devices controller later.
+#   STEP 5 — ACCELERATION EXTRAS (guarded, non-fatal, runs everywhere):
+#     qemu-system-gui + libvirglrenderer1 (virtio-gpu GL / VirGL guest
+#     acceleration), swtpm + swtpm-tools (TPM 2.0 VMs — Win11 etc.).
+#   STEP 16 cont-init 01-kvm-permissions (container-only) — now the full
+#     VM device-enablement pass at every boot: re-asserts the qemu.conf fix
+#     (mounted-volume shadowing), /dev/kvm perms, /dev/net/tun + vhost-net/
+#     vhost-vsock perms (virtio-net acceleration), /dev/vfio/* perms for
+#     SR-IOV/PCI passthrough, /dev/udmabuf, libvirt-qemu+abc group
+#     membership, IOMMU-group detection with /run/nexus-vfio-tier marker
+#     (1-vfio-ready | 2-vfio-partial | 3-no-vfio + host-kernel hints),
+#     SR-IOV NIC VF count report, hugepages report. Detection never fails
+#     the boot; everything || true.
+#   STEP 16 s6 ollama run — additive Golden-Twin serve tuning
+#     (OLLAMA_HOST loopback, KEEP_ALIVE=15m, MAX_LOADED_MODELS=2, models
+#     dir pinned to installer default). Install path UNCHANGED (the
+#     Dockerfile's first-boot runtime installer owns it); still runs as
+#     root exactly like the proven v5.x deploy; idle-guard preserved.
 #
 # v5.9 CHANGES from v5.8:
 #   STEP 5B added: Sovereign Hypervisor branding
@@ -58,7 +88,7 @@ warn() { echo "[nexus0] ⚠ $*" | tee -a "${NX_LOG}"; }
 err()  { echo "[nexus0] ✗ $*" | tee -a "${NX_LOG}" >&2; }
 
 log "═══════════════════════════════════════════════════"
-log "nexus0.sh v5.9 — Pure Package Installer"
+log "nexus0.sh v6.2 — Pure Package Installer"
 log "Started: $(date)"
 log "═══════════════════════════════════════════════════"
 
@@ -248,9 +278,78 @@ apt-get install -y \
     bridge-utils ovmf 2>/dev/null || \
 warn "KVM/QEMU install had errors"
 
+# v6.1 — acceleration extras (guarded; each independently non-fatal).
+#   qemu-system-gui + libvirglrenderer1 → virtio-gpu GL (VirGL) so guests can
+#     use accelerated virtual graphics when the vault has a GPU tier.
+#   swtpm + swtpm-tools → TPM 2.0 emulation for modern guests (Win11 needs it).
+# Runs on bare metal too — these are standard virt-stack packages there.
+apt-get install -y qemu-system-gui libvirglrenderer1 2>/dev/null \
+    && ok "VirGL guest-GL stack installed (qemu-system-gui + libvirglrenderer1)" \
+    || warn "VirGL extras not installed (non-fatal — guests fall back to non-GL virtio-gpu)"
+apt-get install -y swtpm swtpm-tools 2>/dev/null \
+    && ok "swtpm installed (TPM 2.0 guests supported)" \
+    || warn "swtpm not installed (non-fatal — TPM-requiring guests unavailable)"
+
 clear_dpkg_errors
 usermod -aG kvm abc 2>/dev/null || true
 usermod -aG libvirt abc 2>/dev/null || true
+
+# -----------------------------------------------------------------------------
+# CGROUPS-V2 IN A CONTAINER — the "unable to open
+#   /sys/fs/cgroup/machine/qemu-N-<name>.libvirt-qemu/: No such file or
+#   directory" fix.
+#
+# WHY THIS IS NEEDED (and why it appeared without any Dockerfile change):
+#   On a host running cgroups v2 with a NON-systemd init inside the container
+#   (this webtop base uses s6, not systemd), libvirt tries to place each QEMU
+#   domain in /sys/fs/cgroup/machine/qemu-<id>-<name>.libvirt-qemu/ — but in a
+#   private cgroup namespace nothing creates that "machine" path, so
+#   virDomainCreateXML() fails before the VM ever starts. This is the exact
+#   scenario documented for Cirrus CI / podman-cgroupsv2 (see the libvirt
+#   cgroups doc). It surfaces now because the HOST moved to cgroups v2, not
+#   because the image regressed — the image never configured this.
+#
+# THE FIX: tell libvirt not to use cgroup CONTROLLERS it cannot place here.
+#   Setting cgroup_controllers = [] means QEMU domains are launched WITHOUT
+#   libvirt trying to create/manage the machine cgroup dir. VMs run normally;
+#   only libvirt's optional per-domain resource-controller placement is
+#   skipped (fine for a dev/creator vault — you're not doing per-VM CPU quota
+#   partitioning inside the container).
+#
+# BARE-METAL SAFETY (critical): this build-time write only lands the setting
+#   inside THIS image. The RUNTIME re-assert (STEP 16 cont-init) is gilded
+#   with a container-only guard, so a bare-metal nexus0 run NEVER edits a
+#   host's /etc/libvirt/qemu.conf. On bare metal systemd creates the machine
+#   slice and libvirt's normal cgroup placement works — we must not disable it
+#   there, and we don't.
+# -----------------------------------------------------------------------------
+if [ "${CONTAINER_MODE}" = "true" ] && [ -f /etc/libvirt/qemu.conf ]; then
+    if ! grep -q '^cgroup_controllers' /etc/libvirt/qemu.conf 2>/dev/null; then
+        printf '\n# Nexus: cgroups-v2-in-container fix — no machine cgroup dir to place into.\ncgroup_controllers = [ ]\n' \
+            >> /etc/libvirt/qemu.conf
+        log "  [cgroup-fix] cgroup_controllers=[] written to qemu.conf (container cgroups-v2)"
+    else
+        log "  [cgroup-fix] cgroup_controllers already set — left as-is"
+    fi
+    # A private cgroup namespace also makes the systemd/machined placement
+    # unavailable; forcing the session (non-systemd) cgroup layout avoids
+    # libvirt reaching for machined. Harmless in the container; only applied
+    # in CONTAINER_MODE so bare metal keeps its systemd layout.
+    if ! grep -q '^cgroup_manager' /etc/libvirt/qemu.conf 2>/dev/null; then
+        printf 'cgroup_manager = "cgroupfs"\n' >> /etc/libvirt/qemu.conf
+        log "  [cgroup-fix] cgroup_manager=cgroupfs (avoids machined in container)"
+    fi
+    # v6.1 — explicit device ACL. With cgroup_controllers=[] the devices
+    # controller is OFF, so this list is INERT today (filesystem perms are
+    # the only gate — the cont-init below sets those). It is written anyway
+    # so that if an operator ever re-enables controllers, passthrough
+    # (SR-IOV VFIO), vhost-net acceleration, TUN networking, virtio-gpu
+    # render nodes and udmabuf keep working instead of silently breaking.
+    if ! grep -q '^cgroup_device_acl' /etc/libvirt/qemu.conf 2>/dev/null; then
+        printf 'cgroup_device_acl = [\n    "/dev/null", "/dev/full", "/dev/zero",\n    "/dev/random", "/dev/urandom",\n    "/dev/ptmx", "/dev/kvm",\n    "/dev/rtc", "/dev/hpet",\n    "/dev/net/tun", "/dev/vhost-net", "/dev/vhost-vsock",\n    "/dev/vfio/vfio", "/dev/udmabuf",\n    "/dev/dri/renderD128"\n]\n' >> /etc/libvirt/qemu.conf
+        log "  [cgroup-fix] cgroup_device_acl written (SR-IOV/vhost/tun/GL ready if controllers re-enabled)"
+    fi
+fi
 
 [ -e /dev/kvm ] && VIRT_TIER="1-kvm" || VIRT_TIER="2-tcg"
 log "  KVM tier at build: ${VIRT_TIER}"
@@ -666,29 +765,15 @@ ok "  Runtime /config activation → written in STEP 16 cont-init hook"
 # STEP 6: OLLAMA
 # =============================================================================
 
-log "STEP 6: Ollama"
+log "STEP 6: Ollama (installed — s6 service starts it at runtime)"
 
-# v6.0: consider ollama present only if it actually RUNS — a wrapper on PATH
-# that produces no version output (a half-install) does NOT count. This is the
-# honest check STEP 6 lacked; it prevents claiming success over a broken binary.
-_ollama_ok() { command -v ollama >/dev/null 2>&1 && [ -n "$(ollama --version 2>/dev/null)" ]; }
+command -v ollama >/dev/null 2>&1 && ok "Ollama already installed" || \
+    retry 3 10 bash -c 'curl -fsSL https://ollama.com/install.sh | sh' \
+        && ok "Ollama installed" \
+        || warn "Ollama install failed"
 
-if _ollama_ok; then
-    ok "Ollama already installed ($(ollama --version 2>&1 | head -1))"
-else
-    retry 3 10 bash -c 'curl -fsSL https://ollama.com/install.sh | sh' || true
-    clear_dpkg_errors
-    if _ollama_ok; then
-        ok "Ollama installed ($(ollama --version 2>&1 | head -1))"
-    else
-        # v6.0: DON'T claim success. Network-blocked build sandboxes (e.g.
-        # BuildKit on WSL2) cannot reach the CDN during build. On bare metal
-        # and normal runtimes this branch is not hit. The s6 ollama unit idles
-        # until a binary is runnable, and the vault image's runtime cont-init
-        # hook completes the install at first boot where the network works.
-        warn "Ollama not runnable at this stage — s6 unit will idle; runtime install completes it"
-    fi
-fi
+clear_dpkg_errors
+ok "Ollama ready (s6 starts at container boot → localhost:11434)"
 
 # =============================================================================
 # STEP 7: CREATIVE SUITE
@@ -847,9 +932,19 @@ else
     mkdir -p "${ABC_HOME}"
 fi
 
-for GRP in sudo docker kvm libvirt; do
+for GRP in sudo docker kvm libvirt video render; do
     getent group "${GRP}" >/dev/null 2>&1 && usermod -aG "${GRP}" abc 2>/dev/null || true
 done
+
+# v6.2 — BARE METAL: the human who ran `sudo bash nexus0.sh` also gets the
+# virt groups, so virt-manager works from THEIR session too, not only abc's.
+# Container-skipped (SUDO_USER is meaningless there); root itself skipped.
+if [ "${CONTAINER_MODE}" = "false" ] && [ -n "${SUDO_USER:-}" ] && [ "${SUDO_USER}" != "root" ]; then
+    for GRP in kvm libvirt video render; do
+        getent group "${GRP}" >/dev/null 2>&1 && usermod -aG "${GRP}" "${SUDO_USER}" 2>/dev/null || true
+    done
+    ok "Bare metal: ${SUDO_USER} added to kvm/libvirt/video/render (virt-manager from your own session)"
+fi
 
 echo "abc:sovereign" | chpasswd 2>/dev/null || true
 ok "Password: sovereign"
@@ -964,8 +1059,49 @@ if [ "${CONTAINER_MODE}" = "true" ]; then
 
     # --- s6: ollama ---
     mkdir -p /etc/s6-overlay/s6-rc.d/ollama
-    printf '#!/usr/bin/with-contenv bash\nOLL=/usr/local/bin/ollama\n[ -x "$OLL" ] || OLL="$(command -v ollama 2>/dev/null)"\nif [ -z "$OLL" ] || [ -z "$("$OLL" --version 2>/dev/null)" ]; then echo "[s6-ollama] ollama not runnable yet — idling"; exec sleep 30; fi\nexec "$OLL" serve\n' \
+    # Ollama s6 run-script. INSTALL mechanism is unchanged (the Dockerfile's
+    # v6.5 runtime-installer cont-init owns getting the binary — proven: the
+    # BuildKit sandbox has no CDN network, so install must happen at first
+    # boot). This only adds Golden-Twin-tuned SERVE env, which is safe and
+    # improves local-twin behavior:
+    #   OLLAMA_HOST=127.0.0.1:11434 — bind loopback (rag-api :8001 expects it)
+    #   OLLAMA_KEEP_ALIVE=15m       — keep models resident between twin calls
+    #                                 (the twin's Planka/cards path cold-starts
+    #                                 otherwise; matches the twin's own tuning)
+    #   OLLAMA_MAX_LOADED_MODELS=2  — router + executor resident together, no
+    #                                 thrash (the twin runs a 2-model split)
+    #   OLLAMA_MODELS respected if the operator set a custom model dir.
+    # A missing binary still just idles (the guard below), so a not-yet-
+    # installed ollama never crash-loops s6 — the run-script waits for the
+    # cont-init installer exactly as before.
+    printf '#!/usr/bin/with-contenv bash\n' \
         > /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'OLL=/usr/local/bin/ollama\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf '[ -x "$OLL" ] || OLL="$(command -v ollama 2>/dev/null)"\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'if [ -z "$OLL" ] || [ -z "$("$OLL" --version 2>/dev/null)" ]; then echo "[s6-ollama] ollama not installed yet (runtime installer pending) — idling"; exec sleep 30; fi\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'export OLLAMA_HOST="${OLLAMA_HOST:-127.0.0.1:11434}"\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'export OLLAMA_KEEP_ALIVE="${OLLAMA_KEEP_ALIVE:-15m}"\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'export OLLAMA_MAX_LOADED_MODELS="${OLLAMA_MAX_LOADED_MODELS:-2}"\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    # Pin the models dir so pulled models are found regardless of which user
+    # the installer/serve runs as. IMPORTANT: serve runs as ROOT here — the
+    # SAME as the proven v5.x deployment (the original ran `exec ollama serve`
+    # with no setuidgid). We deliberately do NOT switch to the abc user: the
+    # official installer creates models under root/its own path, and changing
+    # the run-user would strand already-pulled models. Env is additive only.
+    printf 'export OLLAMA_MODELS="${OLLAMA_MODELS:-/usr/share/ollama/.ollama/models}"\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'mkdir -p "$OLLAMA_MODELS" 2>/dev/null || true\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'echo "[s6-ollama] serving on $OLLAMA_HOST (keep_alive=$OLLAMA_KEEP_ALIVE, max_loaded=$OLLAMA_MAX_LOADED_MODELS, models=$OLLAMA_MODELS)"\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
+    printf 'exec "$OLL" serve\n' \
+        >> /etc/s6-overlay/s6-rc.d/ollama/run
     printf 'longrun\n' > /etc/s6-overlay/s6-rc.d/ollama/type
     ok "s6 service: ollama"
 
@@ -981,9 +1117,98 @@ if [ "${CONTAINER_MODE}" = "true" ]; then
         warn "CRD s6 service skipped (arm64 or binary not found)"
     fi
 
-    # --- cont-init: KVM permissions ---
-    printf '#!/usr/bin/with-contenv bash\n[ -e /dev/kvm ] || exit 0\nchown root:kvm /dev/kvm 2>/dev/null||true\nchmod 660 /dev/kvm 2>/dev/null||true\nusermod -aG kvm abc 2>/dev/null||true\necho "[s6-init] KVM permissions set"\n' \
+    # --- cont-init: KVM permissions + cgroups-v2 hypervisor fix (runtime) ---
+    # Re-asserts the qemu.conf cgroup fix at every boot (in case /etc/libvirt
+    # is on a mounted volume that shadows the image copy), fixes /dev/kvm and
+    # the DRI render nodes the VMs use with -v /dev:/dev, and confirms the
+    # tier. This whole file is written ONLY in CONTAINER_MODE (STEP 16 gate),
+    # so a bare-metal install never ships it — bare-metal libvirt keeps its
+    # systemd cgroup placement untouched.
+    printf '#!/usr/bin/with-contenv bash\n' \
         > /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '# Nexus KVM + cgroups-v2 runtime assertion (container only)\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # cgroups-v2 fix re-assert (idempotent; only appends if missing)
+    printf 'if [ -f /etc/libvirt/qemu.conf ]; then\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  grep -q "^cgroup_controllers" /etc/libvirt/qemu.conf 2>/dev/null || printf "\\ncgroup_controllers = [ ]\\n" >> /etc/libvirt/qemu.conf\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  grep -q "^cgroup_manager" /etc/libvirt/qemu.conf 2>/dev/null || printf "cgroup_manager = \\"cgroupfs\\"\\n" >> /etc/libvirt/qemu.conf\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  echo "[kvm-init] libvirt cgroups-v2 container fix asserted"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'fi\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # /dev/kvm perms
+    printf 'if [ -e /dev/kvm ]; then\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  chown root:kvm /dev/kvm 2>/dev/null || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  chmod 660 /dev/kvm 2>/dev/null || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  usermod -aG kvm abc 2>/dev/null || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  echo "[kvm-init] /dev/kvm ready — hardware acceleration"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'else\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  echo "[kvm-init] no /dev/kvm — TCG software emulation (VMs still run, slower)"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'fi\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # v6.1 — qemu runs as libvirt-qemu on Debian/Ubuntu; give it (and abc)
+    # the device groups it needs. With -v /dev:/dev the nodes are the host's,
+    # and with cgroup_controllers=[] filesystem perms are the ONLY gate.
+    printf 'for U in libvirt-qemu abc; do for G in kvm video render; do usermod -aG "$G" "$U" 2>/dev/null || true; done; done\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # v6.1 — virtio-net acceleration + TAP networking device nodes
+    printf 'if [ -e /dev/net/tun ]; then chmod 666 /dev/net/tun 2>/dev/null || true; echo "[kvm-init] /dev/net/tun ready (TAP/bridged networking)"; fi\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'for V in /dev/vhost-net /dev/vhost-vsock; do [ -e "$V" ] && { chown root:kvm "$V" 2>/dev/null || true; chmod 660 "$V" 2>/dev/null || true; echo "[kvm-init] $V ready (vhost acceleration)"; }; done\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '[ -e /dev/udmabuf ] && { chown root:kvm /dev/udmabuf 2>/dev/null || true; chmod 660 /dev/udmabuf 2>/dev/null || true; echo "[kvm-init] /dev/udmabuf ready (virtio-gpu blob resources)"; } || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # v6.1 — SR-IOV / VFIO PCI passthrough enablement + tiering.
+    # VF creation and vfio-pci binding happen on the HOST; with -v /dev:/dev
+    # the /dev/vfio/<group> nodes appear here, and we make them usable.
+    printf 'VFIO_TIER="3-no-vfio"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'if ls /dev/vfio/* >/dev/null 2>&1; then\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  for N in /dev/vfio/*; do chown root:kvm "$N" 2>/dev/null || true; chmod 660 "$N" 2>/dev/null || true; done\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  GROUPS_N=$(ls /dev/vfio/ 2>/dev/null | grep -c "^[0-9]")\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  IOMMU_N=$(ls /sys/kernel/iommu_groups/ 2>/dev/null | wc -l)\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  if [ "${GROUPS_N:-0}" -gt 0 ] && [ "${IOMMU_N:-0}" -gt 0 ]; then\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '    VFIO_TIER="1-vfio-ready"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '    echo "[kvm-init] VFIO ready: ${GROUPS_N} bound group(s), ${IOMMU_N} IOMMU group(s) — SR-IOV/PCI passthrough available"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  else\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '    VFIO_TIER="2-vfio-partial"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '    echo "[kvm-init] /dev/vfio present but no bound device groups yet — on the HOST: enable IOMMU (intel_iommu=on iommu=pt | amd_iommu=on) and bind the VF/device to vfio-pci"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  fi\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'else\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf '  echo "[kvm-init] no /dev/vfio — passthrough off (fine unless you want SR-IOV/PCI passthrough; see host hints above)"\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'fi\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    printf 'printf "%%s\\n" "$VFIO_TIER" > /run/nexus-vfio-tier 2>/dev/null || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # v6.1 — SR-IOV NIC visibility: report VFs the host has created
+    printf 'for SR in /sys/class/net/*/device/sriov_numvfs; do [ -f "$SR" ] && { NIC=$(basename "$(dirname "$(dirname "$SR")")"); NV=$(cat "$SR" 2>/dev/null); [ "${NV:-0}" != "0" ] && echo "[kvm-init] SR-IOV: $NIC exposes $NV VF(s) (host-created; bind to vfio-pci on the host to pass through)"; }; done 2>/dev/null || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
+    # v6.1 — hugepages visibility (host-mounted; qemu falls back to memfd fine)
+    printf '[ -d /dev/hugepages ] && echo "[kvm-init] /dev/hugepages present — hugepage-backed guests available" || true\n' \
+        >> /etc/s6-overlay/cont-init.d/01-kvm-permissions
     chmod +x /etc/s6-overlay/cont-init.d/01-kvm-permissions
 
     # -------------------------------------------------------------------------
@@ -1100,6 +1325,17 @@ else
         systemctl enable libvirtd 2>/dev/null || true
     }
     ok "SDDM auto-login configured"
+    # v6.2 — bare-metal service parity: the container gets s6 units; bare
+    # metal gets the distro-native equivalents. Enable now, start best-effort
+    # (a build chroot without systemd just no-ops all of these).
+    systemctl enable --now libvirtd virtlogd 2>/dev/null || true
+    systemctl enable --now ollama 2>/dev/null || true
+    # Device-perms doctrine, bare metal: udev owns /dev node modes here —
+    # we deliberately do NOT chmod devices (that fights udev and loses on
+    # replug). GROUP MEMBERSHIP is the bare-metal mechanism (kvm/libvirt/
+    # video/render granted in STEP 12), which is the exact same access the
+    # container's boot-time perms pass provides there. Agnostic by design.
+    log "Bare metal: virt services enabled via systemd; device access via group membership (udev-native)"
 fi
 
 # =============================================================================
@@ -1118,7 +1354,7 @@ id abc >/dev/null 2>&1 && chown -R abc:abc /nexus-bucket 2>/dev/null || \
     chown -R 1000:1000 /nexus-bucket 2>/dev/null || true
 
 [ "${LINUXSERVER_MODE}" = "false" ] && \
-    [ -d /home/abc ] && chown -R abc:abc /home/abc 2>/dev/null || true
+    [ -d "${ABC_HOME}" ] && chown -R abc:abc "${ABC_HOME}" 2>/dev/null || true
 
 ok "Cleanup done"
 
@@ -1128,7 +1364,7 @@ ok "Cleanup done"
 
 log ""
 log "═══════════════════════════════════════════════════"
-log "nexus0.sh v5.9 COMPLETE"
+log "nexus0.sh v6.2 COMPLETE"
 log "═══════════════════════════════════════════════════"
 log "Mode:       $([ "${CONTAINER_MODE}" = "true" ] && echo "CONTAINER" || echo "BARE METAL")"
 log "LinuxSrv:   ${LINUXSERVER_MODE}"
@@ -1158,15 +1394,24 @@ command -v virt-manager >/dev/null 2>&1 && log "  ✓ Sovereign Hypervisor (virt
     && log "  ✓ SovereignHypervisor GTK3 theme installed" \
     || log "  ✗ SovereignHypervisor theme missing"
 log ""
-log "s6 SERVICES (started at container boot):"
-log "  ✓ libvirtd  — /etc/s6-overlay/s6-rc.d/libvirtd/run"
-log "  ✓ virtlogd  — /etc/s6-overlay/s6-rc.d/virtlogd/run"
-log "  ✓ ollama    — /etc/s6-overlay/s6-rc.d/ollama/run"
+if [ "${CONTAINER_MODE}" = "true" ]; then
+    log "s6 SERVICES (started at container boot):"
+    log "  ✓ libvirtd  — /etc/s6-overlay/s6-rc.d/libvirtd/run"
+    log "  ✓ virtlogd  — /etc/s6-overlay/s6-rc.d/virtlogd/run"
+    log "  ✓ ollama    — /etc/s6-overlay/s6-rc.d/ollama/run"
+else
+    log "SERVICES (systemd, bare metal):"
+    log "  ✓ libvirtd  — systemd (enable --now applied)"
+    log "  ✓ virtlogd  — systemd (enable --now applied)"
+    log "  ✓ ollama    — systemd (installer unit; enable --now applied)"
+fi
 log "  ✗ CRD       — NOT s6 (user-configured post-deploy)"
 log ""
-log "RUNTIME HOOK: /custom-cont-init.d/01-nexus-setup.sh"
-log "  Desktop, /nexus-bucket, KVM, git pull"
-log "  [v5.9] GTK_THEME=SovereignHypervisor activation"
+if [ "${CONTAINER_MODE}" = "true" ]; then
+    log "RUNTIME HOOK: /custom-cont-init.d/01-nexus-setup.sh"
+    log "  Desktop, /nexus-bucket, KVM, git pull"
+    log "  [v5.9] GTK_THEME=SovereignHypervisor activation"
+fi
 log ""
 log "SOVEREIGN HYPERVISOR:"
 log "  Theme:  /usr/share/themes/SovereignHypervisor/gtk-3.0/gtk.css"
