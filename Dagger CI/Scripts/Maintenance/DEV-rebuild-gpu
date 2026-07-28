@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# DEV-rebuild-gpu — DESTRUCTIVE refresh, the GPU twin of DEV-rebuild.
+#   stop -> rm container -> REMOVE THE VOLUME(S) -> pull -> DEV-gpu
+# Everything in /config is destroyed. Use DEV-restore-gpu to keep it.
+# DEV_PURGE_IMAGE=1 also deletes the local image before pulling (full re-download).
+set -uo pipefail
+NAME="${DEV_NAME:-nexus-creator-vault}"
+IMAGE="${DEV_IMAGE:-natoascode/zero-trust-cockpit:creator-vault}"
+VOLUMES="${DEV_VOLUMES:-creator-vault0}"
+log() { echo "[DEV-rebuild-gpu] $*"; }
+
+if [ "${DEV_YES:-0}" != "1" ] && [ -t 0 ]; then
+  printf "[DEV-rebuild-gpu] This DELETES the vault volume(s): %s\n" "$VOLUMES"
+  printf "[DEV-rebuild-gpu] Type REBUILD to continue: "
+  read -r reply
+  [ "$reply" = "REBUILD" ] || { log "aborted."; exit 1; }
+fi
+
+log "stopping ${NAME}..."
+docker container stop "$NAME" >/dev/null 2>&1 || log "  (not running)"
+log "removing container..."
+docker container rm -f "$NAME" >/dev/null 2>&1 || log "  (no container)"
+
+for v in $VOLUMES; do
+  if docker volume inspect "$v" >/dev/null 2>&1; then
+    if docker volume rm "$v" >/dev/null 2>&1; then
+      log "volume removed: $v"
+    else
+      log "volume $v still in use — finding holders..."
+      holders=$(docker ps -aq --filter "volume=$v" 2>/dev/null)
+      for h in $holders; do docker rm -f "$h" >/dev/null 2>&1 || true; done
+      docker volume rm "$v" >/dev/null 2>&1 && log "volume removed after clearing holders: $v" \
+        || log "WARN: could not remove volume $v — rebuild will reuse it"
+    fi
+  else
+    log "volume absent (nothing to clear): $v"
+  fi
+done
+
+if [ "${DEV_PURGE_IMAGE:-0}" = "1" ]; then
+  log "purging local image ${IMAGE}..."
+  docker image rm -f "$IMAGE" >/dev/null 2>&1 || log "  (image not present)"
+fi
+
+n=0
+until docker pull "$IMAGE"; do
+  n=$((n+1)); [ "$n" -ge 3 ] && { log "pull failed 3x — continuing with whatever is local"; break; }
+  log "pull retry ${n}/3..."; sleep 5
+done
+
+for c in "$(dirname "$0")/DEV-gpu" /usr/local/bin/DEV-gpu; do
+  [ -x "$c" ] && { log "relaunching via $c"; exec "$c"; }
+done
+command -v DEV-gpu >/dev/null 2>&1 && exec DEV-gpu
+log "ERROR: DEV-gpu not found — run it manually to bring the vault back up."; exit 1

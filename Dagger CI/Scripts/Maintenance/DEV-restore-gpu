@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# DEV-restore-gpu — NON-destructive refresh, the GPU twin of DEV-restore.
+#   stop -> rm container -> pull -> DEV-gpu        (the volume is PRESERVED)
+# Use this to pick up a new image without losing anything in /config.
+set -uo pipefail
+NAME="${DEV_NAME:-nexus-creator-vault}"
+IMAGE="${DEV_IMAGE:-natoascode/zero-trust-cockpit:creator-vault}"
+VOLUMES="${DEV_VOLUMES:-creator-vault0}"
+log() { echo "[DEV-restore-gpu] $*"; }
+
+log "stopping ${NAME}..."
+docker container stop "$NAME" >/dev/null 2>&1 || log "  (not running)"
+log "removing container (volume kept)..."
+docker container rm -f "$NAME" >/dev/null 2>&1 || log "  (no container)"
+
+for v in $VOLUMES; do
+  docker volume inspect "$v" >/dev/null 2>&1 && log "preserving volume: $v" || log "note: volume $v does not exist yet — it will be created fresh"
+done
+
+n=0
+until docker pull "$IMAGE"; do
+  n=$((n+1)); [ "$n" -ge 3 ] && { log "pull failed 3x — continuing with whatever is local"; break; }
+  log "pull retry ${n}/3..."; sleep 5
+done
+
+for c in "$(dirname "$0")/DEV-gpu" /usr/local/bin/DEV-gpu; do
+  [ -x "$c" ] && { log "relaunching via $c"; exec "$c"; }
+done
+command -v DEV-gpu >/dev/null 2>&1 && exec DEV-gpu
+log "ERROR: DEV-gpu not found — run it manually to bring the vault back up."; exit 1

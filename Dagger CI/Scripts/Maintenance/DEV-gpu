@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# DEV-gpu — launch the Nexus Creator Vault with whatever accelerator this host has.
+# Profile order: /usr/local/etc/nexus-gpu.env -> /etc/nexus/gpu.env -> ~/.nexus/gpu.env
+# Override anything: DEV_GPU=nvidia|amd|intel|dxg|cpu  DEV_IMAGE=...  DEV_KEEP=1
+set -uo pipefail
+NAME="${DEV_NAME:-nexus-creator-vault}"
+IMAGE="${DEV_IMAGE:-natoascode/zero-trust-cockpit:creator-vault}"
+VOLUME="${DEV_VOLUME:-creator-vault0}"
+PORT="${DEV_PORT:-1050}"
+TZ_="${DEV_TZ:-America/Colorado}"
+log() { echo "[DEV-gpu] $*"; }
+
+GPU_ARGS=""
+for p in /usr/local/etc/nexus-gpu.env /etc/nexus/gpu.env "${HOME}/.nexus/gpu.env"; do
+  if [ -r "$p" ]; then . "$p"; GPU_ARGS="${NEXUS_GPU_DOCKER_ARGS:-}"; log "profile: $p (vendor=${NEXUS_GPU_VENDOR:-?})"; break; fi
+done
+
+# explicit override wins over the profile
+case "${DEV_GPU:-}" in
+  nvidia) GPU_ARGS="--gpus all -e OLLAMA_VULKAN=0" ;;
+  amd)    GPU_ARGS="--device /dev/kfd:/dev/kfd --device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1" ;;
+  intel)  GPU_ARGS="--device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1" ;;
+  dxg)    GPU_ARGS="--device /dev/dxg:/dev/dxg -v /usr/lib/wsl:/usr/lib/wsl:ro -e LD_LIBRARY_PATH=/usr/lib/wsl/lib -e OLLAMA_VULKAN=1" ;;
+  cpu)    GPU_ARGS="" ;;
+esac
+
+# last-resort probe if there is no profile and no override
+if [ -z "${GPU_ARGS}" ] && [ -z "${DEV_GPU:-}" ]; then
+  if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then GPU_ARGS="--gpus all -e OLLAMA_VULKAN=0"
+  elif [ -e /dev/kfd ]; then GPU_ARGS="--device /dev/kfd:/dev/kfd --device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1"
+  elif [ -e /dev/dri ]; then GPU_ARGS="--device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1"
+  fi
+  [ -n "$GPU_ARGS" ] && log "no profile found — probed: ${GPU_ARGS}"
+fi
+log "accelerator args: ${GPU_ARGS:-none (CPU mode)}"
+
+if docker container inspect "$NAME" >/dev/null 2>&1; then
+  if [ "${DEV_KEEP:-0}" = "1" ]; then
+    log "refusing to replace the existing ${NAME} (DEV_KEEP=1)"; exit 0
+  fi
+  log "replacing existing ${NAME}..."
+  docker container stop "$NAME" >/dev/null 2>&1 || true
+  docker container rm -f "$NAME" >/dev/null 2>&1 || true
+fi
+
+# shellcheck disable=SC2086
+docker run -itd --name="$NAME" -h "$NAME" --privileged \
+  -p "${PORT}:3000" -e PUID=1050 -e PGID=1050 -e TZ="$TZ_" \
+  --restart unless-stopped \
+  -v /dev:/dev -v "${VOLUME}:/config" -v /var/run/docker.sock:/var/run/docker.sock \
+  ${GPU_ARGS} "$IMAGE" || { echo "[DEV-gpu] ERROR: launch failed"; exit 1; }
+
+log "started. http://localhost:${PORT}"
+sleep 3
+case "${GPU_ARGS}" in
+  *--gpus*) docker exec "$NAME" nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null \
+              && log "GPU visible inside the vault" || log "nvidia-smi not answering yet — give s6 a moment, then: docker exec ${NAME} nvidia-smi" ;;
+  *dri*|*dxg*) docker exec "$NAME" sh -c 'ls /dev/dri 2>/dev/null; [ -e /dev/dxg ] && echo dxg' 2>/dev/null \
+              && log "render nodes visible inside the vault" ;;
+esac
+log "prove inference: docker exec ${NAME} ollama run llama3.2:3b hi ; docker exec ${NAME} ollama ps"
