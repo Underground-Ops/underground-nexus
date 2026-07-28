@@ -219,19 +219,19 @@ decide() {
       NOTES="NVIDIA '${GPU_NAME:-unknown}' — CUDA path (native + WSL2, covers eGPUs)"
       ;;
     amd)
-      GPU_ARGS="--device /dev/kfd:/dev/kfd$(dri_devices)${GROUP_ARGS} -e OLLAMA_VULKAN=1"
+      GPU_ARGS="--device /dev/kfd:/dev/kfd$(dri_devices)${GROUP_ARGS} -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1"
       [ -n "${HSA_OVERRIDE_GFX_VERSION:-}" ] && \
         GPU_ARGS="${GPU_ARGS} -e HSA_OVERRIDE_GFX_VERSION=${HSA_OVERRIDE_GFX_VERSION}"
       NOTES="AMD ROCm compute node present — ROCm first, Vulkan left enabled as the fallback for cards ROCm does not target"
       SECONDARY="if Ollama reports no ROCm device, find your gfx target and re-run with HSA_OVERRIDE_GFX_VERSION=10.3.0 (or the nearest supported target)"
       ;;
     intel)
-      GPU_ARGS="$(dri_devices)${GROUP_ARGS} -e OLLAMA_VULKAN=1"
+      GPU_ARGS="$(dri_devices)${GROUP_ARGS} -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1"
       NOTES="Render node present (Intel/AMD iGPU or dGPU without ROCm) — Ollama's Vulkan backend uses it. Real acceleration, modest next to CUDA."
       SECONDARY="NPUs are NOT used by Ollama; the render node is the accelerator here"
       ;;
     dxg)
-      GPU_ARGS="-v /usr/lib/wsl:/usr/lib/wsl:ro -e LD_LIBRARY_PATH=/usr/lib/wsl/lib -e OLLAMA_VULKAN=1"
+      GPU_ARGS="-v /usr/lib/wsl:/usr/lib/wsl:ro -e LD_LIBRARY_PATH=/usr/lib/wsl/lib -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1"
       [ "$HAS_DXG" = 1 ] && GPU_ARGS="--device /dev/dxg:/dev/dxg ${GPU_ARGS}"
       [ "$HAS_DRI" = 1 ] && GPU_ARGS="${GPU_ARGS}$(dri_devices)${GROUP_ARGS}"
       NOTES="WSL2 /dev/dxg + Mesa Dozen (Vulkan on D3D12) — EXPERIMENTAL, opted in via NEXUS_WSL_DXG=1"
@@ -411,17 +411,17 @@ done
 # explicit override wins over the profile
 case "${DEV_GPU:-}" in
   nvidia) GPU_ARGS="--gpus all -e OLLAMA_VULKAN=0" ;;
-  amd)    GPU_ARGS="--device /dev/kfd:/dev/kfd --device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1" ;;
-  intel)  GPU_ARGS="--device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1" ;;
-  dxg)    GPU_ARGS="--device /dev/dxg:/dev/dxg -v /usr/lib/wsl:/usr/lib/wsl:ro -e LD_LIBRARY_PATH=/usr/lib/wsl/lib -e OLLAMA_VULKAN=1" ;;
+  amd)    GPU_ARGS="--device /dev/kfd:/dev/kfd --device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1" ;;
+  intel)  GPU_ARGS="--device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1" ;;
+  dxg)    GPU_ARGS="--device /dev/dxg:/dev/dxg -v /usr/lib/wsl:/usr/lib/wsl:ro -e LD_LIBRARY_PATH=/usr/lib/wsl/lib -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1" ;;
   cpu)    GPU_ARGS="" ;;
 esac
 
 # last-resort probe if there is no profile and no override
 if [ -z "${GPU_ARGS}" ] && [ -z "${DEV_GPU:-}" ]; then
   if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then GPU_ARGS="--gpus all -e OLLAMA_VULKAN=0"
-  elif [ -e /dev/kfd ]; then GPU_ARGS="--device /dev/kfd:/dev/kfd --device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1"
-  elif [ -e /dev/dri ]; then GPU_ARGS="--device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1"
+  elif [ -e /dev/kfd ]; then GPU_ARGS="--device /dev/kfd:/dev/kfd --device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1"
+  elif [ -e /dev/dri ]; then GPU_ARGS="--device /dev/dri:/dev/dri -e OLLAMA_VULKAN=1 -e OLLAMA_IGPU_ENABLE=1"
   fi
   [ -n "$GPU_ARGS" ] && log "no profile found — probed: ${GPU_ARGS}"
 fi
@@ -448,10 +448,20 @@ sleep 3
 case "${GPU_ARGS}" in
   *--gpus*) docker exec "$NAME" nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null \
               && log "GPU visible inside the vault" || log "nvidia-smi not answering yet — give s6 a moment, then: docker exec ${NAME} nvidia-smi" ;;
-  *dri*|*dxg*) docker exec "$NAME" sh -c 'ls /dev/dri 2>/dev/null; [ -e /dev/dxg ] && echo dxg' 2>/dev/null \
-              && log "render nodes visible inside the vault" ;;
+  *dri*|*dxg*)
+    R=$(docker exec "$NAME" sh -c 'ls /dev/dri 2>/dev/null | tr "\n" " "' 2>/dev/null)
+    D=$(docker exec "$NAME" sh -c '[ -e /dev/dxg ] && echo yes' 2>/dev/null)
+    [ -n "$R" ] && log "DRI render nodes inside the vault: $R"
+    [ -z "$R" ] && [ -n "$D" ] && log "no DRI render node - only /dev/dxg (WSL D3D12 route; needs the Dozen ICD)"
+    [ -z "$R" ] && [ -z "$D" ] && log "no render nodes visible inside the vault" ;;
 esac
-log "prove inference: docker exec ${NAME} ollama run llama3.2:3b hi ; docker exec ${NAME} ollama ps"
+if docker exec "$NAME" test -x /usr/local/lib/ollama/llama-server >/dev/null 2>&1; then
+  log "prove inference: docker exec ${NAME} ollama run llama3.2:3b hi ; docker exec ${NAME} ollama ps"
+else
+  log "ollama runner not installed yet - first boot is still fetching it."
+  log "  wait for: docker exec ${NAME} test -x /usr/local/lib/ollama/llama-server"
+  log "  then:     docker exec ${NAME} ollama run llama3.2:3b hi ; docker exec ${NAME} ollama ps"
+fi
 DEVGPU
 }
 
