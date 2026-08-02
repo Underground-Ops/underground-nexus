@@ -2,37 +2,68 @@
 # Athena0 - Underground Nexus chaos engine
 # Multi-arch: linux/amd64 + linux/arm64
 #
-# CHANGES FROM THE PREVIOUS DOCKERFILE (all marked [CHG-n] inline):
+# WHY THE LAST TWO BUILDS FAILED (both arches, same step, same cause)
+#
+#   Err: .../core:/stable:/v1.28/deb InRelease
+#     Sub-process /usr/bin/sqv returned an error code (1)
+#     Error: Policy rejected packet type
+#     Caused by: Signature Packet v3 is not considered secure since 2026-02-01
+#
+#   Kali's current apt (3.2.0+kali1) verifies repository signatures with sqv
+#   (Sequoia) instead of gpgv. Sequoia's policy rejects v3 signature packets
+#   from 2026-02-01 onward, and the Kubernetes v1.28 OBS repo is signed with
+#   one. So that repo can no longer be verified on Kali at all, on any
+#   architecture. My previous block ran it under `set -eux` with a bare
+#   `apt-get update`, so the rejection killed the build.
+#
+#   Your ORIGINAL Dockerfile hit exactly the same rejection. It only appeared
+#   to work because that line ended in `|| true`, which swallowed it. The repo
+#   was never actually usable; the failure was just silent.
+#
+# WHY REMOVING IT COSTS NOTHING
+#   Both build logs show kubectl already installed one step earlier, from
+#   Kali's own repo, on both architectures:
+#       Setting up kubectl (1.33.4+ds-1) ...  "installed: kubectl"
+#   The dead repo was trying to supply 1.28 for a tool that was already
+#   present at 1.33.4. kubectl capability is preserved and newer.
+#
+# CHANGES FROM THE ORIGINAL (all marked [CHG-n] inline):
 #   [CHG-1] NEW  Kali archive keyring refresh before the first apt-get update.
-#               This is what is failing your build right now. It is NOT an
-#               architecture problem. Kali lost their old signing key in April
-#               2025 and rotated to ED65462EC8D5E4C5; any base image or mirror
-#               predating that fails with exactly the NO_PUBKEY error in your
-#               log. Fix is Kali's own documented remedy.
+#               Kali lost their signing key in April 2025 and rotated to
+#               ED65462EC8D5E4C5. Verified working on both arches.
 #   [CHG-2] CHG  Toolset install split into required + optional-per-package.
-#               THE most important arm64 change. `apt-get install a b c || true`
-#               is all-or-nothing: if ONE package has no arm64 build, apt
-#               installs NOTHING and `|| true` hides it. You would get a
-#               "successful" arm64 Athena0 with zero tools in it. Now each
-#               optional package is attempted on its own.
-#   [CHG-3] CHG  `echo -e` -> `printf`. RUN executes under /bin/sh (dash), where
-#               `echo -e` emits a literal "-e" as the first characters, which
-#               corrupts the shebang of start_services.sh. Verified behaviour.
-#   [CHG-4] DEL  Removed the legacy apt.kubernetes.io / kubernetes-xenial repo
-#               block. Google retired those endpoints in March 2024, so that
-#               step can only ever fail. pkgs.k8s.io (already present below)
-#               is the live repo and it publishes arm64.
+#               `apt-get install a b c || true` is all-or-nothing: one missing
+#               package installs NOTHING and `|| true` hides it. Every optional
+#               package did resolve on arm64 this time, so this is insurance
+#               rather than a live fix, but it is what makes a future arm64 gap
+#               cost you one tool instead of the whole toolset.
+#   [CHG-3] CHG  `echo -e` -> `printf` for start_services.sh. RUN executes under
+#               /bin/sh (dash), where `echo -e` emits a literal "-e" and
+#               corrupts the shebang.
+#   [CHG-4] DEL  BOTH Kubernetes third-party repos removed: the legacy
+#               apt.kubernetes.io/kubernetes-xenial one (Google retired those
+#               endpoints in March 2024, 404s in your logs) and the pkgs.k8s.io
+#               v1.28 one (sqv v3-signature rejection, above). kubectl now comes
+#               from Kali, with a repo-free arch-aware binary fallback so the
+#               capability is guaranteed either way.
 #   [CHG-5] MOV  VOLUME moved to the end. Docker discards writes to a path made
 #               a VOLUME earlier in the same build, so the underground-nexus
-#               clone and the wget'd scripts were being thrown away. Same
-#               volumes are still declared. Revert by moving it back if you
-#               depend on the old behaviour.
-#   [CHG-6] NEW  Final build-time inventory so you can see what actually landed
-#               on each architecture instead of finding out at runtime.
+#               clone was being thrown away.
+#   [CHG-6] NEW  Build-time inventory so a thin arm64 build is visible in the
+#               log instead of at runtime.
+#   [CHG-7] NEW  Scrub stale kubernetes.list after the external nexus scripts.
+#               underground-nexus-dagger-ci.sh writes the dead xenial repo into
+#               /etc/apt/sources.list.d/ (visible in your logs as the 404). Left
+#               there it poisons every later apt-get update, at build time AND
+#               inside the running container. Removed after the scripts run.
+#   [CHG-8] NEW  `unzip` added to the optional list. Your own
+#               underground-nexus-update.sh calls it and fails with
+#               "unzip: not found" in both logs. One word, restores intended
+#               behaviour. Drop it from the list if you want the old gap back.
 #
 # The systemd-sysusers shim is UNCHANGED and byte-identical to yours.
 #
-# Build (from an amd64 host, arm64 runs under QEMU and is slow):
+# Build:
 #   docker buildx build --platform linux/arm64 -t natoascode/athena0:arm64 --push .
 #   docker buildx build --platform linux/amd64,linux/arm64 -t natoascode/athena0:latest --push .
 # =============================================================================
@@ -49,8 +80,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Chicken-and-egg: the repo is unsigned to us until the keyring is in place,
 # but we need a download tool from that repo. So we allow ONE unauthenticated
 # fetch to obtain wget/ca-certificates/gnupg, install the official keyring,
-# then verify the new signing key is actually present before trusting anything.
-# Every apt operation after this point is fully verified.
+# then verify the 2025 signing key is actually present before trusting
+# anything. Every apt operation after this point is fully verified.
 # ---------------------------------------------------------------------------
 RUN set -eux; \
     apt-get update -o Acquire::AllowInsecureRepositories=true || true; \
@@ -215,19 +246,16 @@ RUN set -eux; \
     dbus-uuidgen --ensure=/etc/machine-id || true
 
 # ---------------------------------------------------------------------------
-# [CHG-2] Main toolset, arm64-safe.
-#
-# We pre-create the system groups that packages declare via sysusers.d and then
-# chown to during their postinst (cron -> "crontab", wireshark -> "wireshark").
+# [CHG-2] Main toolset, arm64-safe. kubectl is in this list and comes from
+# Kali's own repo: verified installing as 1.33.4+ds-1 on BOTH amd64 and arm64.
 #
 # CORE packages install as one transaction and MUST succeed: if these are
 # missing the container is not Athena0 and the build should fail loudly rather
 # than ship a hollow image.
 #
-# OPTIONAL packages install one at a time. Some have no arm64 build in Kali at
-# any given moment (terraform's licence change and cpu-checker are the usual
-# suspects). One at a time means a single gap costs you that one tool instead
-# of the entire toolset, which is what the old single `|| true` list did.
+# OPTIONAL packages install one at a time, so a future arm64 gap costs one
+# tool instead of the entire toolset. [CHG-8] adds unzip, which your
+# underground-nexus-update.sh calls and currently cannot find.
 # ---------------------------------------------------------------------------
 RUN set -eux; \
     for grp in crontab wireshark; do \
@@ -246,7 +274,7 @@ RUN set -eux; \
         git; \
     echo "--- optional tools, one at a time ---"; \
     for pkg in wireshark kubectl cpu-checker terraform docker-compose \
-               metasploit-framework radare2; do \
+               metasploit-framework radare2 unzip; do \
         if apt-get install -y --no-install-recommends "$pkg"; then \
             echo "  installed: $pkg"; \
         else \
@@ -266,6 +294,30 @@ RUN set -eux; \
     dpkg --configure --force-all -a; \
     apt-get install -yf
 
+# ---------------------------------------------------------------------------
+# [CHG-4] kubectl guarantee WITHOUT any third-party apt repo.
+#
+# Kali ships kubectl and it installed above on both architectures. This is the
+# safety net: if a future Kali drops it, fetch the official static binary for
+# the running architecture straight from dl.k8s.io. No repo, no signature
+# policy to break, correct arch every time. Pin KUBECTL_VER below if you ever
+# need a specific version instead of stable.
+# ---------------------------------------------------------------------------
+RUN set -eux; \
+    if command -v kubectl >/dev/null 2>&1; then \
+        echo "kubectl present from Kali repo: $(kubectl version --client 2>/dev/null | head -1 || echo installed)"; \
+    else \
+        echo "kubectl missing from Kali repo, fetching official binary..."; \
+        _arch="$(dpkg --print-architecture)"; \
+        KUBECTL_VER="$(curl -fsSL https://dl.k8s.io/release/stable.txt)"; \
+        curl -fsSLo /usr/local/bin/kubectl \
+            "https://dl.k8s.io/release/${KUBECTL_VER}/bin/linux/${_arch}/kubectl"; \
+        chmod +x /usr/local/bin/kubectl; \
+        kubectl version --client >/dev/null 2>&1 || \
+            { echo "FATAL: kubectl fallback did not produce a working binary"; exit 1; }; \
+        echo "kubectl ${KUBECTL_VER} installed for ${_arch}"; \
+    fi
+
 # Install dagger for built-in CI/CD (publishes linux/amd64 and linux/arm64)
 RUN curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
 RUN mkdir -p /root/.local/share/bash-completion/completions
@@ -283,30 +335,35 @@ RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/mai
 RUN sh underground-nexus-update.sh || true
 RUN sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/underground-nexus-dagger-ci.sh || true
 
+# ---------------------------------------------------------------------------
+# [CHG-7] Scrub the dead Kubernetes apt source the nexus scripts write.
+#
+# underground-nexus-dagger-ci.sh adds
+#   deb ... https://apt.kubernetes.io/ kubernetes-xenial main
+# which Google retired in March 2024 (the 404 in your build logs). Left in
+# place it makes every later `apt-get update` return non-zero, at build time
+# and inside the running container. kubectl is already installed, so the file
+# has no purpose. Removed here rather than in the scripts so this Dockerfile
+# stays self-contained.
+# ---------------------------------------------------------------------------
+RUN set -eux; \
+    rm -f /etc/apt/sources.list.d/kubernetes.list; \
+    rm -f /usr/share/keyrings/kubernetes-archive-keyring.gpg; \
+    rm -f /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
+    apt-get update; \
+    echo "apt sources clean: $(ls /etc/apt/sources.list.d/ 2>/dev/null || echo none)"
+
 #-------------------------------
 
 WORKDIR "/"
-# k3d, kubectl and helm all publish arm64 binaries; their installers detect it.
+# k3d, helm and dagger all publish arm64 binaries; their installers detect it.
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash || true
-
-# [CHG-4] The legacy apt.kubernetes.io / kubernetes-xenial repo was retired by
-# Google in March 2024 and can only fail now, so its block is gone. pkgs.k8s.io
-# is the live repo and serves arm64.
-RUN set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends ca-certificates curl apt-transport-https gpg; \
-    rm -f /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
-    mkdir -p /etc/apt/keyrings; \
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key \
-        | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
-    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
-        > /etc/apt/sources.list.d/kubernetes.list; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends kubectl || true
-
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ || true
 RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/enable-weekly-updates.sh
 RUN sh enable-weekly-updates.sh || true
+
+# The weekly-update script can re-add the dead source; scrub again, harmlessly.
+RUN rm -f /etc/apt/sources.list.d/kubernetes.list || true
 
 # Create a new user 'notitia' with password 'notiaPoint1'
 # Intentional honeypot credential for eBPF IAM testing (Hide n Hunt scenario).
@@ -344,20 +401,20 @@ RUN rm -f /install.sh /install.sh.* || true
 
 # ---------------------------------------------------------------------------
 # [CHG-6] Build-time inventory. Prints what actually landed for this
-# architecture so a thin arm64 build is visible in the build log instead of
-# being discovered at runtime.
+# architecture so a thin build is visible in the build log instead of being
+# discovered at runtime.
 # ---------------------------------------------------------------------------
 RUN set -eu; \
     echo "=== Athena0 inventory for $(dpkg --print-architecture) ==="; \
     for t in nmap wireshark tshark msfconsole radare2 kubectl helm k3d dagger \
-             docker-compose terraform cron git curl wget htop; do \
+             docker-compose terraform cron git curl wget htop unzip; do \
         if command -v "$t" >/dev/null 2>&1; then \
             printf '  present  %s\n' "$t"; \
         else \
             printf '  MISSING  %s\n' "$t"; \
         fi; \
     done; \
-    echo "=== chaos engine core: nmap + msfconsole + dagger must be present ==="
+    echo "=== chaos engine core: nmap + msfconsole + dagger + kubectl ==="
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* || true
 
