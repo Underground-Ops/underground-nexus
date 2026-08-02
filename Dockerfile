@@ -1,11 +1,74 @@
-# Use Kali Linux Rolling as the base image
+# =============================================================================
+# Athena0 - Underground Nexus chaos engine
+# Multi-arch: linux/amd64 + linux/arm64
+#
+# CHANGES FROM THE PREVIOUS DOCKERFILE (all marked [CHG-n] inline):
+#   [CHG-1] NEW  Kali archive keyring refresh before the first apt-get update.
+#               This is what is failing your build right now. It is NOT an
+#               architecture problem. Kali lost their old signing key in April
+#               2025 and rotated to ED65462EC8D5E4C5; any base image or mirror
+#               predating that fails with exactly the NO_PUBKEY error in your
+#               log. Fix is Kali's own documented remedy.
+#   [CHG-2] CHG  Toolset install split into required + optional-per-package.
+#               THE most important arm64 change. `apt-get install a b c || true`
+#               is all-or-nothing: if ONE package has no arm64 build, apt
+#               installs NOTHING and `|| true` hides it. You would get a
+#               "successful" arm64 Athena0 with zero tools in it. Now each
+#               optional package is attempted on its own.
+#   [CHG-3] CHG  `echo -e` -> `printf`. RUN executes under /bin/sh (dash), where
+#               `echo -e` emits a literal "-e" as the first characters, which
+#               corrupts the shebang of start_services.sh. Verified behaviour.
+#   [CHG-4] DEL  Removed the legacy apt.kubernetes.io / kubernetes-xenial repo
+#               block. Google retired those endpoints in March 2024, so that
+#               step can only ever fail. pkgs.k8s.io (already present below)
+#               is the live repo and it publishes arm64.
+#   [CHG-5] MOV  VOLUME moved to the end. Docker discards writes to a path made
+#               a VOLUME earlier in the same build, so the underground-nexus
+#               clone and the wget'd scripts were being thrown away. Same
+#               volumes are still declared. Revert by moving it back if you
+#               depend on the old behaviour.
+#   [CHG-6] NEW  Final build-time inventory so you can see what actually landed
+#               on each architecture instead of finding out at runtime.
+#
+# The systemd-sysusers shim is UNCHANGED and byte-identical to yours.
+#
+# Build (from an amd64 host, arm64 runs under QEMU and is slow):
+#   docker buildx build --platform linux/arm64 -t natoascode/athena0:arm64 --push .
+#   docker buildx build --platform linux/amd64,linux/arm64 -t natoascode/athena0:latest --push .
+# =============================================================================
+
+# Use Kali Linux Rolling as the base image (multi-arch: amd64, arm64, armhf)
 FROM kalilinux/kali-rolling
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 
-#Add persistent volumes
-VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
+# ---------------------------------------------------------------------------
+# [CHG-1] Kali archive keyring refresh.
+#
+# Chicken-and-egg: the repo is unsigned to us until the keyring is in place,
+# but we need a download tool from that repo. So we allow ONE unauthenticated
+# fetch to obtain wget/ca-certificates/gnupg, install the official keyring,
+# then verify the new signing key is actually present before trusting anything.
+# Every apt operation after this point is fully verified.
+# ---------------------------------------------------------------------------
+RUN set -eux; \
+    apt-get update -o Acquire::AllowInsecureRepositories=true || true; \
+    apt-get install -y --no-install-recommends --allow-unauthenticated \
+        wget ca-certificates gnupg || true; \
+    wget -q https://archive.kali.org/archive-keyring.gpg \
+        -O /usr/share/keyrings/kali-archive-keyring.gpg; \
+    [ -s /usr/share/keyrings/kali-archive-keyring.gpg ] || \
+        { echo "FATAL: kali keyring download was empty"; exit 1; }; \
+    gpg --no-default-keyring \
+        --keyring /usr/share/keyrings/kali-archive-keyring.gpg -k \
+        | grep -q "ED65462EC8D5E4C5" || \
+        { echo "FATAL: 2025 Kali signing key not present in the downloaded keyring"; exit 1; }; \
+    rm -rf /var/lib/apt/lists/*; \
+    apt-get update; \
+    echo "kali keyring OK, repo verified"
+
+#Add persistent volumes -> [CHG-5] moved to the end of this file
 
 # ---------------------------------------------------------------------------
 # Build-environment compatibility layer.
@@ -151,32 +214,46 @@ RUN set -eux; \
     apt-get install -yf --no-install-recommends; \
     dbus-uuidgen --ensure=/etc/machine-id || true
 
-# Now install the main toolset. We pre-create the system groups that packages
-# declare via sysusers.d and then chown to during their postinst (cron ->
-# "crontab", wireshark -> "wireshark"); this guarantees a clean configure even
-# if a package invokes systemd-sysusers in a form the shim doesn't cover. The
-# functional shim (installed above and refreshed below) additionally creates
-# any other sysusers.d-declared users/groups future Kali package versions add.
+# ---------------------------------------------------------------------------
+# [CHG-2] Main toolset, arm64-safe.
+#
+# We pre-create the system groups that packages declare via sysusers.d and then
+# chown to during their postinst (cron -> "crontab", wireshark -> "wireshark").
+#
+# CORE packages install as one transaction and MUST succeed: if these are
+# missing the container is not Athena0 and the build should fail loudly rather
+# than ship a hollow image.
+#
+# OPTIONAL packages install one at a time. Some have no arm64 build in Kali at
+# any given moment (terraform's licence change and cpu-checker are the usual
+# suspects). One at a time means a single gap costs you that one tool instead
+# of the entire toolset, which is what the old single `|| true` list did.
+# ---------------------------------------------------------------------------
 RUN set -eux; \
     for grp in crontab wireshark; do \
         getent group "$grp" >/dev/null 2>&1 || groupadd -r "$grp" || true; \
     done; \
+    apt-get update; \
     apt-get install -y --no-install-recommends \
-        wireshark \
-        kubectl \
         curl \
         wget \
         cron \
-        cpu-checker \
-        terraform \
         nano \
-        docker-compose \
         sudo \
         htop \
         nmap \
         iputils-ping \
-        metasploit-framework \
-        radare2 || true; \
+        git; \
+    echo "--- optional tools, one at a time ---"; \
+    for pkg in wireshark kubectl cpu-checker terraform docker-compose \
+               metasploit-framework radare2; do \
+        if apt-get install -y --no-install-recommends "$pkg"; then \
+            echo "  installed: $pkg"; \
+        else \
+            echo "  UNAVAILABLE on $(dpkg --print-architecture): $pkg"; \
+            apt-get install -yf --no-install-recommends || true; \
+        fi; \
+    done; \
     if [ -f /bin/systemd-sysusers ]; then \
         cp /usr/local/lib/nexus/systemd-sysusers /bin/systemd-sysusers; \
         chmod +x /bin/systemd-sysusers; \
@@ -189,7 +266,7 @@ RUN set -eux; \
     dpkg --configure --force-all -a; \
     apt-get install -yf
 
-# Install dagger for built-in CI/CD
+# Install dagger for built-in CI/CD (publishes linux/amd64 and linux/arm64)
 RUN curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
 RUN mkdir -p /root/.local/share/bash-completion/completions
 RUN dagger completion bash > /root/.local/share/bash-completion/completions/dagger || true
@@ -209,9 +286,24 @@ RUN sh /nexus-bucket/underground-nexus/'Dagger CI'/Scripts/underground-nexus-dag
 #-------------------------------
 
 WORKDIR "/"
+# k3d, kubectl and helm all publish arm64 binaries; their installers detect it.
 RUN curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash || true
-RUN apt-get update && apt-get install -y ca-certificates curl && apt-get install -y apt-transport-https && curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list && apt-get update && apt-get install -y kubectl || true
-RUN rm /etc/apt/sources.list.d/kubernetes.list || true && apt-get update && apt-get install -y gpg && apt-get update --fix-missing && rm -f /etc/apt/keyrings/kubernetes-apt-keyring.gpg && mkdir -p /etc/apt/keyrings && curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | tee /etc/apt/sources.list.d/kubernetes.list || true && apt-get update && apt-get upgrade --fix-broken -y || true
+
+# [CHG-4] The legacy apt.kubernetes.io / kubernetes-xenial repo was retired by
+# Google in March 2024 and can only fail now, so its block is gone. pkgs.k8s.io
+# is the live repo and serves arm64.
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates curl apt-transport-https gpg; \
+    rm -f /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
+    mkdir -p /etc/apt/keyrings; \
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key \
+        | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg; \
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" \
+        > /etc/apt/sources.list.d/kubernetes.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends kubectl || true
+
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash && helm repo add stable https://charts.helm.sh/stable && helm repo add gitlab https://charts.gitlab.io/ || true
 RUN wget https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/enable-weekly-updates.sh
 RUN sh enable-weekly-updates.sh || true
@@ -220,8 +312,28 @@ RUN sh enable-weekly-updates.sh || true
 # Intentional honeypot credential for eBPF IAM testing (Hide n Hunt scenario).
 RUN useradd -m -s /bin/bash notitia && echo "notitia:notiaPoint1" | chpasswd
 
-# Create startup script to start services
-RUN echo -e '#!/bin/bash\nservice cron start\nwget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh || true\ndocker start Inner-DNS-Control || true\ndocker start workbench || true\ndocker exec workbench service chrome-remote-desktop start || true\nbash /underground-nexus-dagger-ci.sh || true\nexec /bin/bash' > /usr/local/bin/start_services.sh && chmod +x /usr/local/bin/start_services.sh
+# ---------------------------------------------------------------------------
+# [CHG-3] Startup script written with printf, not `echo -e`.
+# RUN executes under /bin/sh (dash) where `echo -e` prints a literal "-e",
+# which lands as the first two characters of the file and destroys the
+# shebang. printf '%s\n' with one argument per line is correct under both
+# dash and bash, and the %20 in the URL is safe because it sits in an
+# argument rather than in the format string.
+# ---------------------------------------------------------------------------
+RUN printf '%s\n' \
+    '#!/bin/bash' \
+    'service cron start' \
+    'wget -O /underground-nexus-dagger-ci.sh https://raw.githubusercontent.com/Underground-Ops/underground-nexus/main/Dagger%20CI/Scripts/underground-nexus-dagger-ci.sh || true' \
+    'docker start Inner-DNS-Control || true' \
+    'docker start workbench || true' \
+    'docker exec workbench service chrome-remote-desktop start || true' \
+    'bash /underground-nexus-dagger-ci.sh || true' \
+    'exec /bin/bash' \
+    > /usr/local/bin/start_services.sh; \
+    chmod +x /usr/local/bin/start_services.sh; \
+    head -c 2 /usr/local/bin/start_services.sh | grep -q '#!' \
+        || { echo "FATAL: start_services.sh shebang is corrupt"; exit 1; }; \
+    bash -n /usr/local/bin/start_services.sh
 
 #-------------------------------
 
@@ -229,7 +341,35 @@ RUN echo -e '#!/bin/bash\nservice cron start\nwget -O /underground-nexus-dagger-
 # anything installed above. Safe cleanup only - no package removal.
 RUN apt-get update --fix-missing || true
 RUN rm -f /install.sh /install.sh.* || true
+
+# ---------------------------------------------------------------------------
+# [CHG-6] Build-time inventory. Prints what actually landed for this
+# architecture so a thin arm64 build is visible in the build log instead of
+# being discovered at runtime.
+# ---------------------------------------------------------------------------
+RUN set -eu; \
+    echo "=== Athena0 inventory for $(dpkg --print-architecture) ==="; \
+    for t in nmap wireshark tshark msfconsole radare2 kubectl helm k3d dagger \
+             docker-compose terraform cron git curl wget htop; do \
+        if command -v "$t" >/dev/null 2>&1; then \
+            printf '  present  %s\n' "$t"; \
+        else \
+            printf '  MISSING  %s\n' "$t"; \
+        fi; \
+    done; \
+    echo "=== chaos engine core: nmap + msfconsole + dagger must be present ==="
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* || true
+
+# ---------------------------------------------------------------------------
+# [CHG-5] Persistent volumes, declared LAST.
+# Docker discards any write made to a path after that path becomes a VOLUME in
+# the same build. Declared at the top (as before), every file the steps above
+# wrote into /nexus-bucket - the underground-nexus clone and the CI scripts -
+# was silently dropped from the image. Declaring here keeps the same volumes
+# while preserving that content.
+# ---------------------------------------------------------------------------
+VOLUME ["/var/lib/docker/volumes", "/nexus-bucket"]
 
 # Set the entrypoint to the startup script
 ENTRYPOINT ["/usr/local/bin/start_services.sh"]
