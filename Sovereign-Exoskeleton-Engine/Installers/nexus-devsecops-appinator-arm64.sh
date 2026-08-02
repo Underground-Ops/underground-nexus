@@ -276,7 +276,7 @@ DEVCMD
 # SEC / OPS — arm64 wave bodies, carried across unchanged from the tested
 # arm64 appinator. SEC-exoskeleton forwards ONLY 1000 and 2000 by design.
 # ---------------------------------------------------------------------------
-SEC_RUN='docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22 -p 80:80 -p 8080:8080 -p 443:443 -p 1000:1000 -p 2000:2000 -p 2375:2375 -p 2376:2376 -p 2377:2377 -p 18080:18080 -p 18443:18443 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket '"${NEXUS_IMAGE}"' && docker exec Underground-Nexus bash deploy-olympiad.sh'
+SEC_RUN='docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 22 -p 80:80 -p 8080:8080 -p 443:443 -p 1000:1000 -p 2000:2000 -p 18080:18080 -p 18443:18443 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket '"${NEXUS_IMAGE}"' && docker exec Underground-Nexus bash deploy-olympiad.sh'
 EXO_RUN='docker run -itd --name=Underground-Nexus -h Underground-Nexus --privileged --init -p 1000:1000 -p 2000:2000 -v /dev:/dev -v underground-nexus-docker-socket:/var/run -v underground-nexus-data:/var/lib/docker/volumes -v nexus-bucket:/nexus-bucket '"${NEXUS_IMAGE}"' && docker exec Underground-Nexus bash deploy-olympiad.sh'
 OPS_RUN='docker run -itd --name=Underground-Ops -h Underground-Ops --privileged --init -p 1060:1050 -v /dev:/dev -v underground-ops-docker-socket:/var/run '"${NEXUS_IMAGE}"''
 # TEARDOWN vs SOFT — semantics carried across from the tested arm64 appinator,
